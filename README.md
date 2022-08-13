@@ -16,6 +16,7 @@
   * User의 상태
     * id (필수)
     * email (필수)
+    * password (정책 설정 필요)
     * hp (필수)
     * name (필수)
     * nickName (선택)

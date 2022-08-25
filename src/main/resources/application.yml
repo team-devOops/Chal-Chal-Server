@@ -8,3 +8,8 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: create-drop
+
+jwt:
+  token: jwtsecret
+  expire:
+    time: 3600

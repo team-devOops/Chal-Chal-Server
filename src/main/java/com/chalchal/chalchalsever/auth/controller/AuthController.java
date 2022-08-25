@@ -1,5 +1,6 @@
 package com.chalchal.chalchalsever.auth.controller;
 
+import com.chalchal.chalchalsever.auth.service.UserService;
 import com.chalchal.chalchalsever.domain.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -13,9 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = {"회원가입"})
 @RequiredArgsConstructor
 public class AuthController {
-//    @PostMapping(value = "/join")
-//    @ApiOperation(value = "회원가입")
-//    public User signUp() {
-//        return null;
-//    }
+
+    private static UserService userService;
+
+    @PostMapping(value = "/join")
+    @ApiOperation(value = "회원가입")
+    public User signUp(User user) {
+        return userService.saveUser(user);
+    }
 }

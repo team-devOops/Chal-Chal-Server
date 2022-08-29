@@ -22,11 +22,8 @@ public class AuthController {
 
     @PostMapping(value = "/join")
     @ApiOperation(value = "회원가입")
-    public User signUp(String email, String pw) {
+    public User signUp(String email, String password) {
         User user = new User();
-        user.setEmail("email");
-        user.setPw("222");
-        System.out.println("?");
         return userService.createUser(user);
     }
 }

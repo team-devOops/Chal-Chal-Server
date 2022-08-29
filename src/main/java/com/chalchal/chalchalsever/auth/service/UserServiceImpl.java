@@ -4,8 +4,9 @@ import com.chalchal.chalchalsever.auth.repository.UserRepository;
 import com.chalchal.chalchalsever.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -15,15 +16,27 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public User saveUser(User params) {
-        String encodePassword = bCryptPasswordEncoder.encode(params.getPw());
-
-        return userRepository.save(
-            User.builder()
-                .pw(encodePassword)
-                .id(params.getId())
+    public User createUser(User params) {
+        params = User.builder()
                 .email(params.getEmail())
-                .build()
-        );
+                .pw(bCryptPasswordEncoder.encode(params.getPw()))
+                .build();
+
+        return userRepository.save(params);
+    }
+
+    @Override
+    public User findUser(String email) {
+        return null;
+    }
+
+    @Override
+    public User findByEmailAndPw(String email, String password) {
+        return null;
+    }
+
+    @Override
+    public List<User> findAll() {
+        return null;
     }
 }

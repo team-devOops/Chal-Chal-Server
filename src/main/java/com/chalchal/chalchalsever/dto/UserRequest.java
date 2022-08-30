@@ -7,5 +7,5 @@ import lombok.Getter;
 public class UserRequest {
     private String email;
     private String password;
-    private UserRole userRole;;
+    private UserRole userRole;
 }

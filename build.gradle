@@ -20,6 +20,7 @@ repositories {
 }
 
 ext {
+    swagger_version = '3.0.0'
     set('snippetsDir', file("build/generated-snippets"))
 }
 
@@ -37,9 +38,9 @@ dependencies {
 
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
 
-    implementation 'io.springfox:springfox-swagger-ui:3.0.0'
-    implementation 'io.springfox:springfox-swagger2:3.0.0'
-    implementation 'io.springfox:springfox-boot-starter:3.0.0'
+    implementation "io.springfox:springfox-swagger-ui:${swagger_version}"
+    implementation "io.springfox:springfox-swagger2:${swagger_version}"
+    implementation "io.springfox:springfox-boot-starter:${swagger_version}"
 }
 
 tasks.named('test') {

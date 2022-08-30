@@ -12,12 +12,11 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/auth")
 @Api(tags = {"회원가입"})
 @RequiredArgsConstructor
 public class AuthController {
@@ -27,21 +26,21 @@ public class AuthController {
 
     @PostMapping(value = "/join")
     @ApiOperation(value = "회원가입")
-    public User signUp(HttpServletRequest request, @RequestBody UserRequest userRequest) {
+    public User signUp(@RequestBody UserRequest userRequest) {
         return userService.createUser(userRequest);
     }
 
     @PostMapping("/login")
     @ApiOperation(value = "로그인")
-    public String login(HttpServletRequest request, @RequestBody UserRequest userRequest) {
+    public String login(@RequestBody UserRequest userRequest) {
         User user = userService.findByEmailAndPassword(userRequest.getEmail(), userRequest.getPassword());
         return jwtConfig.createToken(user.getEmail(), Arrays.asList(user.getUserRole().getValue()));
     }
 
     @PostMapping(value = "/info/{id}")
     @ApiOperation(value = "회원가입")
-    public User getInfo(HttpServletRequest request, @RequestBody Authentication authentication,
-                                                    @RequestBody UserRequest userRequest) {
+    public User getInfo(@RequestBody Authentication authentication,
+                        @RequestBody UserRequest userRequest) {
         if (authentication == null) {
             throw new BadCredentialsException("회원 정보를 찾을 수 없습니다.");
         }

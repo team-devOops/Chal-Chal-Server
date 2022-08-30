@@ -2,6 +2,7 @@ package com.chalchal.chalchalsever.config.security;
 
 import com.chalchal.chalchalsever.config.jwt.JwtAuthenticationFilter;
 import com.chalchal.chalchalsever.config.jwt.JwtConfig;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +21,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtConfig jwtConfig;
+    private final ObjectMapper objectMapper;
+
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
     @Override
     public void configure(WebSecurity web) {
@@ -29,15 +34,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .sessionManagement()
+        http.httpBasic().disable()
+            .csrf().disable()
+            .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-
                 .and()
-                .addFilterBefore(new JwtAuthenticationFilter(jwtConfig), UsernamePasswordAuthenticationFilter.class);
+            .addFilterBefore(new JwtAuthenticationFilter(jwtConfig, objectMapper), UsernamePasswordAuthenticationFilter.class)
+            .exceptionHandling()
+                .accessDeniedHandler(customAccessDeniedHandler)
+                .authenticationEntryPoint(customAuthenticationEntryPoint);
     }
-
-
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {

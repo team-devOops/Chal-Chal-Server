@@ -1,6 +1,5 @@
 package com.chalchal.chalchalsever.auth.controller;
 
-import com.chalchal.chalchalsever.auth.repository.UserRepository;
 import com.chalchal.chalchalsever.auth.service.UserService;
 import com.chalchal.chalchalsever.config.jwt.JwtConfig;
 import com.chalchal.chalchalsever.domain.User;

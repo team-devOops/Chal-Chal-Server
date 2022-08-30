@@ -8,10 +8,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 
 @Slf4j
@@ -37,13 +36,9 @@ public class AuthController {
         return jwtConfig.createToken(user.getEmail(), Arrays.asList(user.getUserRole().getValue()));
     }
 
-    @PostMapping(value = "/info/{id}")
-    @ApiOperation(value = "회원가입")
-    public User getInfo(@RequestBody Authentication authentication,
-                        @RequestBody UserRequest userRequest) {
-        if (authentication == null) {
-            throw new BadCredentialsException("회원 정보를 찾을 수 없습니다.");
-        }
-        return userService.findUser(authentication.getName());
+    @PostMapping(value = "/info/{email}")
+    @ApiOperation(value = "개인정보")
+    public User getInfo(HttpServletRequest httpServletRequest, @PathVariable String email) {
+        return userService.findUser(email);
     }
 }

@@ -29,7 +29,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) {
         web.ignoring()
-           .antMatchers("/h2-console/**"); // h2-console
+           .antMatchers("/h2-console/**", "/swagger-ui/**"); // h2-console
     }
 
     @Override
@@ -40,7 +40,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
                 .authorizeRequests()
-                .antMatchers("/api/auth/login", "/api/auth/join").permitAll()
+                .antMatchers("/api/auth/login", "/api/auth/join", "/swagger-ui/**", "/swagger-resources/**",
+                        "/swagger-ui.html", "/v2/api-docs").permitAll()
                 .anyRequest().hasRole("USER")
             .and()
             .addFilterBefore(new JwtAuthenticationFilter(jwtConfig, objectMapper), UsernamePasswordAuthenticationFilter.class)

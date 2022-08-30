@@ -11,7 +11,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Builder
-@Data
+@Getter
 @Entity
 @AllArgsConstructor
 @Table(name = "t_user")

@@ -10,6 +10,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -18,7 +19,7 @@ import java.util.Date;
 public class BaseDomain {
     @CreatedDate
     @Column(name = "reg_date", nullable = false, updatable = false)
-    private Date regDate;
+    private LocalDateTime regDate;
 
     @CreatedBy
     @Column(name = "reg_id", nullable = false, updatable = false)
@@ -26,7 +27,7 @@ public class BaseDomain {
 
     @LastModifiedDate
     @Column(name = "upd_date")
-    private Date updDate;
+    private LocalDateTime updDate;
 
     @LastModifiedBy
     @Column(name = "upd_id")

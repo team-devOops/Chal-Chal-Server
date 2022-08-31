@@ -25,11 +25,11 @@ public class UserServiceImpl implements UserService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     @Override
-    public User createUser(UserRequest params) {
+    public User createUser(UserRequest userRequest) {
         User user = userRepository.save(User.builder()
-                .email(params.getEmail())
-                .password(bCryptPasswordEncoder.encode(params.getPassword()))
-                .userRole(params.getUserRole())
+                .email(userRequest.getEmail())
+                .password(bCryptPasswordEncoder.encode(userRequest.getPassword()))
+                .userRole(userRequest.getUserRole())
                 .build());
 
         return user;

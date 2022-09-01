@@ -11,10 +11,14 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 
@@ -48,7 +52,19 @@ public class AuthController {
 
         userTokenInfoService.createUserTokenInfo(tokenResponse);
 
-        return new ResponseEntity(HttpStatus.OK);
+        ResponseCookie responseCookie = ResponseCookie.from("REFRESHTOKEN", tokenResponse.getREFRESH_TOKEN())
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .domain("localhost")
+                .secure(true)
+                .build();
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(HttpHeaders.AUTHORIZATION, tokenResponse.getACCESS_TOKEN());
+        httpHeaders.add(HttpHeaders.SET_COOKIE, responseCookie.toString());
+
+        return new ResponseEntity<>(tokenResponse, httpHeaders, HttpStatus.OK);
     }
 
     @PostMapping(value = "/info/{email}")

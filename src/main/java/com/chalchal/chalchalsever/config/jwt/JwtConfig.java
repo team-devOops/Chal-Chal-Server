@@ -1,7 +1,10 @@
 package com.chalchal.chalchalsever.config.jwt;
 
 import com.chalchal.chalchalsever.auth.repository.UserTokenInfoRepository;
+import com.chalchal.chalchalsever.auth.service.UserService;
 import com.chalchal.chalchalsever.auth.service.UserTokenInfoService;
+import com.chalchal.chalchalsever.domain.User;
+import com.chalchal.chalchalsever.domain.UserTokenInfo;
 import com.chalchal.chalchalsever.dto.TokenResponse;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.crypto.spec.SecretKeySpec;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
@@ -37,6 +41,7 @@ public class JwtConfig {
     private final UserDetailsService userDetailsService;
     private final UserTokenInfoRepository userTokenInfoRepository;
     private final UserTokenInfoService userTokenInfoService;
+    //private final UserService userService;
 
     @PostConstruct
     protected void init() {
@@ -53,17 +58,19 @@ public class JwtConfig {
                 .compact();
     }
 
-    public long createRefreshToken(String userEmail, long id, List<String> roleList) {
+    public long createRefreshToken(User user) {
+        Date now = new Date();
         String refreshToken = Jwts.builder()
-                .setSubject(userEmail)
+                .setSubject(user.getEmail())
                 .setHeader(createHeader())
-                .setClaims(createClaims(userEmail, roleList))
-                .setExpiration(createExpireDate(1000 * 60 * 10))
+                .setClaims(createClaims(user.getEmail(), Arrays.asList(user.getUserRole().getValue())))
+                //.setExpiration(createExpireDate(1000 * 60 * 10))
+                .setExpiration(new Date(now.getTime() + expireTime))
                 .signWith(SignatureAlgorithm.HS256, refreshKey)
                 .compact();
 
         TokenResponse tokenResponse = TokenResponse.builder()
-                .id(id)
+                .id(user.getId())
                 .REFRESH_TOKEN(refreshToken)
                 .build();
 
@@ -80,7 +87,7 @@ public class JwtConfig {
         return request.getHeader(HttpHeaders.AUTHORIZATION);
     }
 
-    public boolean validateToken(String jwtToken) {
+    public boolean validateToken(HttpServletRequest request, String jwtToken) {
         log.debug("jwtToken : " + jwtToken);
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
@@ -89,6 +96,34 @@ public class JwtConfig {
             log.info("잘못된 JWT 서명입니다.");
         } catch (ExpiredJwtException e) {
             log.info("만료된 JWT 토큰입니다.");
+            long refreshTokenIndex = getRefreshTokenByCookieIndex(request, "REFRESHTOKENINDEX");
+
+            if(0 >= refreshTokenIndex) {
+                return false;
+            }
+
+            //index로 refreshToken값 가져와서 비교
+            UserTokenInfo userTokenInfo = userTokenInfoService.getTokenInfo(refreshTokenIndex);
+            validateRefreshToken(userTokenInfo);
+
+        } catch (UnsupportedJwtException e) {
+            log.info("지원되지 않는 JWT 토큰입니다.");
+        } catch (IllegalArgumentException e) {
+            log.info("JWT 토큰이 잘못되었습니다.");
+        }
+
+        return false;
+    }
+
+    public boolean validateRefreshToken(UserTokenInfo userTokenInfo) {
+        try {
+            Jws<Claims> claims = Jwts.parser().setSigningKey(refreshKey).parseClaimsJws(userTokenInfo.getRefreshToken());
+            return claims.getBody().getExpiration().before(new Date()) == false;
+        } catch (SecurityException | MalformedJwtException e) {
+            log.info("잘못된 JWT 서명입니다.");
+        } catch (ExpiredJwtException e) {
+            log.info("refreshToken 재발급");
+            //createRefreshToken(userService.findUserById(userTokenInfo.getId()));
         } catch (UnsupportedJwtException e) {
             log.info("지원되지 않는 JWT 토큰입니다.");
         } catch (IllegalArgumentException e) {
@@ -130,5 +165,16 @@ public class JwtConfig {
 
     public Boolean reCreateRefreshToken(String email) throws Exception {
         return true;
+    }
+
+    private long getRefreshTokenByCookieIndex(HttpServletRequest httpServletRequest, String cookieName) {
+        Cookie[] cookies = httpServletRequest.getCookies();
+
+        for (Cookie cookie : cookies) {
+            if(cookieName.equals(cookie.getName()))
+                return Long.parseLong(cookie.getValue());
+        }
+
+        return 0;
     }
 }

@@ -9,7 +9,7 @@ import lombok.*;
 public class TokenResponse {
     private long index;
     private long id;
-    private long refresh_token_index;
+    private long refreshTokenIndex;
 
     private String ACCESS_TOKEN;
     private String REFRESH_TOKEN;

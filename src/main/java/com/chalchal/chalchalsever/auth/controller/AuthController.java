@@ -42,10 +42,10 @@ public class AuthController {
         TokenResponse tokenResponse = TokenResponse.builder()
                 .id(user.getId())
                 .ACCESS_TOKEN(jwtConfig.createToken(user.getEmail(), Arrays.asList(user.getUserRole().getValue())))
-                .refresh_token_index(jwtConfig.createRefreshToken(user.getEmail(), user.getId(), Arrays.asList(user.getUserRole().getValue())))
+                .refreshTokenIndex(jwtConfig.createRefreshToken(user))
                 .build();
 
-        ResponseCookie responseCookie = ResponseCookie.from("REFRESHTOKENINDEX", String.valueOf(tokenResponse.getRefresh_token_index()))
+        ResponseCookie responseCookie = ResponseCookie.from("REFRESHTOKENINDEX", String.valueOf(tokenResponse.getRefreshTokenIndex()))
                 .httpOnly(true)
                 .secure(true)
                 .path("/")

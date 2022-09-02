@@ -27,4 +27,4 @@ jwt:
     access: jwtsecret
     refresh: jwtrefresh
   expire:
-    time: 3600000
+    time: 360

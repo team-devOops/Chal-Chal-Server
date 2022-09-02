@@ -19,7 +19,6 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends GenericFilterBean {
     private final JwtConfig jwtTokenProvider;
-    private final ObjectMapper objectMapper;
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain) throws IOException, ServletException {
@@ -27,8 +26,9 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         String jwt = jwtTokenProvider.resolveToken(httpServletRequest);
         String requestURI = httpServletRequest.getRequestURI();
+
         log.debug("doFilter 들어옴");
-        if (StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt)) {
+        if (StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(httpServletRequest, jwt)) {
             Authentication authentication = jwtTokenProvider.getAuthentication(jwt);
             SecurityContextHolder.getContext().setAuthentication(authentication);
             log.debug("Security Context에 '{}' 인증 정보를 저장했습니다, uri: {}", authentication.getName(),

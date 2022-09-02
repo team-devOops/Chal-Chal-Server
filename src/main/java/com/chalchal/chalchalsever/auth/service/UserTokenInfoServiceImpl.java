@@ -23,4 +23,14 @@ public class UserTokenInfoServiceImpl implements UserTokenInfoService {
                 .refreshToken(tokenResponse.getREFRESH_TOKEN())
                 .build());
     }
+
+    @Override
+    public UserTokenInfo getTokenInfo(long tokenIndex) {
+        return userTokenInfoRepository.findByTokenIndex(tokenIndex);
+    }
+
+    @Override
+    public long getUserId(String refreshToken) {
+        return userTokenInfoRepository.findIdByRefreshToken(refreshToken);
+    }
 }

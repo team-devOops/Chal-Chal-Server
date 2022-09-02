@@ -2,6 +2,7 @@ package com.chalchal.chalchalsever.config.jwt;
 
 import com.chalchal.chalchalsever.auth.repository.UserTokenInfoRepository;
 import com.chalchal.chalchalsever.auth.service.UserTokenInfoService;
+import com.chalchal.chalchalsever.dto.TokenResponse;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +36,7 @@ public class JwtConfig {
 
     private final UserDetailsService userDetailsService;
     private final UserTokenInfoRepository userTokenInfoRepository;
+    private final UserTokenInfoService userTokenInfoService;
 
     @PostConstruct
     protected void init() {
@@ -51,14 +53,21 @@ public class JwtConfig {
                 .compact();
     }
 
-    public String createRefreshToken(String userEmail, List<String> roleList) {
-        return Jwts.builder()
+    public long createRefreshToken(String userEmail, long id, List<String> roleList) {
+        String refreshToken = Jwts.builder()
                 .setSubject(userEmail)
                 .setHeader(createHeader())
                 .setClaims(createClaims(userEmail, roleList))
                 .setExpiration(createExpireDate(1000 * 60 * 10))
                 .signWith(SignatureAlgorithm.HS256, refreshKey)
                 .compact();
+
+        TokenResponse tokenResponse = TokenResponse.builder()
+                .id(id)
+                .REFRESH_TOKEN(refreshToken)
+                .build();
+
+        return userTokenInfoService.createUserTokenInfo(tokenResponse).getTokenIndex();
     }
 
     public Authentication getAuthentication(String token) {

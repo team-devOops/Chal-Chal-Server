@@ -7,7 +7,10 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TokenResponse {
-    private Long id;
+    private long index;
+    private long id;
+    private long refresh_token_index;
+
     private String ACCESS_TOKEN;
     private String REFRESH_TOKEN;
 }

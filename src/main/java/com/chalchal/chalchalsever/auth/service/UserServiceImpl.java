@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +26,9 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.save(User.builder()
                 .email(userRequest.getEmail())
                 .password(bCryptPasswordEncoder.encode(userRequest.getPassword()))
+                .name(userRequest.getName())
+                .nickName(StringUtils.isEmpty(userRequest.getNickName()) ? userRequest.getName() : userRequest.getNickName())
+                .phoneNo(userRequest.getPhoneNo().replaceAll("-", ""))
                 .userRole(userRequest.getUserRole())
                 .build());
 
@@ -50,7 +54,7 @@ public class UserServiceImpl implements UserService {
             throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
         }
 
-        return User.builder().id(user.getId()).password(user.getPassword()).userRole(user.getUserRole()).email(user.getEmail()).build();
+        return user;
     }
 
     @Override

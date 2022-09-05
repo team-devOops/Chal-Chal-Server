@@ -28,6 +28,15 @@ public class User extends BaseDomain implements UserDetails {
     @Column(unique = true)
     private String email;
 
+    @Column(name = "phone_no", nullable = false)
+    private String phoneNo;
+
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @Column(name = "nickName")
+    private String nickName;
+
     @Column
     @Enumerated(EnumType.STRING)
     private UserRole userRole;

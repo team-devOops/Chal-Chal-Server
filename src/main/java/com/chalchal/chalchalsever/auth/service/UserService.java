@@ -14,4 +14,6 @@ public interface UserService {
     User findByEmailAndPassword(String email, String password);
 
     List<User> findAll();
+
+    boolean validateRegister(String email);
 }

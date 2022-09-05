@@ -57,4 +57,13 @@ public class UserServiceImpl implements UserService {
     public List<User> findAll() {
         return null;
     }
+
+    @Override
+    public boolean validateRegister(String email) {
+        if(userRepository.countByEmail(email) > 0) {
+            return false;
+        }
+
+        return true;
+    }
 }

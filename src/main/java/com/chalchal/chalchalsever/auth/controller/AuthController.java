@@ -33,8 +33,12 @@ public class AuthController {
 
     @PostMapping(value = "/join")
     @ApiOperation(value = "회원가입")
-    public User signUp(@RequestBody UserRequest userRequest) {
-        return userService.createUser(userRequest);
+    public ResponseEntity<?> signUp(@RequestBody UserRequest userRequest) {
+        if(userService.validateRegister(userRequest.getEmail())) {
+            return new ResponseEntity<>(userService.createUser(userRequest), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.CONFLICT);
     }
 
     @PostMapping(value = "/refresh")

@@ -8,10 +8,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Builder
-@Data
+@Getter
 @Entity
 @AllArgsConstructor
 @Table(name = "t_user")

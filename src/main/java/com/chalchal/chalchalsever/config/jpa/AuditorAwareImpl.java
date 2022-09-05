@@ -1,6 +1,5 @@
 package com.chalchal.chalchalsever.config.jpa;
 
-
 import org.apache.catalina.User;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;

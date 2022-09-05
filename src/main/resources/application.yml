@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    url: jdbc:h2:file:/Users/myalley/Desktop/h2/h2sql;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     driverClassName: org.h2.Driver
     username: sa
     password: password
@@ -23,6 +23,8 @@ logging:
     root: debug
 
 jwt:
-  token: jwtsecret
+  token:
+    access: jwtsecret
+    refresh: jwtrefresh
   expire:
-    time: 3600
+    time: 360

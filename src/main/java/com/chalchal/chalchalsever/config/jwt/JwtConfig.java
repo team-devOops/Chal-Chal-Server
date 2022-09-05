@@ -1,7 +1,6 @@
 package com.chalchal.chalchalsever.config.jwt;
 
 import com.chalchal.chalchalsever.auth.repository.UserTokenInfoRepository;
-import com.chalchal.chalchalsever.auth.service.UserService;
 import com.chalchal.chalchalsever.auth.service.UserTokenInfoService;
 import com.chalchal.chalchalsever.domain.User;
 import com.chalchal.chalchalsever.domain.UserTokenInfo;
@@ -41,7 +40,6 @@ public class JwtConfig {
     private final UserDetailsService userDetailsService;
     private final UserTokenInfoRepository userTokenInfoRepository;
     private final UserTokenInfoService userTokenInfoService;
-    //private final UserService userService;
 
     @PostConstruct
     protected void init() {
@@ -64,8 +62,8 @@ public class JwtConfig {
                 .setSubject(user.getEmail())
                 .setHeader(createHeader())
                 .setClaims(createClaims(user.getEmail(), Arrays.asList(user.getUserRole().getValue())))
-                //.setExpiration(createExpireDate(1000 * 60 * 10))
-                .setExpiration(new Date(now.getTime() + expireTime))
+                .setExpiration(createExpireDate(1000 * 60 * 10))
+                //.setExpiration(new Date(now.getTime() + expireTime))
                 .signWith(SignatureAlgorithm.HS256, refreshKey)
                 .compact();
 
@@ -96,16 +94,6 @@ public class JwtConfig {
             log.info("잘못된 JWT 서명입니다.");
         } catch (ExpiredJwtException e) {
             log.info("만료된 JWT 토큰입니다.");
-            long refreshTokenIndex = getRefreshTokenByCookieIndex(request, "REFRESHTOKENINDEX");
-
-            if(0 >= refreshTokenIndex) {
-                return false;
-            }
-
-            //index로 refreshToken값 가져와서 비교
-            UserTokenInfo userTokenInfo = userTokenInfoService.getTokenInfo(refreshTokenIndex);
-            validateRefreshToken(userTokenInfo);
-
         } catch (UnsupportedJwtException e) {
             log.info("지원되지 않는 JWT 토큰입니다.");
         } catch (IllegalArgumentException e) {
@@ -123,7 +111,6 @@ public class JwtConfig {
             log.info("잘못된 JWT 서명입니다.");
         } catch (ExpiredJwtException e) {
             log.info("refreshToken 재발급");
-            //createRefreshToken(userService.findUserById(userTokenInfo.getId()));
         } catch (UnsupportedJwtException e) {
             log.info("지원되지 않는 JWT 토큰입니다.");
         } catch (IllegalArgumentException e) {
@@ -167,7 +154,7 @@ public class JwtConfig {
         return true;
     }
 
-    private long getRefreshTokenByCookieIndex(HttpServletRequest httpServletRequest, String cookieName) {
+    public long getRefreshTokenByCookieIndex(HttpServletRequest httpServletRequest, String cookieName) {
         Cookie[] cookies = httpServletRequest.getCookies();
 
         for (Cookie cookie : cookies) {

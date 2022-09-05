@@ -1,8 +1,10 @@
 package com.chalchal.chalchalsever.auth.controller;
 
 import com.chalchal.chalchalsever.auth.service.UserService;
+import com.chalchal.chalchalsever.auth.service.UserTokenInfoService;
 import com.chalchal.chalchalsever.config.jwt.JwtConfig;
 import com.chalchal.chalchalsever.domain.User;
+import com.chalchal.chalchalsever.domain.UserTokenInfo;
 import com.chalchal.chalchalsever.dto.TokenResponse;
 import com.chalchal.chalchalsever.dto.UserRequest;
 import io.swagger.annotations.Api;
@@ -26,12 +28,36 @@ import java.util.Arrays;
 public class AuthController {
 
     private final UserService userService;
+    private final UserTokenInfoService userTokenInfoService;
     private final JwtConfig jwtConfig;
 
     @PostMapping(value = "/join")
     @ApiOperation(value = "회원가입")
     public User signUp(@RequestBody UserRequest userRequest) {
         return userService.createUser(userRequest);
+    }
+
+    @PostMapping(value = "/refresh")
+    @ApiOperation(value = "access token 재발급")
+    public ResponseEntity<?> accessTokenRefresh(HttpServletRequest httpServletRequest) {
+        long refreshTokenInedx = jwtConfig.getRefreshTokenByCookieIndex(httpServletRequest, "REFRESHTOKENINDEX");
+
+        UserTokenInfo userTokenInfo = userTokenInfoService.getTokenInfo(refreshTokenInedx);
+
+        if(jwtConfig.validateRefreshToken(userTokenInfo)) {
+            User user = userService.findUserById(userTokenInfo.getId());
+            TokenResponse tokenResponse = TokenResponse.builder()
+                    .id(user.getId())
+                    .ACCESS_TOKEN(jwtConfig.createToken(user.getEmail(), Arrays.asList(user.getUserRole().getValue())))
+                    .build();
+
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.add(HttpHeaders.AUTHORIZATION, tokenResponse.getACCESS_TOKEN());
+
+            return new ResponseEntity<>(httpHeaders, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
     @PostMapping("/login")

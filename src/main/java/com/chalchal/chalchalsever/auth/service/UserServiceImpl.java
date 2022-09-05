@@ -1,13 +1,11 @@
 package com.chalchal.chalchalsever.auth.service;
 
 import com.chalchal.chalchalsever.auth.repository.UserRepository;
-import com.chalchal.chalchalsever.config.jwt.JwtConfig;
 import com.chalchal.chalchalsever.domain.User;
 import com.chalchal.chalchalsever.dto.UserRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +19,6 @@ public class UserServiceImpl implements UserService {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final UserRepository userRepository;
-    private final JwtConfig jwtConfig;
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     @Override
     public User createUser(UserRequest userRequest) {
@@ -42,7 +38,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findUserById(long id) {
-        return null;
+        User user = Optional.ofNullable(userRepository.findById(id)).orElseThrow(()->new BadCredentialsException("유효하지 않은 아이디입니다."));
+        return user;
     }
 
     @Override

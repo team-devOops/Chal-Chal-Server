@@ -1,8 +1,7 @@
 package com.chalchal.chalchalsever.config.security;
 
 import com.chalchal.chalchalsever.config.jwt.JwtAuthenticationFilter;
-import com.chalchal.chalchalsever.config.jwt.JwtConfig;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.chalchal.chalchalsever.config.jwt.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,8 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    private final JwtConfig jwtConfig;
-    private final ObjectMapper objectMapper;
+    private final JwtUtils jwtUtils;
 
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
@@ -49,7 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                             , "/v2/api-docs").permitAll()
                 .anyRequest().hasRole("USER")
             .and()
-            .addFilterBefore(new JwtAuthenticationFilter(jwtConfig), UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(new JwtAuthenticationFilter(jwtUtils), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling()
                 .accessDeniedHandler(customAccessDeniedHandler)
                 .authenticationEntryPoint(customAuthenticationEntryPoint)

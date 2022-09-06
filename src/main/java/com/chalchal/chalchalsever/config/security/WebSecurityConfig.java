@@ -38,14 +38,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
                 .authorizeRequests()
-                .antMatchers("/api/auth/login"
+                .antMatchers("/api/auth/sign-in"
                             , "/api/auth/join"
                             , "/api/auth/refresh"
                             , "/swagger-ui/**"
                             , "/swagger-resources/**"
                             , "/swagger-ui.html"
                             , "/v2/api-docs").permitAll()
-                .anyRequest().hasRole("USER")
+                //.anyRequest().hasRole("USER")
+                .anyRequest().authenticated()
             .and()
             .addFilterBefore(new JwtAuthenticationFilter(jwtUtils), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling()

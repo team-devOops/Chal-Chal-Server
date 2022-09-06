@@ -64,7 +64,7 @@ public class AuthController {
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
-    @PostMapping("/login")
+    @PostMapping("/sign-in")
     @ApiOperation(value = "로그인")
     public ResponseEntity<?> login(@RequestBody UserRequest userRequest) {
         User user = userService.findByEmailAndPassword(userRequest.getEmail(), userRequest.getPassword());
@@ -90,9 +90,38 @@ public class AuthController {
         return new ResponseEntity<>(httpHeaders, HttpStatus.OK);
     }
 
+    @PostMapping(value = "/sign-out")
+    @ApiOperation(value = "로그아웃")
+    public ResponseEntity<?> logout(HttpServletRequest httpServletRequest) {
+        long refreshTokenInedx = jwtUtils.getRefreshTokenByCookieIndex(httpServletRequest, "REFRESHTOKENINDEX");
+        UserTokenInfo userTokenInfo = userTokenInfoService.getTokenInfo(refreshTokenInedx);
+
+        TokenResponse tokenResponse = TokenResponse.builder()
+                .id(userTokenInfo.getId())
+                .refreshTokenIndex(refreshTokenInedx)
+                .REFRESH_TOKEN(null)
+                .build();
+
+        jwtUtils.insertRefreshTokenInfo(tokenResponse);
+
+        ResponseCookie responseCookie = ResponseCookie.from("REFRESHTOKENINDEX", null)
+                .httpOnly(true)
+                .maxAge(0)
+                .secure(true)
+                .path("/")
+                .domain("localhost")
+                .secure(true)
+                .build();
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(HttpHeaders.SET_COOKIE, responseCookie.toString());
+
+        return new ResponseEntity<>(httpHeaders, HttpStatus.OK);
+    }
+
     @PostMapping(value = "/info/{email}")
     @ApiOperation(value = "개인정보")
-    public User getInfo(@PathVariable String email) {
-        return userService.findUser(email);
+    public ResponseEntity<?> getInfo(@PathVariable String email) {
+        return new ResponseEntity<>(userService.findUser(email), HttpStatus.OK);
     }
 }

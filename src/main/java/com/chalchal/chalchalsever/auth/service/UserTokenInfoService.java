@@ -5,5 +5,6 @@ import com.chalchal.chalchalsever.dto.TokenResponse;
 
 public interface UserTokenInfoService {
     UserTokenInfo createUserTokenInfo(TokenResponse tokenResponse);
+    UserTokenInfo clearUserTokenInfo(TokenResponse tokenResponse);
     UserTokenInfo getTokenInfo(long refreshTokenIndex);
 }

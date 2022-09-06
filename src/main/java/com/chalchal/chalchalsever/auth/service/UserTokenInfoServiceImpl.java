@@ -22,6 +22,15 @@ public class UserTokenInfoServiceImpl implements UserTokenInfoService {
     }
 
     @Override
+    public UserTokenInfo clearUserTokenInfo(TokenResponse tokenResponse) {
+        return userTokenInfoRepository.save(UserTokenInfo.builder()
+                .id(tokenResponse.getId())
+                .tokenIndex(tokenResponse.getRefreshTokenIndex())
+                .refreshToken(tokenResponse.getREFRESH_TOKEN())
+                .build());
+    }
+
+    @Override
     public UserTokenInfo getTokenInfo(long tokenIndex) {
         return userTokenInfoRepository.findByTokenIndex(tokenIndex);
     }

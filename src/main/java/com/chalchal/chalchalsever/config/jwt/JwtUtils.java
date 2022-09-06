@@ -38,7 +38,6 @@ public class JwtUtils {
     private long expireTime;
 
     private final UserDetailsService userDetailsService;
-    private final UserTokenInfoRepository userTokenInfoRepository;
     private final UserTokenInfoService userTokenInfoService;
 
     @PostConstruct
@@ -148,5 +147,9 @@ public class JwtUtils {
         }
 
         return 0;
+    }
+
+    public long insertRefreshTokenInfo(TokenResponse tokenResponse) {
+        return userTokenInfoService.clearUserTokenInfo(tokenResponse).getTokenIndex();
     }
 }

@@ -5,10 +5,7 @@ import com.chalchal.chalchalsever.domain.UserTokenInfo;
 import com.chalchal.chalchalsever.dto.TokenResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -27,10 +24,5 @@ public class UserTokenInfoServiceImpl implements UserTokenInfoService {
     @Override
     public UserTokenInfo getTokenInfo(long tokenIndex) {
         return userTokenInfoRepository.findByTokenIndex(tokenIndex);
-    }
-
-    @Override
-    public long getUserId(String refreshToken) {
-        return userTokenInfoRepository.findIdByRefreshToken(refreshToken);
     }
 }

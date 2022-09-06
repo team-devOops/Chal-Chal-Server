@@ -2,7 +2,6 @@ package com.chalchal.chalchalsever.config.security;
 
 import com.chalchal.chalchalsever.dto.ResultResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.models.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

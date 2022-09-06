@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findUser(String email) {
-        return null;
+        return Optional.ofNullable(userRepository.findByEmail(email)).orElseThrow(()->new BadCredentialsException("유효하지 않은 아이디입니다."));
     }
 
     @Override

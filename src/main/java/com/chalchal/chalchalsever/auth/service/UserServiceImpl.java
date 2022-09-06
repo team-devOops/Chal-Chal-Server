@@ -37,6 +37,7 @@ public class UserServiceImpl implements UserService {
                 .nickName(StringUtils.isEmpty(userRequest.getNickName()) ? userRequest.getName() : userRequest.getNickName())
                 .phoneNo(userRequest.getPhoneNo().replaceAll("-", ""))
                 .userRole(userRequest.getUserRole())
+                .useYn("Y")
                 .build());
 
         return user;
@@ -62,6 +63,11 @@ public class UserServiceImpl implements UserService {
         }
 
         return user;
+    }
+
+    @Override
+    public User resignUser(long id) {
+        return null;
     }
 
     @Override

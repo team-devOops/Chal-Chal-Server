@@ -16,6 +16,8 @@ public interface UserService {
 
     User findByEmailAndPassword(String email, String password);
 
+    User resignUser(long id);
+
     boolean validateRegister(String email);
 
     HttpHeaders setLogout(HttpServletRequest httpServletRequest);

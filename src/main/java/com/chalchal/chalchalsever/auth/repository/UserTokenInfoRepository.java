@@ -6,8 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserTokenInfoRepository extends JpaRepository<UserTokenInfo, Long> {
-    boolean existsByRefreshToken(String token); //?
-
     UserTokenInfo findByTokenIndex(long tokenIndex);
 
     long findIdByRefreshToken(String refreshToken);

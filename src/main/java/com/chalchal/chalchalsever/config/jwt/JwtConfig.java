@@ -57,13 +57,11 @@ public class JwtConfig {
     }
 
     public long createRefreshToken(User user) {
-        Date now = new Date();
         String refreshToken = Jwts.builder()
                 .setSubject(user.getEmail())
                 .setHeader(createHeader())
                 .setClaims(createClaims(user.getEmail(), Arrays.asList(user.getUserRole().getValue())))
                 .setExpiration(createExpireDate(1000 * 60 * 10))
-                //.setExpiration(new Date(now.getTime() + expireTime))
                 .signWith(SignatureAlgorithm.HS256, refreshKey)
                 .compact();
 
@@ -85,8 +83,8 @@ public class JwtConfig {
         return request.getHeader(HttpHeaders.AUTHORIZATION);
     }
 
-    public boolean validateToken(HttpServletRequest request, String jwtToken) {
-        log.debug("jwtToken : " + jwtToken);
+    public boolean validateToken(String jwtToken) {
+
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
             return claims.getBody().getExpiration().before(new Date()) == false;
@@ -139,19 +137,6 @@ public class JwtConfig {
     private Date createExpireDate(long expireDate) {
         long curTime = System.currentTimeMillis();
         return new Date(curTime + expireDate);
-    }
-
-    private Key createSigningKey(String key) {
-        byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(key);
-        return new SecretKeySpec(apiKeySecretBytes, SignatureAlgorithm.HS256.getJcaName());
-    }
-
-    public boolean existsRefreshToken(String refreshToken) {
-        return userTokenInfoRepository.existsByRefreshToken(refreshToken);
-    }
-
-    public Boolean reCreateRefreshToken(String email) throws Exception {
-        return true;
     }
 
     public long getRefreshTokenByCookieIndex(HttpServletRequest httpServletRequest, String cookieName) {

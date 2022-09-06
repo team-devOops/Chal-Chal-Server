@@ -40,8 +40,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
                 .authorizeRequests()
-                .antMatchers("/api/auth/login", "/api/auth/join", "/api/auth/refresh", "/swagger-ui/**", "/swagger-resources/**",
-                        "/swagger-ui.html", "/v2/api-docs").permitAll()
+                .antMatchers("/api/auth/login"
+                            , "/api/auth/join"
+                            , "/api/auth/refresh"
+                            , "/swagger-ui/**"
+                            , "/swagger-resources/**"
+                            , "/swagger-ui.html"
+                            , "/v2/api-docs").permitAll()
                 .anyRequest().hasRole("USER")
             .and()
             .addFilterBefore(new JwtAuthenticationFilter(jwtConfig), UsernamePasswordAuthenticationFilter.class)

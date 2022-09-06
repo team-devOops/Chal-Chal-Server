@@ -92,7 +92,7 @@ public class AuthController {
 
     @PostMapping(value = "/info/{email}")
     @ApiOperation(value = "개인정보")
-    public User getInfo(HttpServletRequest httpServletRequest, @PathVariable String email) {
+    public User getInfo(@PathVariable String email) {
         return userService.findUser(email);
     }
 }

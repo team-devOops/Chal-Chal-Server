@@ -1,15 +1,21 @@
 package com.chalchal.chalchalsever.auth.service;
 
 import com.chalchal.chalchalsever.auth.repository.UserRepository;
+import com.chalchal.chalchalsever.config.jwt.JwtUtils;
 import com.chalchal.chalchalsever.domain.User;
+import com.chalchal.chalchalsever.domain.UserTokenInfo;
+import com.chalchal.chalchalsever.dto.TokenResponse;
 import com.chalchal.chalchalsever.dto.UserRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.http.HttpHeaders;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
 @Slf4j
@@ -19,6 +25,8 @@ public class UserServiceImpl implements UserService {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final UserRepository userRepository;
+    private final JwtUtils jwtUtils;
+    private final UserTokenInfoService userTokenInfoService;
 
     @Override
     public User createUser(UserRequest userRequest) {
@@ -63,5 +71,45 @@ public class UserServiceImpl implements UserService {
         }
 
         return true;
+    }
+
+    @Override
+    public HttpHeaders setLogout(HttpServletRequest httpServletRequest) {
+        long refreshTokenInedx = jwtUtils.getRefreshTokenByCookieIndex(httpServletRequest, "REFRESHTOKENINDEX");
+        UserTokenInfo userTokenInfo = userTokenInfoService.getTokenInfo(refreshTokenInedx);
+
+        TokenResponse tokenResponse = TokenResponse.builder()
+                .id(userTokenInfo.getId())
+                .refreshTokenIndex(refreshTokenInedx)
+                .REFRESH_TOKEN(null)
+                .build();
+
+        jwtUtils.insertRefreshTokenInfo(tokenResponse);
+
+        ResponseCookie responseCookie = ResponseCookie.from("REFRESHTOKENINDEX", null)
+                .httpOnly(true)
+                .maxAge(0)
+                .secure(true)
+                .path("/")
+                .domain("localhost")
+                .secure(true)
+                .build();
+
+        HttpHeaders httpHeaders = new org.springframework.http.HttpHeaders();
+        httpHeaders.add(org.springframework.http.HttpHeaders.SET_COOKIE, responseCookie.toString());
+
+        return httpHeaders;
+    }
+
+    @Override
+    public ResponseCookie setCookie(TokenResponse tokenResponse) {
+
+        return ResponseCookie.from("REFRESHTOKENINDEX", String.valueOf(tokenResponse.getRefreshTokenIndex()))
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .domain("localhost")
+                .secure(true)
+                .build();
     }
 }

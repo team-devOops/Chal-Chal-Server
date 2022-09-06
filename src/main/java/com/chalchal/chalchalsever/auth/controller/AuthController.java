@@ -75,13 +75,7 @@ public class AuthController {
                 .refreshTokenIndex(jwtUtils.createRefreshToken(user))
                 .build();
 
-        ResponseCookie responseCookie = ResponseCookie.from("REFRESHTOKENINDEX", String.valueOf(tokenResponse.getRefreshTokenIndex()))
-                .httpOnly(true)
-                .secure(true)
-                .path("/")
-                .domain("localhost")
-                .secure(true)
-                .build();
+        ResponseCookie responseCookie = userService.setCookie(tokenResponse);
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(HttpHeaders.AUTHORIZATION, tokenResponse.getACCESS_TOKEN());
@@ -93,30 +87,15 @@ public class AuthController {
     @PostMapping(value = "/sign-out")
     @ApiOperation(value = "로그아웃")
     public ResponseEntity<?> logout(HttpServletRequest httpServletRequest) {
-        long refreshTokenInedx = jwtUtils.getRefreshTokenByCookieIndex(httpServletRequest, "REFRESHTOKENINDEX");
-        UserTokenInfo userTokenInfo = userTokenInfoService.getTokenInfo(refreshTokenInedx);
+        return new ResponseEntity<>(userService.setLogout(httpServletRequest), HttpStatus.OK);
+    }
 
-        TokenResponse tokenResponse = TokenResponse.builder()
-                .id(userTokenInfo.getId())
-                .refreshTokenIndex(refreshTokenInedx)
-                .REFRESH_TOKEN(null)
-                .build();
+    @PostMapping(value = "/resign")
+    @ApiOperation(value = "회원 탈퇴")
+    public ResponseEntity<?> resign() {
+            //쿠키삭제 DB삭제 해줘야함
 
-        jwtUtils.insertRefreshTokenInfo(tokenResponse);
-
-        ResponseCookie responseCookie = ResponseCookie.from("REFRESHTOKENINDEX", null)
-                .httpOnly(true)
-                .maxAge(0)
-                .secure(true)
-                .path("/")
-                .domain("localhost")
-                .secure(true)
-                .build();
-
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(HttpHeaders.SET_COOKIE, responseCookie.toString());
-
-        return new ResponseEntity<>(httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping(value = "/info/{email}")

@@ -2,7 +2,7 @@ package com.chalchal.chalchalsever.auth.controller;
 
 import com.chalchal.chalchalsever.auth.service.UserService;
 import com.chalchal.chalchalsever.auth.service.UserTokenInfoService;
-import com.chalchal.chalchalsever.config.jwt.JwtConfig;
+import com.chalchal.chalchalsever.config.jwt.JwtUtils;
 import com.chalchal.chalchalsever.domain.User;
 import com.chalchal.chalchalsever.domain.UserTokenInfo;
 import com.chalchal.chalchalsever.dto.TokenResponse;
@@ -29,7 +29,7 @@ public class AuthController {
 
     private final UserService userService;
     private final UserTokenInfoService userTokenInfoService;
-    private final JwtConfig jwtConfig;
+    private final JwtUtils jwtUtils;
 
     @PostMapping(value = "/join")
     @ApiOperation(value = "회원가입")
@@ -44,15 +44,15 @@ public class AuthController {
     @PostMapping(value = "/refresh")
     @ApiOperation(value = "access token 재발급")
     public ResponseEntity<?> accessTokenRefresh(HttpServletRequest httpServletRequest) {
-        long refreshTokenInedx = jwtConfig.getRefreshTokenByCookieIndex(httpServletRequest, "REFRESHTOKENINDEX");
+        long refreshTokenInedx = jwtUtils.getRefreshTokenByCookieIndex(httpServletRequest, "REFRESHTOKENINDEX");
 
         UserTokenInfo userTokenInfo = userTokenInfoService.getTokenInfo(refreshTokenInedx);
 
-        if(jwtConfig.validateRefreshToken(userTokenInfo)) {
+        if(jwtUtils.validateRefreshToken(userTokenInfo)) {
             User user = userService.findUserById(userTokenInfo.getId());
             TokenResponse tokenResponse = TokenResponse.builder()
                     .id(user.getId())
-                    .ACCESS_TOKEN(jwtConfig.createToken(user.getEmail(), Arrays.asList(user.getUserRole().getValue())))
+                    .ACCESS_TOKEN(jwtUtils.createToken(user.getEmail(), Arrays.asList(user.getUserRole().getValue())))
                     .build();
 
             HttpHeaders httpHeaders = new HttpHeaders();
@@ -71,8 +71,8 @@ public class AuthController {
 
         TokenResponse tokenResponse = TokenResponse.builder()
                 .id(user.getId())
-                .ACCESS_TOKEN(jwtConfig.createToken(user.getEmail(), Arrays.asList(user.getUserRole().getValue())))
-                .refreshTokenIndex(jwtConfig.createRefreshToken(user))
+                .ACCESS_TOKEN(jwtUtils.createToken(user.getEmail(), Arrays.asList(user.getUserRole().getValue())))
+                .refreshTokenIndex(jwtUtils.createRefreshToken(user))
                 .build();
 
         ResponseCookie responseCookie = ResponseCookie.from("REFRESHTOKENINDEX", String.valueOf(tokenResponse.getRefreshTokenIndex()))

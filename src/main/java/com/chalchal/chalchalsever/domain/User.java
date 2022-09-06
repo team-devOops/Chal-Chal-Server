@@ -34,12 +34,15 @@ public class User extends BaseDomain implements UserDetails {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "nickName")
+    @Column(name = "nickname")
     private String nickName;
 
     @Column
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
+
+    @Column(name = "use_yn", nullable = false)
+    private String useYn;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

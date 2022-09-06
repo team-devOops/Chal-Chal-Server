@@ -15,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -92,10 +93,13 @@ public class AuthController {
 
     @PostMapping(value = "/resign")
     @ApiOperation(value = "회원 탈퇴")
-    public ResponseEntity<?> resign() {
-            //쿠키삭제 DB삭제 해줘야함
-
+    public ResponseEntity<?> resign(HttpServletRequest httpServletRequest) {
+        Authentication authentication = jwtUtils.getAuthentication(jwtUtils.resolveToken(httpServletRequest));
+        if(log.isDebugEnabled()) {
+            log.debug("!!!!!!!!!!!! : " + authentication.getName());
+        }
         return new ResponseEntity<>(HttpStatus.OK);
+//        return new ResponseEntity<>(userService.setLogout(httpServletRequest), HttpStatus.OK);
     }
 
     @PostMapping(value = "/info/{email}")

@@ -45,10 +45,10 @@ public class JwtUtils {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    public String createToken(String userEmail, List<String> roleList) {
+    public String createToken(User user) {
         Date now = new Date();
         return Jwts.builder()
-                .setClaims(createClaims(userEmail, roleList))
+                .setClaims(createClaims(user))
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + expireTime))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
@@ -59,7 +59,7 @@ public class JwtUtils {
         String refreshToken = Jwts.builder()
                 .setSubject(user.getEmail())
                 .setHeader(createHeader())
-                .setClaims(createClaims(user.getEmail(), Arrays.asList(user.getUserRole().getValue())))
+                .setClaims(createClaims(user))
                 .setExpiration(createExpireDate(1000 * 60 * 10))
                 .signWith(SignatureAlgorithm.HS256, refreshKey)
                 .compact();
@@ -117,9 +117,10 @@ public class JwtUtils {
         return false;
     }
 
-    private Map<String, Object> createClaims(String email, List<String> roleList) {
-        Claims claims = Jwts.claims().setSubject(email);
-        claims.put("roles", roleList);
+    private Map<String, Object> createClaims(User user) {
+        Claims claims = Jwts.claims().setSubject(user.getEmail());
+        claims.put("id", user.getId());
+        claims.put("roles", Arrays.asList(user.getUserRole()));
         return claims;
     }
 

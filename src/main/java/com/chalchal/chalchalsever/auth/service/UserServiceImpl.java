@@ -16,6 +16,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.http.HttpHeaders;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Slf4j
@@ -34,7 +35,7 @@ public class UserServiceImpl implements UserService {
                 .email(userRequest.getEmail())
                 .password(bCryptPasswordEncoder.encode(userRequest.getPassword()))
                 .name(userRequest.getName())
-                .nickName(StringUtils.isEmpty(userRequest.getNickName()) ? userRequest.getName() : userRequest.getNickName())
+                .nickname(StringUtils.isEmpty(userRequest.getNickName()) ? userRequest.getName() : userRequest.getNickName())
                 .phoneNo(userRequest.getPhoneNo().replaceAll("-", ""))
                 .userRole(userRequest.getUserRole())
                 .useYn("Y")
@@ -45,7 +46,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findUser(String email) {
-        return Optional.ofNullable(userRepository.findByEmail(email)).orElseThrow(()->new BadCredentialsException("유효하지 않은 아이디입니다."));
+        return Optional.ofNullable(userRepository.findByEmailAndUseYn(email, "Y")).orElseThrow(()->new BadCredentialsException("유효하지 않은 아이디입니다."));
     }
 
     @Override
@@ -56,7 +57,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByEmailAndPassword(String email, String password) {
-        User user = Optional.ofNullable(userRepository.findByEmail(email)).orElseThrow(()->new BadCredentialsException("이메일이나 비밀번호를 확인해주세요."));
+        User user = Optional.ofNullable(userRepository.findByEmailAndUseYn(email, "Y")).orElseThrow(()->new BadCredentialsException("이메일이나 비밀번호를 확인해주세요."));
 
         if (bCryptPasswordEncoder.matches(password, user.getPassword()) == false) {
             throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
@@ -66,8 +67,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public User resignUser(long id) {
-        return null;
+        User user = userRepository.findById(id);
+        user.changeUseYn("N");
+
+        return user;
     }
 
     @Override
@@ -101,8 +106,8 @@ public class UserServiceImpl implements UserService {
                 .secure(true)
                 .build();
 
-        HttpHeaders httpHeaders = new org.springframework.http.HttpHeaders();
-        httpHeaders.add(org.springframework.http.HttpHeaders.SET_COOKIE, responseCookie.toString());
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(HttpHeaders.SET_COOKIE, responseCookie.toString());
 
         return httpHeaders;
     }

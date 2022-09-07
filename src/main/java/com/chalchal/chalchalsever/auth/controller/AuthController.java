@@ -53,7 +53,7 @@ public class AuthController {
             User user = userService.findUserById(userTokenInfo.getId());
             TokenResponse tokenResponse = TokenResponse.builder()
                     .id(user.getId())
-                    .ACCESS_TOKEN(jwtUtils.createToken(user.getEmail(), Arrays.asList(user.getUserRole().getValue())))
+                    .ACCESS_TOKEN(jwtUtils.createToken(user))
                     .build();
 
             HttpHeaders httpHeaders = new HttpHeaders();
@@ -72,7 +72,7 @@ public class AuthController {
 
         TokenResponse tokenResponse = TokenResponse.builder()
                 .id(user.getId())
-                .ACCESS_TOKEN(jwtUtils.createToken(user.getEmail(), Arrays.asList(user.getUserRole().getValue())))
+                .ACCESS_TOKEN(jwtUtils.createToken(user))
                 .refreshTokenIndex(jwtUtils.createRefreshToken(user))
                 .build();
 
@@ -95,11 +95,9 @@ public class AuthController {
     @ApiOperation(value = "회원 탈퇴")
     public ResponseEntity<?> resign(HttpServletRequest httpServletRequest) {
         Authentication authentication = jwtUtils.getAuthentication(jwtUtils.resolveToken(httpServletRequest));
-        if(log.isDebugEnabled()) {
-            log.debug("!!!!!!!!!!!! : " + authentication.getName());
-        }
-        return new ResponseEntity<>(HttpStatus.OK);
-//        return new ResponseEntity<>(userService.setLogout(httpServletRequest), HttpStatus.OK);
+        User user = (User) authentication.getPrincipal();
+
+        return new ResponseEntity<>(userService.resignUser(user.getId()), userService.setLogout(httpServletRequest), HttpStatus.OK);
     }
 
     @PostMapping(value = "/info/{email}")

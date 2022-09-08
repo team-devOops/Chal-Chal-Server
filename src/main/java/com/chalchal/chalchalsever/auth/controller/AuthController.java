@@ -5,6 +5,7 @@ import com.chalchal.chalchalsever.auth.service.UserTokenInfoService;
 import com.chalchal.chalchalsever.config.jwt.JwtUtils;
 import com.chalchal.chalchalsever.domain.User;
 import com.chalchal.chalchalsever.domain.UserTokenInfo;
+import com.chalchal.chalchalsever.dto.ResultResponse;
 import com.chalchal.chalchalsever.dto.TokenResponse;
 import com.chalchal.chalchalsever.dto.UserRequest;
 import io.swagger.annotations.Api;
@@ -15,6 +16,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -82,7 +84,7 @@ public class AuthController {
         httpHeaders.add(HttpHeaders.AUTHORIZATION, tokenResponse.getACCESS_TOKEN());
         httpHeaders.add(HttpHeaders.SET_COOKIE, responseCookie.toString());
 
-        return new ResponseEntity<>(httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(ResultResponse.builder().status(HttpStatus.OK.value()).data(user), httpHeaders, HttpStatus.OK);
     }
 
     @PostMapping(value = "/sign-out")

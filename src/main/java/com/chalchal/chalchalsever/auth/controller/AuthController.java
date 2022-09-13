@@ -16,12 +16,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
 
 @Slf4j
 @RestController
@@ -47,24 +45,20 @@ public class AuthController {
     @PostMapping(value = "/refresh")
     @ApiOperation(value = "access token 재발급")
     public ResponseEntity<?> accessTokenRefresh(HttpServletRequest httpServletRequest) {
-        long refreshTokenInedx = jwtUtils.getRefreshTokenByCookieIndex(httpServletRequest, "REFRESHTOKENINDEX");
+        long refreshTokenIndex = jwtUtils.getRefreshTokenByCookieIndex(httpServletRequest, "REFRESHTOKENINDEX");
 
-        UserTokenInfo userTokenInfo = userTokenInfoService.getTokenInfo(refreshTokenInedx);
+        UserTokenInfo userTokenInfo = userTokenInfoService.getTokenInfo(refreshTokenIndex);
 
-        if(jwtUtils.validateRefreshToken(userTokenInfo)) {
+        if(jwtUtils.isValidRefreshToken(userTokenInfo)) {
             User user = userService.findUserById(userTokenInfo.getId());
-            TokenResponse tokenResponse = TokenResponse.builder()
-                    .id(user.getId())
-                    .ACCESS_TOKEN(jwtUtils.createToken(user))
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.AUTHORIZATION, jwtUtils.createToken(user))
                     .build();
-
-            HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.add(HttpHeaders.AUTHORIZATION, tokenResponse.getACCESS_TOKEN());
-
-            return new ResponseEntity<>(httpHeaders, HttpStatus.OK);
         }
 
-        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .build();
     }
 
     @PostMapping("/sign-in")
@@ -74,14 +68,14 @@ public class AuthController {
 
         TokenResponse tokenResponse = TokenResponse.builder()
                 .id(user.getId())
-                .ACCESS_TOKEN(jwtUtils.createToken(user))
+                .accessToken(jwtUtils.createToken(user))
                 .refreshTokenIndex(jwtUtils.createRefreshToken(user))
                 .build();
 
         ResponseCookie responseCookie = userService.setCookie(tokenResponse);
 
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(HttpHeaders.AUTHORIZATION, tokenResponse.getACCESS_TOKEN());
+        httpHeaders.add(HttpHeaders.AUTHORIZATION, tokenResponse.getAccessToken());
         httpHeaders.add(HttpHeaders.SET_COOKIE, responseCookie.toString());
 
         return new ResponseEntity<>(ResultResponse.builder().status(HttpStatus.OK.value()).data(user), httpHeaders, HttpStatus.OK);

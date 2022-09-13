@@ -17,7 +17,7 @@ public class UserTokenInfoServiceImpl implements UserTokenInfoService {
     public UserTokenInfo createUserTokenInfo(TokenResponse tokenResponse) {
         return userTokenInfoRepository.save(UserTokenInfo.builder()
                 .id(tokenResponse.getId())
-                .refreshToken(tokenResponse.getREFRESH_TOKEN())
+                .refreshToken(tokenResponse.getRefreshToken())
                 .build());
     }
 
@@ -26,7 +26,7 @@ public class UserTokenInfoServiceImpl implements UserTokenInfoService {
         return userTokenInfoRepository.save(UserTokenInfo.builder()
                 .id(tokenResponse.getId())
                 .tokenIndex(tokenResponse.getRefreshTokenIndex())
-                .refreshToken(tokenResponse.getREFRESH_TOKEN())
+                .refreshToken(tokenResponse.getRefreshToken())
                 .build());
     }
 

@@ -66,7 +66,7 @@ public class JwtUtils {
 
         TokenResponse tokenResponse = TokenResponse.builder()
                 .id(user.getId())
-                .REFRESH_TOKEN(refreshToken)
+                .refreshToken(refreshToken)
                 .build();
 
         return userTokenInfoService.createUserTokenInfo(tokenResponse).getTokenIndex();
@@ -100,7 +100,7 @@ public class JwtUtils {
         return false;
     }
 
-    public boolean validateRefreshToken(UserTokenInfo userTokenInfo) {
+    public boolean isValidRefreshToken(UserTokenInfo userTokenInfo) {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(refreshKey).parseClaimsJws(userTokenInfo.getRefreshToken());
             return claims.getBody().getExpiration().before(new Date()) == false;

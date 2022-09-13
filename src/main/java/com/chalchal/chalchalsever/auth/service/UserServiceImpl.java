@@ -86,13 +86,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public HttpHeaders setLogout(HttpServletRequest httpServletRequest) {
-        long refreshTokenInedx = jwtUtils.getRefreshTokenByCookieIndex(httpServletRequest, "REFRESHTOKENINDEX");
-        UserTokenInfo userTokenInfo = userTokenInfoService.getTokenInfo(refreshTokenInedx);
+        long refreshTokenIndex = jwtUtils.getRefreshTokenByCookieIndex(httpServletRequest, "REFRESHTOKENINDEX");
+        UserTokenInfo userTokenInfo = userTokenInfoService.getTokenInfo(refreshTokenIndex);
 
         TokenResponse tokenResponse = TokenResponse.builder()
                 .id(userTokenInfo.getId())
-                .refreshTokenIndex(refreshTokenInedx)
-                .REFRESH_TOKEN(null)
+                .refreshTokenIndex(refreshTokenIndex)
+                .refreshToken(null)
                 .build();
 
         jwtUtils.insertRefreshTokenInfo(tokenResponse);

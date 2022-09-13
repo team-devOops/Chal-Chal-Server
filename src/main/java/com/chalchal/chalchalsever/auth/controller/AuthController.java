@@ -28,6 +28,8 @@ import javax.servlet.http.HttpServletRequest;
 @RequiredArgsConstructor
 public class AuthController {
 
+    private final static  String REFRESH_TOKEN_INDEX = "REFRESHTOKENINDEX";
+
     private final UserService userService;
     private final UserTokenInfoService userTokenInfoService;
     private final JwtUtils jwtUtils;
@@ -45,7 +47,7 @@ public class AuthController {
     @PostMapping(value = "/refresh")
     @ApiOperation(value = "access token 재발급")
     public ResponseEntity<?> accessTokenRefresh(HttpServletRequest httpServletRequest) {
-        long refreshTokenIndex = jwtUtils.getRefreshTokenByCookieIndex(httpServletRequest, "REFRESHTOKENINDEX");
+        long refreshTokenIndex = jwtUtils.getRefreshTokenByCookieIndex(httpServletRequest, REFRESH_TOKEN_INDEX);
 
         UserTokenInfo userTokenInfo = userTokenInfoService.getTokenInfo(refreshTokenIndex);
 

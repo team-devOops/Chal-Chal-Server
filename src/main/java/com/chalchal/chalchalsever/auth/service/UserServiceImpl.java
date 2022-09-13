@@ -24,6 +24,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
+    private final static  String REFRESH_TOKEN_INDEX = "REFRESHTOKENINDEX";
+
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final UserRepository userRepository;
     private final JwtUtils jwtUtils;
@@ -86,7 +88,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public HttpHeaders setLogout(HttpServletRequest httpServletRequest) {
-        long refreshTokenIndex = jwtUtils.getRefreshTokenByCookieIndex(httpServletRequest, "REFRESHTOKENINDEX");
+        long refreshTokenIndex = jwtUtils.getRefreshTokenByCookieIndex(httpServletRequest, REFRESH_TOKEN_INDEX);
         UserTokenInfo userTokenInfo = userTokenInfoService.getTokenInfo(refreshTokenIndex);
 
         TokenResponse tokenResponse = TokenResponse.builder()
@@ -97,7 +99,7 @@ public class UserServiceImpl implements UserService {
 
         jwtUtils.insertRefreshTokenInfo(tokenResponse);
 
-        ResponseCookie responseCookie = ResponseCookie.from("REFRESHTOKENINDEX", null)
+        ResponseCookie responseCookie = ResponseCookie.from(REFRESH_TOKEN_INDEX, null)
                 .httpOnly(true)
                 .maxAge(0)
                 .secure(true)
@@ -115,7 +117,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseCookie setCookie(TokenResponse tokenResponse) {
 
-        return ResponseCookie.from("REFRESHTOKENINDEX", String.valueOf(tokenResponse.getRefreshTokenIndex()))
+        return ResponseCookie.from(REFRESH_TOKEN_INDEX, String.valueOf(tokenResponse.getRefreshTokenIndex()))
                 .httpOnly(true)
                 .secure(true)
                 .path("/")

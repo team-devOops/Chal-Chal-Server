@@ -1,6 +1,5 @@
 package com.chalchal.chalchalsever.config.jwt;
 
-import com.chalchal.chalchalsever.auth.repository.UserTokenInfoRepository;
 import com.chalchal.chalchalsever.auth.service.UserTokenInfoService;
 import com.chalchal.chalchalsever.domain.User;
 import com.chalchal.chalchalsever.domain.UserTokenInfo;
@@ -17,11 +16,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.bind.DatatypeConverter;
-import java.security.Key;
 import java.util.*;
 
 @Slf4j

@@ -1,7 +1,6 @@
 spring:
   datasource:
     url: jdbc:log4jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=MySQL
-#    driverClassName: org.h2.Driver
     driverClassName: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
     username: sa
     password: password

@@ -16,9 +16,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 
 @Slf4j
@@ -33,6 +37,8 @@ public class AuthController {
     private final UserService userService;
     private final UserTokenInfoService userTokenInfoService;
     private final JwtUtils jwtUtils;
+
+    private final JavaMailSender mailSender;
 
     @PostMapping(value = "/join")
     @ApiOperation(value = "회원가입")
@@ -102,5 +108,24 @@ public class AuthController {
     @ApiOperation(value = "개인정보")
     public ResponseEntity<?> getInfo(@PathVariable String email) {
         return new ResponseEntity<>(userService.findUser(email), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/auth")
+    @ApiOperation(value = "이메일 발송")
+    public ResponseEntity<?> sendEmail(HttpServletRequest httpServletRequest) {
+        MimeMessage message = mailSender.createMimeMessage();
+
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(message,true,"utf-8");
+            helper.setFrom("zz");
+            helper.setTo("xx");
+            helper.setSubject("xx");
+            // true 전달 > html 형식으로 전송 , 작성하지 않으면 단순 텍스트로 전달.
+            helper.setText("xx",true);
+            mailSender.send(message);
+        } catch ( MessagingException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

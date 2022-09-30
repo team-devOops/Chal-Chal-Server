@@ -8,6 +8,7 @@ import com.chalchal.chalchalsever.domain.UserTokenInfo;
 import com.chalchal.chalchalsever.dto.ResultResponse;
 import com.chalchal.chalchalsever.dto.TokenResponse;
 import com.chalchal.chalchalsever.dto.UserRequest;
+import com.chalchal.chalchalsever.dto.UserResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +45,7 @@ public class AuthController {
     @ApiOperation(value = "회원가입")
     public ResponseEntity<?> signUp(@RequestBody UserRequest userRequest) {
         if(userService.validateRegister(userRequest.getEmail())) {
-            return new ResponseEntity<>(userService.createUser(userRequest), HttpStatus.OK);
+            return new ResponseEntity<>(UserResponse.from(userService.createUser(userRequest)), HttpStatus.OK);
         }
 
         return new ResponseEntity<>(HttpStatus.CONFLICT);
@@ -86,7 +87,7 @@ public class AuthController {
         httpHeaders.add(HttpHeaders.AUTHORIZATION, tokenResponse.getAccessToken());
         httpHeaders.add(HttpHeaders.SET_COOKIE, responseCookie.toString());
 
-        return new ResponseEntity<>(ResultResponse.builder().status(HttpStatus.OK.value()).data(user), httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(ResultResponse.builder().status(HttpStatus.OK.value()).data(UserResponse.from(user)), httpHeaders, HttpStatus.OK);
     }
 
     @PostMapping(value = "/sign-out")
@@ -107,7 +108,7 @@ public class AuthController {
     @PostMapping(value = "/info/{email}")
     @ApiOperation(value = "개인정보")
     public ResponseEntity<?> getInfo(@PathVariable String email) {
-        return new ResponseEntity<>(userService.findUser(email), HttpStatus.OK);
+        return new ResponseEntity<>(UserResponse.from(userService.findUser(email)), HttpStatus.OK);
     }
 
     @PostMapping(value = "/auth")

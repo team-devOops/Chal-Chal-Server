@@ -18,6 +18,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return Optional.ofNullable(userRepository.findByEmail(email)).orElseThrow(() -> new BadCredentialsException("이메일 주소를 확인해주세요."));
+        return Optional.ofNullable(userRepository.findByEmailAndUseYn(email, "Y")).orElseThrow(() -> new BadCredentialsException("이메일 주소를 확인해주세요."));
     }
 }

@@ -2,6 +2,7 @@ package com.chalchal.chalchalsever.domain;
 
 import com.chalchal.chalchalsever.enumeration.UserRole;
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,6 +16,7 @@ import java.util.*;
 @AllArgsConstructor
 @Table(name = "t_user")
 @NoArgsConstructor
+@DynamicUpdate
 public class User extends BaseDomain implements UserDetails {
 
     @Id
@@ -28,9 +30,21 @@ public class User extends BaseDomain implements UserDetails {
     @Column(unique = true)
     private String email;
 
+    @Column(name = "phone_no", nullable = false)
+    private String phoneNo;
+
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @Column(name = "nickname")
+    private String nickname;
+
     @Column
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
+
+    @Column(name = "use_yn", nullable = false)
+    private String useYn;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -67,5 +81,9 @@ public class User extends BaseDomain implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public void changeUseYn(String useYn) {
+        this.useYn = useYn;
     }
 }

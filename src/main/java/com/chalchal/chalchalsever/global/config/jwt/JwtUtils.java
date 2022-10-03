@@ -1,6 +1,5 @@
-package com.chalchal.chalchalsever.config.jwt;
+package com.chalchal.chalchalsever.global.config.jwt;
 
-import com.chalchal.chalchalsever.auth.repository.UserTokenInfoRepository;
 import com.chalchal.chalchalsever.auth.service.UserTokenInfoService;
 import com.chalchal.chalchalsever.domain.User;
 import com.chalchal.chalchalsever.domain.UserTokenInfo;
@@ -17,17 +16,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.bind.DatatypeConverter;
-import java.security.Key;
 import java.util.*;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class JwtConfig {
+public class JwtUtils {
     @Value("${jwt.token.access}")
     private String secretKey;
 
@@ -38,7 +34,6 @@ public class JwtConfig {
     private long expireTime;
 
     private final UserDetailsService userDetailsService;
-    private final UserTokenInfoRepository userTokenInfoRepository;
     private final UserTokenInfoService userTokenInfoService;
 
     @PostConstruct
@@ -46,10 +41,10 @@ public class JwtConfig {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    public String createToken(String userEmail, List<String> roleList) {
+    public String createToken(User user) {
         Date now = new Date();
         return Jwts.builder()
-                .setClaims(createClaims(userEmail, roleList))
+                .setClaims(createClaims(user))
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + expireTime))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
@@ -57,19 +52,17 @@ public class JwtConfig {
     }
 
     public long createRefreshToken(User user) {
-        Date now = new Date();
         String refreshToken = Jwts.builder()
                 .setSubject(user.getEmail())
                 .setHeader(createHeader())
-                .setClaims(createClaims(user.getEmail(), Arrays.asList(user.getUserRole().getValue())))
+                .setClaims(createClaims(user))
                 .setExpiration(createExpireDate(1000 * 60 * 10))
-                //.setExpiration(new Date(now.getTime() + expireTime))
                 .signWith(SignatureAlgorithm.HS256, refreshKey)
                 .compact();
 
         TokenResponse tokenResponse = TokenResponse.builder()
                 .id(user.getId())
-                .REFRESH_TOKEN(refreshToken)
+                .refreshToken(refreshToken)
                 .build();
 
         return userTokenInfoService.createUserTokenInfo(tokenResponse).getTokenIndex();
@@ -85,8 +78,8 @@ public class JwtConfig {
         return request.getHeader(HttpHeaders.AUTHORIZATION);
     }
 
-    public boolean validateToken(HttpServletRequest request, String jwtToken) {
-        log.debug("jwtToken : " + jwtToken);
+    public boolean validateToken(String jwtToken) {
+
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
             return claims.getBody().getExpiration().before(new Date()) == false;
@@ -103,7 +96,7 @@ public class JwtConfig {
         return false;
     }
 
-    public boolean validateRefreshToken(UserTokenInfo userTokenInfo) {
+    public boolean isValidRefreshToken(UserTokenInfo userTokenInfo) {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(refreshKey).parseClaimsJws(userTokenInfo.getRefreshToken());
             return claims.getBody().getExpiration().before(new Date()) == false;
@@ -120,9 +113,10 @@ public class JwtConfig {
         return false;
     }
 
-    private Map<String, Object> createClaims(String email, List<String> roleList) {
-        Claims claims = Jwts.claims().setSubject(email);
-        claims.put("roles", roleList);
+    private Map<String, Object> createClaims(User user) {
+        Claims claims = Jwts.claims().setSubject(user.getEmail());
+        claims.put("id", user.getId());
+        claims.put("roles", Arrays.asList(user.getUserRole()));
         return claims;
     }
 
@@ -141,19 +135,6 @@ public class JwtConfig {
         return new Date(curTime + expireDate);
     }
 
-    private Key createSigningKey(String key) {
-        byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(key);
-        return new SecretKeySpec(apiKeySecretBytes, SignatureAlgorithm.HS256.getJcaName());
-    }
-
-    public boolean existsRefreshToken(String refreshToken) {
-        return userTokenInfoRepository.existsByRefreshToken(refreshToken);
-    }
-
-    public Boolean reCreateRefreshToken(String email) throws Exception {
-        return true;
-    }
-
     public long getRefreshTokenByCookieIndex(HttpServletRequest httpServletRequest, String cookieName) {
         Cookie[] cookies = httpServletRequest.getCookies();
 
@@ -163,5 +144,9 @@ public class JwtConfig {
         }
 
         return 0;
+    }
+
+    public long insertRefreshTokenInfo(TokenResponse tokenResponse) {
+        return userTokenInfoService.clearUserTokenInfo(tokenResponse).getTokenIndex();
     }
 }

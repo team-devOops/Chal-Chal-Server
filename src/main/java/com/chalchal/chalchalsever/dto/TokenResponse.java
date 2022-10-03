@@ -11,6 +11,6 @@ public class TokenResponse {
     private long id;
     private long refreshTokenIndex;
 
-    private String ACCESS_TOKEN;
-    private String REFRESH_TOKEN;
+    private String accessToken;
+    private String refreshToken;
 }

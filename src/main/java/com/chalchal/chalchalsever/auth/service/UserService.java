@@ -22,4 +22,6 @@ public interface UserService {
 
     HttpHeaders setLogout(HttpServletRequest httpServletRequest);
     ResponseCookie setCookie(TokenResponse tokenResponse);
+
+    ResponseCookie setRefreshTokenIndexCookie(long refreshToken);
 }

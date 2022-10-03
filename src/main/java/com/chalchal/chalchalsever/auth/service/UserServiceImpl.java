@@ -116,13 +116,29 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseCookie setCookie(TokenResponse tokenResponse) {
+//        return ResponseCookie.from(REFRESH_TOKEN_INDEX, String.valueOf(tokenResponse.getRefreshTokenIndex()))
+//                .httpOnly(true)
+//                .secure(true)
+//                .path("/")
+//                .domain("localhost")
+//                .secure(true)
+//                .build();
+        return generateRefreshTokenCookie(tokenResponse.getRefreshTokenIndex());
+    }
 
-        return ResponseCookie.from(REFRESH_TOKEN_INDEX, String.valueOf(tokenResponse.getRefreshTokenIndex()))
+    @Override
+    public ResponseCookie setRefreshTokenIndexCookie(long refreshTokenIndex) {
+        return generateRefreshTokenCookie(refreshTokenIndex);
+    }
+
+    private ResponseCookie generateRefreshTokenCookie(long refreshTokenIndex) {
+        return ResponseCookie.from(REFRESH_TOKEN_INDEX, String.valueOf(refreshTokenIndex))
                 .httpOnly(true)
                 .secure(true)
                 .path("/")
                 .domain("localhost")
                 .secure(true)
                 .build();
+
     }
 }

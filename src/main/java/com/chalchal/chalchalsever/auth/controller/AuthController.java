@@ -6,7 +6,6 @@ import com.chalchal.chalchalsever.global.config.jwt.JwtUtils;
 import com.chalchal.chalchalsever.domain.User;
 import com.chalchal.chalchalsever.domain.UserTokenInfo;
 import com.chalchal.chalchalsever.dto.ResultResponse;
-import com.chalchal.chalchalsever.dto.TokenResponse;
 import com.chalchal.chalchalsever.dto.UserRequest;
 import com.chalchal.chalchalsever.dto.UserResponse;
 import com.chalchal.chalchalsever.global.mail.MailService;
@@ -15,13 +14,9 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 
 @Slf4j
@@ -41,7 +36,7 @@ public class AuthController {
 
     @PostMapping(value = "/join")
     @ApiOperation(value = "회원가입")
-    public ResponseEntity<?> signUp(@RequestBody UserRequest userRequest) {
+    public ResponseEntity<UserResponse> signUp(@RequestBody UserRequest userRequest) {
         if(userService.validateRegister(userRequest.getEmail())) {
             return new ResponseEntity<>(UserResponse.from(userService.createUser(userRequest)), HttpStatus.OK);
         }
@@ -51,7 +46,7 @@ public class AuthController {
 
     @PostMapping(value = "/refresh")
     @ApiOperation(value = "access token 재발급")
-    public ResponseEntity<?> accessTokenRefresh(HttpServletRequest httpServletRequest) {
+    public ResponseEntity<ResultResponse> accessTokenRefresh(HttpServletRequest httpServletRequest) {
         long refreshTokenIndex = jwtUtils.getRefreshTokenByCookieIndex(httpServletRequest, REFRESH_TOKEN_INDEX);
 
         UserTokenInfo userTokenInfo = userTokenInfoService.getTokenInfo(refreshTokenIndex);
@@ -70,48 +65,43 @@ public class AuthController {
 
     @PostMapping("/sign-in")
     @ApiOperation(value = "로그인")
-    public ResponseEntity<?> login(@RequestBody UserRequest userRequest) {
+    public ResponseEntity<ResultResponse> login(@RequestBody UserRequest userRequest) {
         User user = userService.findByEmailAndPassword(userRequest.getEmail(), userRequest.getPassword());
 
-        TokenResponse tokenResponse = TokenResponse.builder()
-                .id(user.getId())
-                .accessToken(jwtUtils.createToken(user))
-                .refreshTokenIndex(jwtUtils.createRefreshToken(user))
-                .build();
-
-        ResponseCookie responseCookie = userService.setCookie(tokenResponse);
-
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(HttpHeaders.AUTHORIZATION, tokenResponse.getAccessToken());
-        httpHeaders.add(HttpHeaders.SET_COOKIE, responseCookie.toString());
-
-        return new ResponseEntity<>(ResultResponse.builder()
+        return ResponseEntity.ok()
+                .header(HttpHeaders.AUTHORIZATION, jwtUtils.createToken(user))
+                .header(HttpHeaders.SET_COOKIE, userService.setRefreshTokenIndexCookie(jwtUtils.createRefreshToken(user)).toString())
+                .body(ResultResponse.builder()
                     .status(HttpStatus.OK.value())
-                    .data(UserResponse.from(user))
-                    .build()
-                , httpHeaders, HttpStatus.OK);
-
+                    .data(UserResponse.from(user)).build()
+                );
     }
 
     @PostMapping(value = "/sign-out")
     @ApiOperation(value = "로그아웃")
-    public ResponseEntity<?> logout(HttpServletRequest httpServletRequest) {
-        return new ResponseEntity<>(userService.setLogout(httpServletRequest), HttpStatus.OK);
+    public ResponseEntity<Void> logout(HttpServletRequest httpServletRequest) {
+        return ResponseEntity.ok()
+                .headers(userService.setLogout(httpServletRequest))
+                .build();
     }
 
     @PostMapping(value = "/resign")
     @ApiOperation(value = "회원 탈퇴")
-    public ResponseEntity<?> resign(HttpServletRequest httpServletRequest) {
+    public ResponseEntity<Void> resign(HttpServletRequest httpServletRequest) {
         Authentication authentication = jwtUtils.getAuthentication(jwtUtils.resolveToken(httpServletRequest));
         User user = (User) authentication.getPrincipal();
 
-        return new ResponseEntity<>(userService.resignUser(user.getId()), userService.setLogout(httpServletRequest), HttpStatus.OK);
+        userService.resignUser(user.getId());
+
+        return ResponseEntity.ok()
+                .headers(userService.setLogout(httpServletRequest))
+                .build();
     }
 
     @PostMapping(value = "/info/{email}")
     @ApiOperation(value = "개인정보")
-    public ResponseEntity<?> getInfo(@PathVariable String email) {
-        return new ResponseEntity<>(UserResponse.from(userService.findUser(email)), HttpStatus.OK);
+    public ResponseEntity<UserResponse> getInfo(@PathVariable String email) {
+        return ResponseEntity.ok(UserResponse.from(userService.findUser(email)));
     }
 
     @PostMapping(value = "/auth")

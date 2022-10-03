@@ -1,4 +1,4 @@
-package com.chalchal.chalchalsever.config.swagger;
+package com.chalchal.chalchalsever.global.config.swagger;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

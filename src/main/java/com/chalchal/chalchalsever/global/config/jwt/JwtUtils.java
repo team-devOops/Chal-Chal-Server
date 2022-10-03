@@ -1,4 +1,4 @@
-package com.chalchal.chalchalsever.config.jwt;
+package com.chalchal.chalchalsever.global.config.jwt;
 
 import com.chalchal.chalchalsever.auth.service.UserTokenInfoService;
 import com.chalchal.chalchalsever.domain.User;

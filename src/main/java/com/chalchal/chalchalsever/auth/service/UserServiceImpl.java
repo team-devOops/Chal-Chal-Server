@@ -1,7 +1,7 @@
 package com.chalchal.chalchalsever.auth.service;
 
 import com.chalchal.chalchalsever.auth.repository.UserRepository;
-import com.chalchal.chalchalsever.config.jwt.JwtUtils;
+import com.chalchal.chalchalsever.global.config.jwt.JwtUtils;
 import com.chalchal.chalchalsever.domain.User;
 import com.chalchal.chalchalsever.domain.UserTokenInfo;
 import com.chalchal.chalchalsever.dto.TokenResponse;

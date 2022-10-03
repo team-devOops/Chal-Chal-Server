@@ -2,21 +2,19 @@ package com.chalchal.chalchalsever.auth.controller;
 
 import com.chalchal.chalchalsever.auth.service.UserService;
 import com.chalchal.chalchalsever.auth.service.UserTokenInfoService;
-import com.chalchal.chalchalsever.config.jwt.JwtUtils;
+import com.chalchal.chalchalsever.global.config.jwt.JwtUtils;
 import com.chalchal.chalchalsever.domain.User;
 import com.chalchal.chalchalsever.domain.UserTokenInfo;
 import com.chalchal.chalchalsever.dto.ResultResponse;
 import com.chalchal.chalchalsever.dto.TokenResponse;
 import com.chalchal.chalchalsever.dto.UserRequest;
 import com.chalchal.chalchalsever.dto.UserResponse;
+import com.chalchal.chalchalsever.global.mail.MailService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseCookie;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.Authentication;
@@ -39,7 +37,7 @@ public class AuthController {
     private final UserTokenInfoService userTokenInfoService;
     private final JwtUtils jwtUtils;
 
-    private final JavaMailSender mailSender;
+    private final MailService mailService;
 
     @PostMapping(value = "/join")
     @ApiOperation(value = "회원가입")
@@ -87,7 +85,12 @@ public class AuthController {
         httpHeaders.add(HttpHeaders.AUTHORIZATION, tokenResponse.getAccessToken());
         httpHeaders.add(HttpHeaders.SET_COOKIE, responseCookie.toString());
 
-        return new ResponseEntity<>(ResultResponse.builder().status(HttpStatus.OK.value()).data(UserResponse.from(user)), httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(ResultResponse.builder()
+                    .status(HttpStatus.OK.value())
+                    .data(UserResponse.from(user))
+                    .build()
+                , httpHeaders, HttpStatus.OK);
+
     }
 
     @PostMapping(value = "/sign-out")
@@ -114,19 +117,7 @@ public class AuthController {
     @PostMapping(value = "/auth")
     @ApiOperation(value = "이메일 발송")
     public ResponseEntity<?> sendEmail(HttpServletRequest httpServletRequest) {
-        MimeMessage message = mailSender.createMimeMessage();
-
-        try {
-            MimeMessageHelper helper = new MimeMessageHelper(message,true,"utf-8");
-            helper.setFrom("zz");
-            helper.setTo("xx");
-            helper.setSubject("xx");
-            // true 전달 > html 형식으로 전송 , 작성하지 않으면 단순 텍스트로 전달.
-            helper.setText("xx",true);
-            mailSender.send(message);
-        } catch ( MessagingException e) {
-            e.printStackTrace();
-        }
+        mailService.mailSend();
         return null;
     }
 }

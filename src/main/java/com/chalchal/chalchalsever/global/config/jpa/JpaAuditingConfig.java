@@ -1,4 +1,4 @@
-package com.chalchal.chalchalsever.config.jpa;
+package com.chalchal.chalchalsever.global.config.jpa;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

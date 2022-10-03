@@ -1,4 +1,4 @@
-package com.chalchal.chalchalsever.config.jwt;
+package com.chalchal.chalchalsever.global.config.jwt;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

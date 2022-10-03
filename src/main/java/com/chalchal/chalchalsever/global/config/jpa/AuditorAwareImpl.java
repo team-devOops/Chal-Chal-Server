@@ -1,4 +1,4 @@
-package com.chalchal.chalchalsever.config.jpa;
+package com.chalchal.chalchalsever.global.config.jpa;
 
 import com.chalchal.chalchalsever.domain.User;
 import org.springframework.data.domain.AuditorAware;

@@ -23,6 +23,6 @@ public class UserTokenInfo extends BaseDomain {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "refresh_token", nullable = false)
+    @Column(name = "refresh_token")
     private String refreshToken;
 }

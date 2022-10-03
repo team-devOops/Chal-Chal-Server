@@ -1,9 +1,12 @@
 package com.chalchal.chalchalsever.auth.service;
 
 import com.chalchal.chalchalsever.domain.User;
+import com.chalchal.chalchalsever.dto.TokenResponse;
 import com.chalchal.chalchalsever.dto.UserRequest;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 
 public interface UserService {
     User createUser(UserRequest userRequest);
@@ -13,5 +16,12 @@ public interface UserService {
 
     User findByEmailAndPassword(String email, String password);
 
-    List<User> findAll();
+    User resignUser(long id);
+
+    boolean validateRegister(String email);
+
+    HttpHeaders setLogout(HttpServletRequest httpServletRequest);
+    ResponseCookie setCookie(TokenResponse tokenResponse);
+
+    ResponseCookie setRefreshTokenIndexCookie(long refreshToken);
 }

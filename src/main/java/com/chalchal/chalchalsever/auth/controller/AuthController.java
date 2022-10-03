@@ -2,23 +2,22 @@ package com.chalchal.chalchalsever.auth.controller;
 
 import com.chalchal.chalchalsever.auth.service.UserService;
 import com.chalchal.chalchalsever.auth.service.UserTokenInfoService;
-import com.chalchal.chalchalsever.config.jwt.JwtConfig;
+import com.chalchal.chalchalsever.global.config.jwt.JwtUtils;
 import com.chalchal.chalchalsever.domain.User;
 import com.chalchal.chalchalsever.domain.UserTokenInfo;
-import com.chalchal.chalchalsever.dto.TokenResponse;
+import com.chalchal.chalchalsever.dto.ResultResponse;
 import com.chalchal.chalchalsever.dto.UserRequest;
+import com.chalchal.chalchalsever.dto.UserResponse;
+import com.chalchal.chalchalsever.global.mail.MailService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseCookie;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
 
 @Slf4j
 @RestController
@@ -27,68 +26,88 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public class AuthController {
 
+    private final static  String REFRESH_TOKEN_INDEX = "REFRESHTOKENINDEX";
+
     private final UserService userService;
     private final UserTokenInfoService userTokenInfoService;
-    private final JwtConfig jwtConfig;
+    private final JwtUtils jwtUtils;
+
+    private final MailService mailService;
 
     @PostMapping(value = "/join")
     @ApiOperation(value = "회원가입")
-    public User signUp(@RequestBody UserRequest userRequest) {
-        return userService.createUser(userRequest);
+    public ResponseEntity<UserResponse> signUp(@RequestBody UserRequest userRequest) {
+        if(userService.validateRegister(userRequest.getEmail())) {
+            return new ResponseEntity<>(UserResponse.from(userService.createUser(userRequest)), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.CONFLICT);
     }
 
     @PostMapping(value = "/refresh")
     @ApiOperation(value = "access token 재발급")
-    public ResponseEntity<?> accessTokenRefresh(HttpServletRequest httpServletRequest) {
-        long refreshTokenInedx = jwtConfig.getRefreshTokenByCookieIndex(httpServletRequest, "REFRESHTOKENINDEX");
+    public ResponseEntity<ResultResponse> accessTokenRefresh(HttpServletRequest httpServletRequest) {
+        long refreshTokenIndex = jwtUtils.getRefreshTokenByCookieIndex(httpServletRequest, REFRESH_TOKEN_INDEX);
 
-        UserTokenInfo userTokenInfo = userTokenInfoService.getTokenInfo(refreshTokenInedx);
+        UserTokenInfo userTokenInfo = userTokenInfoService.getTokenInfo(refreshTokenIndex);
 
-        if(jwtConfig.validateRefreshToken(userTokenInfo)) {
+        if(jwtUtils.isValidRefreshToken(userTokenInfo)) {
             User user = userService.findUserById(userTokenInfo.getId());
-            TokenResponse tokenResponse = TokenResponse.builder()
-                    .id(user.getId())
-                    .ACCESS_TOKEN(jwtConfig.createToken(user.getEmail(), Arrays.asList(user.getUserRole().getValue())))
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.AUTHORIZATION, jwtUtils.createToken(user))
                     .build();
-
-            HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.add(HttpHeaders.AUTHORIZATION, tokenResponse.getACCESS_TOKEN());
-
-            return new ResponseEntity<>(httpHeaders, HttpStatus.OK);
         }
 
-        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .build();
     }
 
-    @PostMapping("/login")
+    @PostMapping("/sign-in")
     @ApiOperation(value = "로그인")
-    public ResponseEntity<?> login(@RequestBody UserRequest userRequest) {
+    public ResponseEntity<ResultResponse> login(@RequestBody UserRequest userRequest) {
         User user = userService.findByEmailAndPassword(userRequest.getEmail(), userRequest.getPassword());
 
-        TokenResponse tokenResponse = TokenResponse.builder()
-                .id(user.getId())
-                .ACCESS_TOKEN(jwtConfig.createToken(user.getEmail(), Arrays.asList(user.getUserRole().getValue())))
-                .refreshTokenIndex(jwtConfig.createRefreshToken(user))
+        return ResponseEntity.ok()
+                .header(HttpHeaders.AUTHORIZATION, jwtUtils.createToken(user))
+                .header(HttpHeaders.SET_COOKIE, userService.setRefreshTokenIndexCookie(jwtUtils.createRefreshToken(user)).toString())
+                .body(ResultResponse.builder()
+                    .status(HttpStatus.OK.value())
+                    .data(UserResponse.from(user)).build()
+                );
+    }
+
+    @PostMapping(value = "/sign-out")
+    @ApiOperation(value = "로그아웃")
+    public ResponseEntity<Void> logout(HttpServletRequest httpServletRequest) {
+        return ResponseEntity.ok()
+                .headers(userService.setLogout(httpServletRequest))
                 .build();
+    }
 
-        ResponseCookie responseCookie = ResponseCookie.from("REFRESHTOKENINDEX", String.valueOf(tokenResponse.getRefreshTokenIndex()))
-                .httpOnly(true)
-                .secure(true)
-                .path("/")
-                .domain("localhost")
-                .secure(true)
+    @PostMapping(value = "/resign")
+    @ApiOperation(value = "회원 탈퇴")
+    public ResponseEntity<Void> resign(HttpServletRequest httpServletRequest) {
+        Authentication authentication = jwtUtils.getAuthentication(jwtUtils.resolveToken(httpServletRequest));
+        User user = (User) authentication.getPrincipal();
+
+        userService.resignUser(user.getId());
+
+        return ResponseEntity.ok()
+                .headers(userService.setLogout(httpServletRequest))
                 .build();
-
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(HttpHeaders.AUTHORIZATION, tokenResponse.getACCESS_TOKEN());
-        httpHeaders.add(HttpHeaders.SET_COOKIE, responseCookie.toString());
-
-        return new ResponseEntity<>(httpHeaders, HttpStatus.OK);
     }
 
     @PostMapping(value = "/info/{email}")
     @ApiOperation(value = "개인정보")
-    public User getInfo(HttpServletRequest httpServletRequest, @PathVariable String email) {
-        return userService.findUser(email);
+    public ResponseEntity<UserResponse> getInfo(@PathVariable String email) {
+        return ResponseEntity.ok(UserResponse.from(userService.findUser(email)));
+    }
+
+    @PostMapping(value = "/auth")
+    @ApiOperation(value = "이메일 발송")
+    public ResponseEntity<?> sendEmail(HttpServletRequest httpServletRequest) {
+        mailService.mailSend();
+        return null;
     }
 }

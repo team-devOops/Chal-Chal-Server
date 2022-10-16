@@ -2,6 +2,7 @@ package com.chalchal.chalchalsever.auth.controller;
 
 import com.chalchal.chalchalsever.auth.service.UserService;
 import com.chalchal.chalchalsever.auth.service.UserTokenInfoService;
+import com.chalchal.chalchalsever.domain.Mail;
 import com.chalchal.chalchalsever.global.config.jwt.JwtUtils;
 import com.chalchal.chalchalsever.domain.User;
 import com.chalchal.chalchalsever.domain.UserTokenInfo;
@@ -107,7 +108,17 @@ public class AuthController {
     @PostMapping(value = "/auth")
     @ApiOperation(value = "이메일 발송")
     public ResponseEntity<?> sendEmail(HttpServletRequest httpServletRequest) {
-        mailService.mailSend();
+        Authentication authentication = jwtUtils.getAuthentication(jwtUtils.resolveToken(httpServletRequest));
+        User user = (User) authentication.getPrincipal();
+
+        //TODO : 이메일 어떤 형식으로 보낼건지 이후 생각 해보기
+        mailService.mailSend(Mail.builder()
+                .to(user.getEmail())
+                .subject("test")
+                .text(".")
+                .build());
+
+        //TODO : 이메일 발송 내역 DB에 저장
         return null;
     }
 }

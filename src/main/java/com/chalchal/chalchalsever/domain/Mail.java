@@ -1,6 +1,7 @@
 package com.chalchal.chalchalsever.domain;
 
 import lombok.Builder;
+import lombok.Getter;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -8,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Builder
+@Getter
 public class Mail {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

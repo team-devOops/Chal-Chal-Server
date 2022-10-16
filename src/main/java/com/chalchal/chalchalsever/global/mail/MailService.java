@@ -1,6 +1,8 @@
 package com.chalchal.chalchalsever.global.mail;
 
 import com.chalchal.chalchalsever.domain.Mail;
+import com.chalchal.chalchalsever.dto.MailRequest;
+import com.chalchal.chalchalsever.global.mail.repository.MailRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
@@ -19,18 +21,32 @@ public class MailService {
     private String MAIL_FROM;
     private final JavaMailSender mailSender;
 
-    public void mailSend(Mail mail) {
+    private final MailRepository mailRepository;
+
+    public void mailSend(MailRequest mailRequest) {
         MimeMessage message = mailSender.createMimeMessage();
 
         try {
-            MimeMessageHelper helper = new MimeMessageHelper(message,true,"utf-8");
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "utf-8");
             helper.setFrom(MAIL_FROM);
-            helper.setTo(mail.getTo());
-            helper.setSubject(mail.getSubject());
-            helper.setText(mail.getText(),true);
+            helper.setTo(mailRequest.getTo());
+            helper.setSubject(mailRequest.getSubject());
+            helper.setText(mailRequest.getText(), true);
             mailSender.send(message);
+
+            //TODO : [20221016] AOP로 개선필요
+            crateMail(mailRequest);
         } catch ( MessagingException e) {
             e.printStackTrace();
         }
+    }
+
+    public Mail crateMail(MailRequest mailRequest) {
+        return mailRepository.save(Mail.builder()
+                .to(mailRequest.getTo())
+                .from(MAIL_FROM)
+                .subject(mailRequest.getSubject())
+                .text(mailRequest.getText())
+                .build());
     }
 }

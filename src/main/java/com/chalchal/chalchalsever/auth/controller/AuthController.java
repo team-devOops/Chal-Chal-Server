@@ -1,15 +1,15 @@
 package com.chalchal.chalchalsever.auth.controller;
 
+import com.chalchal.chalchalsever.auth.service.UserAuthService;
 import com.chalchal.chalchalsever.auth.service.UserService;
 import com.chalchal.chalchalsever.auth.service.UserTokenInfoService;
-import com.chalchal.chalchalsever.domain.Mail;
+import com.chalchal.chalchalsever.domain.UserAuth;
+import com.chalchal.chalchalsever.dto.*;
 import com.chalchal.chalchalsever.global.config.jwt.JwtUtils;
 import com.chalchal.chalchalsever.domain.User;
 import com.chalchal.chalchalsever.domain.UserTokenInfo;
-import com.chalchal.chalchalsever.dto.ResultResponse;
-import com.chalchal.chalchalsever.dto.UserRequest;
-import com.chalchal.chalchalsever.dto.UserResponse;
 import com.chalchal.chalchalsever.global.mail.MailService;
+import com.chalchal.chalchalsever.global.util.DateUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +30,7 @@ public class AuthController {
     private final static  String REFRESH_TOKEN_INDEX = "REFRESHTOKENINDEX";
 
     private final UserService userService;
+    private final UserAuthService userAuthService;
     private final UserTokenInfoService userTokenInfoService;
     private final JwtUtils jwtUtils;
 
@@ -111,14 +112,26 @@ public class AuthController {
         Authentication authentication = jwtUtils.getAuthentication(jwtUtils.resolveToken(httpServletRequest));
         User user = (User) authentication.getPrincipal();
 
-        //TODO : 이메일 어떤 형식으로 보낼건지 이후 생각 해보기
-        mailService.mailSend(Mail.builder()
-                .to(user.getEmail())
-                .subject("test")
-                .text(".")
+        String authCode = "123456";
+
+        UserAuth userAuth = userAuthService.createUserAuth(UserAuthRequest.builder()
+                    .reqSvcNo("@@@@")
+                    .id(user.getId())
+                    .email(user.getEmail())
+                    .code(authCode)
+                    .limitDate(DateUtils.getCurrentDay("YYYYMMDD"))
+                    .limitTime(DateUtils.getCurrentTime("HHmm"))
+                    .authYn("N")
                 .build());
 
-        //TODO : 이메일 발송 내역 DB에 저장
+        MailRequest mailRequest = MailRequest.builder()
+                    .to(user.getEmail())
+                    .subject("TEST")
+                    .text(authCode)
+                .build();
+
+        mailService.mailSend(mailRequest);
+
         return null;
     }
 }

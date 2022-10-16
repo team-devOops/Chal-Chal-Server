@@ -18,7 +18,9 @@ import javax.persistence.*;
 public class UserAuth extends BaseDomain {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "req_svc_no")
+    private String reqSvcNo;
+
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -27,6 +29,12 @@ public class UserAuth extends BaseDomain {
 
     @Column(name = "code", nullable = false)
     private String code;
+
+    @Column(name = "limit_date", nullable = false)
+    private String limitDate;
+
+    @Column(name = "limit_time", nullable = false)
+    private String limitTime;
 
     @Column(name = "auth_yn", nullable = false)
     private String authYn;

@@ -47,6 +47,8 @@ dependencies {
     implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16'
 
     implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+    implementation 'joda-time:joda-time:2.12.0'
 }
 
 tasks.named('test') {

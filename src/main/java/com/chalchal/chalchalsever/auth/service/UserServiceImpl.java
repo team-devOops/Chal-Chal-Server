@@ -12,6 +12,7 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.http.HttpHeaders;
 
@@ -37,7 +38,7 @@ public class UserServiceImpl implements UserService {
                 .email(userRequest.getEmail())
                 .password(bCryptPasswordEncoder.encode(userRequest.getPassword()))
                 .name(userRequest.getName())
-                .nickname(StringUtils.isEmpty(userRequest.getNickName()) ? userRequest.getName() : userRequest.getNickName())
+                .nickname(ObjectUtils.isEmpty(userRequest.getNickName()) ? userRequest.getName() : userRequest.getNickName())
                 .phoneNo(userRequest.getPhoneNo().replaceAll("-", ""))
                 .userRole(userRequest.getUserRole())
                 .useYn("Y")

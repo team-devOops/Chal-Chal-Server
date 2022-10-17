@@ -1,30 +1,33 @@
 package com.chalchal.chalchalsever.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Builder
 @Getter
-public class Mail {
+@Entity
+@AllArgsConstructor
+@Table(name = "t_mail_history")
+@NoArgsConstructor
+public class Mail extends BaseDomain {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "seq_no", nullable = false)
     private Long seqNo;
 
-    @Column(name = "from")
+    @Column(name = "from_mail")
     private String from;
 
-    @Column(name = "to")
+    @Column(name = "to_mail")
     private String to;
 
     @Column(name = "subject")
     private String subject;
 
-    @Column(name = "text")
+    @Column(name = "contents")
     private String text;
 }

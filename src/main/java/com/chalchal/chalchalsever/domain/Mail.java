@@ -28,6 +28,6 @@ public class Mail extends BaseDomain {
     @Column(name = "subject")
     private String subject;
 
-    @Column(name = "contents")
+    @Column(name = "text")
     private String text;
 }

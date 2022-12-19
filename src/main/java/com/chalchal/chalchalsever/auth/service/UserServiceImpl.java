@@ -54,8 +54,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findUserById(long id) {
-        User user = Optional.ofNullable(userRepository.findById(id)).orElseThrow(()->new BadCredentialsException("유효하지 않은 아이디입니다."));
-        return user;
+        return Optional.ofNullable(userRepository.findById(id)).orElseThrow(()->new BadCredentialsException("유효하지 않은 아이디입니다."));
     }
 
     @Override
@@ -117,13 +116,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseCookie setCookie(TokenResponse tokenResponse) {
-//        return ResponseCookie.from(REFRESH_TOKEN_INDEX, String.valueOf(tokenResponse.getRefreshTokenIndex()))
-//                .httpOnly(true)
-//                .secure(true)
-//                .path("/")
-//                .domain("localhost")
-//                .secure(true)
-//                .build();
         return generateRefreshTokenCookie(tokenResponse.getRefreshTokenIndex());
     }
 

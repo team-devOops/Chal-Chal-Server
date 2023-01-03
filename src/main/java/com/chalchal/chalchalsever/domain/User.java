@@ -1,6 +1,4 @@
 package com.chalchal.chalchalsever.domain;
-
-import com.chalchal.chalchalsever.enumeration.UserRole;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

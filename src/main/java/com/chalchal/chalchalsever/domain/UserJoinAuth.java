@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
@@ -14,7 +13,6 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Table(name = "t_user_join_auth")
 @NoArgsConstructor
-@DynamicUpdate
 public class UserJoinAuth extends BaseDomain {
 
     @Id

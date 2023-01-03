@@ -2,7 +2,6 @@ package com.chalchal.chalchalsever.domain;
 
 import com.chalchal.chalchalsever.enumeration.UserRole;
 import lombok.*;
-import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,7 +15,6 @@ import java.util.*;
 @AllArgsConstructor
 @Table(name = "t_user")
 @NoArgsConstructor
-@DynamicUpdate
 public class User extends BaseDomain implements UserDetails {
 
     @Id

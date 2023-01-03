@@ -1,6 +1,6 @@
 package com.chalchal.chalchalsever;
 
-import com.chalchal.chalchalsever.global.util.SvcNoUtils;
+import com.chalchal.chalchalsever.global.generate.SvcNo;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -11,7 +11,7 @@ import java.util.Map;
 public class SvcNoTest {
     @Test
     void getSvcNo() {
-        System.out.println(SvcNoUtils.getSvcNo());
+        System.out.println(SvcNo.getSvcNo());
     }
 
     @Test
@@ -19,7 +19,7 @@ public class SvcNoTest {
         Map<String, Integer> svcNoMap = new HashMap<>();
 
         for (int i = 0; i < 100; i++) {
-            String svcNo = SvcNoUtils.getSvcNo();
+            String svcNo = SvcNo.getSvcNo();
 
             if(svcNoMap.get(svcNo) != null) {
                 int temp = svcNoMap.get(svcNo) + 1;

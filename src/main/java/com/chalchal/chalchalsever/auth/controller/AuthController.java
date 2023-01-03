@@ -1,14 +1,15 @@
 package com.chalchal.chalchalsever.auth.controller;
 
+import com.chalchal.chalchalsever.auth.service.UserAuthService;
 import com.chalchal.chalchalsever.auth.service.UserService;
 import com.chalchal.chalchalsever.auth.service.UserTokenInfoService;
+import com.chalchal.chalchalsever.domain.UserJoinAuth;
+import com.chalchal.chalchalsever.dto.*;
 import com.chalchal.chalchalsever.global.config.jwt.JwtUtils;
 import com.chalchal.chalchalsever.domain.User;
 import com.chalchal.chalchalsever.domain.UserTokenInfo;
-import com.chalchal.chalchalsever.dto.ResultResponse;
-import com.chalchal.chalchalsever.dto.UserRequest;
-import com.chalchal.chalchalsever.dto.UserResponse;
 import com.chalchal.chalchalsever.global.mail.MailService;
+import com.chalchal.chalchalsever.global.util.DateUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ public class AuthController {
     private final static  String REFRESH_TOKEN_INDEX = "REFRESHTOKENINDEX";
 
     private final UserService userService;
+    private final UserAuthService userAuthService;
     private final UserTokenInfoService userTokenInfoService;
     private final JwtUtils jwtUtils;
 
@@ -107,7 +109,29 @@ public class AuthController {
     @PostMapping(value = "/auth")
     @ApiOperation(value = "이메일 발송")
     public ResponseEntity<?> sendEmail(HttpServletRequest httpServletRequest) {
-        mailService.mailSend();
+        Authentication authentication = jwtUtils.getAuthentication(jwtUtils.resolveToken(httpServletRequest));
+        User user = (User) authentication.getPrincipal();
+
+        String authCode = "123456";
+
+        UserJoinAuth userJoinAuth = userAuthService.createUserAuth(UserAuthRequest.builder()
+                    .reqSvcNo("@@@@")
+                    .id(user.getId())
+                    .email(user.getEmail())
+                    .code(authCode)
+                    .limitDate(DateUtils.getCurrentDay("YYYYMMDD"))
+                    .limitTime(DateUtils.getCurrentTime("HHmm"))
+                    .authYn("N")
+                .build());
+
+        MailRequest mailRequest = MailRequest.builder()
+                    .to(user.getEmail())
+                    .subject("TEST")
+                    .text(authCode)
+                .build();
+
+        mailService.mailSend(mailRequest);
+
         return null;
     }
 }

@@ -12,10 +12,10 @@ import javax.persistence.*;
 @Getter
 @Entity
 @AllArgsConstructor
-@Table(name = "t_user_auth")
+@Table(name = "t_user_join_auth")
 @NoArgsConstructor
 @DynamicUpdate
-public class UserAuth extends BaseDomain {
+public class UserJoinAuth extends BaseDomain {
 
     @Id
     @Column(name = "req_svc_no")
@@ -24,17 +24,17 @@ public class UserAuth extends BaseDomain {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(unique = true)
-    private String email;
+    @Column(name = "send_email", nullable = false)
+    private String sendEmail;
 
-    @Column(name = "code", nullable = false)
-    private String code;
+    @Column(name = "auth_code", nullable = false)
+    private String authCode;
 
-    @Column(name = "limit_date", nullable = false)
-    private String limitDate;
+    @Column(name = "valid_date", nullable = false)
+    private String validDate;
 
-    @Column(name = "limit_time", nullable = false)
-    private String limitTime;
+    @Column(name = "valid_time", nullable = false)
+    private String validTime;
 
     @Column(name = "auth_yn", nullable = false)
     private String authYn;

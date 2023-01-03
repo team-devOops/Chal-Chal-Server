@@ -1,7 +1,7 @@
 package com.chalchal.chalchalsever.auth.service;
 
 import com.chalchal.chalchalsever.auth.repository.UserAuthRepository;
-import com.chalchal.chalchalsever.domain.UserAuth;
+import com.chalchal.chalchalsever.domain.UserJoinAuth;
 import com.chalchal.chalchalsever.dto.UserAuthRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,14 +15,14 @@ public class UserAuthServiceImpl implements UserAuthService {
     private final UserAuthRepository userAuthRepository;
 
     @Override
-    public UserAuth createUserAuth(UserAuthRequest userAuthRequest) {
-        return userAuthRepository.save(UserAuth.builder()
+    public UserJoinAuth createUserAuth(UserAuthRequest userAuthRequest) {
+        return userAuthRepository.save(UserJoinAuth.builder()
                     .reqSvcNo("@@@")
                     .id(userAuthRequest.getId())
-                    .email(userAuthRequest.getEmail())
-                    .code(userAuthRequest.getCode())
-                    .limitDate(userAuthRequest.getLimitDate())
-                    .limitTime(userAuthRequest.getLimitTime())
+                    .sendEmail(userAuthRequest.getEmail())
+                    .authCode(userAuthRequest.getCode())
+                    .validDate(userAuthRequest.getLimitDate())
+                    .validTime(userAuthRequest.getLimitTime())
                     .authYn("N")
                 .build());
     }

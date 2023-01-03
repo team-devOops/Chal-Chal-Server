@@ -15,9 +15,8 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class Mail extends BaseDomain {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "seq_no", nullable = false)
-    private Long seqNo;
+    @Column(name = "svc_no", nullable = false)
+    private String svcNo;
 
     @Column(name = "from_mail")
     private String from;

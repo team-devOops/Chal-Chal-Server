@@ -37,9 +37,8 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.save(User.builder()
                 .email(userRequest.getEmail())
                 .password(bCryptPasswordEncoder.encode(userRequest.getPassword()))
-                .name(userRequest.getName())
-                .nickname(ObjectUtils.isEmpty(userRequest.getNickName()) ? userRequest.getName() : userRequest.getNickName())
-                .phoneNo(userRequest.getPhoneNo().replaceAll("-", ""))
+                .userId(userRequest.getUserId())
+                .nickname(userRequest.getNickName())
                 .userRole(userRequest.getUserRole())
                 .useYn("Y")
                 .build());

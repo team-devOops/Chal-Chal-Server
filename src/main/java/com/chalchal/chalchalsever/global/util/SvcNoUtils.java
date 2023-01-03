@@ -7,9 +7,8 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class UUIDUtils {
-    public static String getUUID() {
-        //TODO: UUID 다시 생각해보기
+public class SvcNoUtils {
+    public static String getSvcNo() {
         return DateUtils.getCurrentDay("yyyyMMddHHmmssSSS") + (int)((Math.random()*10000));
     }
 }

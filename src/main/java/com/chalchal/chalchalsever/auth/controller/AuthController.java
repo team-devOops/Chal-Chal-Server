@@ -3,7 +3,7 @@ package com.chalchal.chalchalsever.auth.controller;
 import com.chalchal.chalchalsever.auth.service.UserAuthService;
 import com.chalchal.chalchalsever.auth.service.UserService;
 import com.chalchal.chalchalsever.auth.service.UserTokenInfoService;
-import com.chalchal.chalchalsever.domain.UserAuth;
+import com.chalchal.chalchalsever.domain.UserJoinAuth;
 import com.chalchal.chalchalsever.dto.*;
 import com.chalchal.chalchalsever.global.config.jwt.JwtUtils;
 import com.chalchal.chalchalsever.domain.User;
@@ -114,7 +114,7 @@ public class AuthController {
 
         String authCode = "123456";
 
-        UserAuth userAuth = userAuthService.createUserAuth(UserAuthRequest.builder()
+        UserJoinAuth userJoinAuth = userAuthService.createUserAuth(UserAuthRequest.builder()
                     .reqSvcNo("@@@@")
                     .id(user.getId())
                     .email(user.getEmail())

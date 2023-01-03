@@ -24,20 +24,20 @@ public class User extends BaseDomain implements UserDetails {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @Column(name = "user_id", nullable = false)
+    private String userId;
+
     @Column(name = "password", nullable = false)
     private String password;
 
     @Column(unique = true)
     private String email;
 
-    @Column(name = "phone_no", nullable = false)
-    private String phoneNo;
-
-    @Column(name = "name", nullable = false)
-    private String name;
-
     @Column(name = "nickname")
     private String nickname;
+
+    @Column(name = "intro")
+    private String intro;
 
     @Column
     @Enumerated(EnumType.STRING)

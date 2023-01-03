@@ -12,6 +12,4 @@ public class MailAuthNum {
         if(MAX_AUTH_NUM == authNum.length()) return authNum;
         throw new IllegalArgumentException("[ERROR] " + MAX_AUTH_NUM + "자 여야 합니다.");
     }
-
-
 }

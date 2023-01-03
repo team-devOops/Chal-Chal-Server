@@ -1,4 +1,4 @@
-package com.chalchal.chalchalsever.enumeration;
+package com.chalchal.chalchalsever.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -32,3 +32,6 @@ jwt:
     refresh: jwtrefresh
   expire:
     time: 36000000
+
+svcno:
+  type: SERVER

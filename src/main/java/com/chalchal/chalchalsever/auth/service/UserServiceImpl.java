@@ -12,6 +12,7 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.http.HttpHeaders;
 
@@ -36,9 +37,8 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.save(User.builder()
                 .email(userRequest.getEmail())
                 .password(bCryptPasswordEncoder.encode(userRequest.getPassword()))
-                .name(userRequest.getName())
-                .nickname(StringUtils.isEmpty(userRequest.getNickName()) ? userRequest.getName() : userRequest.getNickName())
-                .phoneNo(userRequest.getPhoneNo().replaceAll("-", ""))
+                .userId(userRequest.getUserId())
+                .nickname(userRequest.getNickName())
                 .userRole(userRequest.getUserRole())
                 .useYn("Y")
                 .build());
@@ -53,8 +53,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findUserById(long id) {
-        User user = Optional.ofNullable(userRepository.findById(id)).orElseThrow(()->new BadCredentialsException("유효하지 않은 아이디입니다."));
-        return user;
+        return Optional.ofNullable(userRepository.findById(id)).orElseThrow(()->new BadCredentialsException("유효하지 않은 아이디입니다."));
     }
 
     @Override
@@ -116,13 +115,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseCookie setCookie(TokenResponse tokenResponse) {
-//        return ResponseCookie.from(REFRESH_TOKEN_INDEX, String.valueOf(tokenResponse.getRefreshTokenIndex()))
-//                .httpOnly(true)
-//                .secure(true)
-//                .path("/")
-//                .domain("localhost")
-//                .secure(true)
-//                .build();
         return generateRefreshTokenCookie(tokenResponse.getRefreshTokenIndex());
     }
 

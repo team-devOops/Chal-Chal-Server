@@ -1,6 +1,6 @@
 package com.chalchal.chalchalsever;
 
-import com.chalchal.chalchalsever.global.util.SvcNoUtils;
+import com.chalchal.chalchalsever.global.generate.SvcNo;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -9,7 +9,7 @@ class ChalChalSeverApplicationTests {
 
     @Test
     void contextLoads() {
-        System.out.println("@@@@@@@ : " + SvcNoUtils.getSvcNo());
+        System.out.println("@@@@@@@ : " + SvcNo.getSvcNo());
     }
 
 }

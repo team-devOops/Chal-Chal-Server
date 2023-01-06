@@ -1,5 +1,6 @@
 package com.chalchal.chalchalsever.domain;
 import lombok.*;
+import org.hibernate.annotations.Comment;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,36 +12,47 @@ import java.util.*;
 @Getter
 @Entity
 @AllArgsConstructor
-@Table(name = "t_user")
+@Table(name = "T_USER")
 @NoArgsConstructor
 public class User extends BaseDomain implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
+    @Comment("유저 KEY")
+    @Column(name = "ID", nullable = false)
     private Long id;
 
-    @Column(name = "user_id", nullable = false)
-    private String userId;
-
-    @Column(name = "password", nullable = false)
-    private String password;
-
+    @Comment("이메일")
     @Column(unique = true)
     private String email;
 
-    @Column(name = "nickname")
+    @Comment("유저 ID")
+    @Column(name = "USER_ID", nullable = false)
+    private String userId;
+
+    @Comment("닉네임")
+    @Column(name = "NICKNAME")
     private String nickname;
 
-    @Column(name = "intro")
+    @Comment("비밀번호")
+    @Column(name = "PASSWORD", nullable = false)
+    private String password;
+
+    @Comment("사용여부")
+    @Column(name = "USE_YN", nullable = false)
+    private String useYn;
+
+    @Comment("자기소개")
+    @Column(name = "INTRO")
     private String intro;
+
+    @Column(name = "PRIVATE_YN")
+    @Comment("사용여부")
+    private String privateYn;
 
     @Column
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
-
-    @Column(name = "use_yn", nullable = false)
-    private String useYn;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

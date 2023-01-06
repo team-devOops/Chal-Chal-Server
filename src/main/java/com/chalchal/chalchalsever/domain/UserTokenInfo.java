@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Comment;
 
 import javax.persistence.*;
 
@@ -11,18 +12,21 @@ import javax.persistence.*;
 @Getter
 @Entity
 @AllArgsConstructor
-@Table(name = "t_login_token_info")
+@Table(name = "T_LOGIN_TOKEN_INFO")
 @NoArgsConstructor
 public class UserTokenInfo extends BaseDomain {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "token_index", nullable = false)
+    @Column(name = "TOKEN_INDEX", nullable = false)
     private Long tokenIndex;
 
-    @Column(name = "id", nullable = false)
+
+    @Comment("유저 KEY")
+    @Column(name = "ID", nullable = false)
     private Long id;
 
-    @Column(name = "refresh_token")
+    @Comment("REFRESH 토큰")
+    @Column(name = "REFRESH_TOKEN")
     private String refreshToken;
 }

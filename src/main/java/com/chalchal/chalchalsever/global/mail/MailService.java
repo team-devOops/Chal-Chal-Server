@@ -31,7 +31,7 @@ public class MailService {
             helper.setFrom(MAIL_FROM);
             helper.setTo(mailRequest.getTo());
             helper.setSubject(mailRequest.getSubject());
-            helper.setText(mailRequest.getText(), true);
+            helper.setText(mailRequest.getContent(), true);
             mailSender.send(message);
 
             //TODO : [20221016] AOP로 개선필요
@@ -43,10 +43,10 @@ public class MailService {
 
     public Mail crateMail(MailRequest mailRequest) {
         return mailRepository.save(Mail.builder()
-                .to(mailRequest.getTo())
-                .from(MAIL_FROM)
+                .toMail(mailRequest.getTo())
+                .fromMail(MAIL_FROM)
                 .subject(mailRequest.getSubject())
-                .text(mailRequest.getText())
+                .content(mailRequest.getContent())
                 .build());
     }
 }

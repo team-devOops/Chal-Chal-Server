@@ -19,14 +19,14 @@ public class Mail extends BaseDomain {
     private String svcNo;
 
     @Column(name = "from_mail")
-    private String from;
+    private String fromMail;
 
     @Column(name = "to_mail")
-    private String to;
+    private String toMail;
 
     @Column(name = "subject")
     private String subject;
 
-    @Column(name = "text")
-    private String text;
+    @Column(name = "content")
+    private String content;
 }

@@ -9,15 +9,15 @@ import lombok.Getter;
 public class MailRequest {
     private String to;
     private String subject;
-    private String text;
+    private String content;
 
-    public MailRequest(String to, String subject, String text) {
+    public MailRequest(String to, String subject, String content) {
         this.to = to;
         this.subject = subject;
-        this.text = text;
+        this.content = content;
     }
 
     public static MailRequest from(Mail mail) {
-        return new MailRequest(mail.getTo(), mail.getSubject(), mail.getText());
+        return new MailRequest(mail.getToMail(), mail.getSubject(), mail.getContent());
     }
 }

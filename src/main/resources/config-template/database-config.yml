@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    url:
+    driverClassName: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    username:
+    password:

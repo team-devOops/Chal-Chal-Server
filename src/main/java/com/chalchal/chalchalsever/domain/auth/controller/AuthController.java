@@ -7,7 +7,6 @@ import com.chalchal.chalchalsever.domain.auth.service.UserAuthService;
 import com.chalchal.chalchalsever.domain.auth.service.UserService;
 import com.chalchal.chalchalsever.domain.auth.service.UserTokenInfoService;
 import com.chalchal.chalchalsever.domain.auth.entity.UserJoinAuth;
-import com.chalchal.chalchalsever.dto.*;
 import com.chalchal.chalchalsever.global.config.jwt.JwtUtils;
 import com.chalchal.chalchalsever.domain.auth.entity.User;
 import com.chalchal.chalchalsever.domain.auth.entity.UserTokenInfo;

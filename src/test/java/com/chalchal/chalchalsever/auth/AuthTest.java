@@ -1,6 +1,6 @@
 package com.chalchal.chalchalsever.auth;
 
-import com.chalchal.chalchalsever.domain.MailAuthNum;
+import com.chalchal.chalchalsever.global.mail.entity.MailAuthNum;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

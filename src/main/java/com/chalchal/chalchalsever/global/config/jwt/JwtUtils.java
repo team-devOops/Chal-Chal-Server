@@ -1,9 +1,9 @@
 package com.chalchal.chalchalsever.global.config.jwt;
 
-import com.chalchal.chalchalsever.auth.service.UserTokenInfoService;
-import com.chalchal.chalchalsever.domain.User;
-import com.chalchal.chalchalsever.domain.UserTokenInfo;
-import com.chalchal.chalchalsever.dto.TokenResponse;
+import com.chalchal.chalchalsever.domain.auth.service.UserTokenInfoService;
+import com.chalchal.chalchalsever.domain.auth.entity.User;
+import com.chalchal.chalchalsever.domain.auth.entity.UserTokenInfo;
+import com.chalchal.chalchalsever.domain.auth.dto.TokenResponse;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,6 +1,6 @@
 package com.chalchal.chalchalsever.global.mail.repository;
 
-import com.chalchal.chalchalsever.domain.Mail;
+import com.chalchal.chalchalsever.global.mail.entity.Mail;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

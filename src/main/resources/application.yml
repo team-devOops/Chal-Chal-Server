@@ -2,11 +2,7 @@ spring:
   config:
     import:
       - classpath:/config/mail-config.yml
-  datasource:
-    url: jdbc:log4jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=MySQL
-    driverClassName: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-    username: sa
-    password: password
+      - classpath:/config/database-config.yml
   main:
     allow-bean-definition-overriding: true
   jpa:
@@ -14,7 +10,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
-    database-platform: org.hibernate.dialect.H2Dialect
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
       ddl-auto: create-drop
     defer-datasource-initialization: true

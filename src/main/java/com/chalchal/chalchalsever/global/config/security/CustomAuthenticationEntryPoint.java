@@ -1,6 +1,6 @@
 package com.chalchal.chalchalsever.global.config.security;
 
-import com.chalchal.chalchalsever.dto.ResultResponse;
+import com.chalchal.chalchalsever.global.dto.ResultResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

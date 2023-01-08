@@ -1,0 +1,8 @@
+notification:
+  slack:
+    webhook:
+      url:
+    channel: #chal-chal-exception
+    botName: chal-chal-exception-bot
+    icon:
+      emoji: ':fox_face:'

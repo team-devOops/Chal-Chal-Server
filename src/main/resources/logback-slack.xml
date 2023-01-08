@@ -6,13 +6,13 @@
     <appender name="SLACK" class="com.github.maricn.logback.SlackAppender">
         <webhookUri>${SLACK_WEBHOOK_URL}</webhookUri>
         <layout class="ch.qos.logback.classic.PatternLayout">
-            <pattern>%-4relative [%thread] %-2level %logger{0}:%class - %msg%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} - %-5le %logger{0} : %msg%n</pattern>
         </layout>
         <username>${SLACK_WEBHOOK_USER_NAME}</username>
         <iconEmoji>${SLACK_WEBHOOK_EMOJI}</iconEmoji>
         <colorCoding>true</colorCoding>
     </appender>
-    <!-- Currently recommended way of using Slack appender -->
+
     <appender name="ASYNC_SLACK" class="ch.qos.logback.classic.AsyncAppender">
         <appender-ref ref="SLACK"/>
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">

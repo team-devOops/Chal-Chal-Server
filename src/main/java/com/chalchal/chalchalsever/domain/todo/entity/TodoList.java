@@ -51,13 +51,37 @@ public class TodoList extends BaseDomain {
 
     @Comment("사용여부")
     @Column(name = "USE_YN")
-    private char useYn;
+    private String useYn;
 
     @Comment("완료여부")
     @Column(name = "SUCCESS_YN")
-    private char successYn;
+    private String successYn;
 
     @Comment("완료일자")
     @Column(name = "SUCCESS_DATE")
     private DateTime successDate;
+
+    public void changeGroupKey(String groupKey) {
+        this.groupKey = groupKey;
+    }
+
+    public void changeTitle(String title) {
+        this.title = title;
+    }
+
+    public void changeMemo(String memo) {
+        this.memo = memo;
+    }
+
+    public void changeSuccessYn(String successYn) {
+        this.successYn = successYn;
+    }
+
+    public void changeUseYn(String useYn) {
+        this.useYn = useYn;
+    }
+
+    public void updateSuccessDate() {
+        this.successDate = DateTime.now();
+    }
 }

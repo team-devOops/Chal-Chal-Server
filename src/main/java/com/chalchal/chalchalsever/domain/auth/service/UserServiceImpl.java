@@ -38,6 +38,7 @@ public class UserServiceImpl implements UserService {
                 .userId(userRequest.getUserId())
                 .nickname(userRequest.getNickName())
                 .useYn("Y")
+                .privateYn("N")
                 .build());
 
         return user;
@@ -45,7 +46,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findUser(String email) {
-        return Optional.ofNullable(userRepository.findByEmailAndUseYn(email, "Y")).orElseThrow(()->new BadCredentialsException("유효하지 않은 아이디입니다."));
+        return Optional.ofNullable(userRepository.findByEmailAndUseYn(email, "Y"))
+                .orElseThrow(() -> new BadCredentialsException("유효하지 않은 아이디입니다."));
     }
 
     @Override

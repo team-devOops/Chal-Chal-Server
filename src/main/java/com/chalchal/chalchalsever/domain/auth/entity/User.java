@@ -58,7 +58,7 @@ public class User extends BaseDomain implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<GrantedAuthority> roles = new HashSet<>();
-        roles.add(new SimpleGrantedAuthority(userRole.getValue()));
+        //roles.add(new SimpleGrantedAuthority(userRole.getValue()));
         return roles;
     }
 

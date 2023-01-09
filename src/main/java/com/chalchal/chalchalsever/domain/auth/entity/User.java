@@ -18,7 +18,7 @@ import java.util.*;
 public class User extends BaseDomain implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Comment("유저 KEY")
     @Column(name = "ID", nullable = false)
     private Long id;

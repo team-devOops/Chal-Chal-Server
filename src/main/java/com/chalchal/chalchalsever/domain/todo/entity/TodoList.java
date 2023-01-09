@@ -1,6 +1,7 @@
 package com.chalchal.chalchalsever.domain.todo.entity;
 
 import com.chalchal.chalchalsever.domain.BaseDomain;
+import com.chalchal.chalchalsever.global.util.StringUtils;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -66,18 +67,31 @@ public class TodoList extends BaseDomain {
     }
 
     public void changeTitle(String title) {
+        if(StringUtils.isEmpty(title)) {
+            return;
+        }
         this.title = title;
     }
 
     public void changeMemo(String memo) {
+        if(StringUtils.isEmpty(memo)) {
+            return;
+        }
         this.memo = memo;
     }
 
     public void changeSuccessYn(String successYn) {
+        if(StringUtils.isEmpty(successYn)) {
+            return;
+        }
         this.successYn = successYn;
+        updateSuccessDate();
     }
 
     public void changeUseYn(String useYn) {
+        if(StringUtils.isEmpty(useYn)) {
+            return;
+        }
         this.useYn = useYn;
     }
 

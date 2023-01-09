@@ -22,7 +22,7 @@ public class BaseDomain {
 
     @CreatedBy
     @Column(name = "reg_id", nullable = false, updatable = false)
-    private String regId;
+    private Long regId;
 
     @LastModifiedDate
     @Column(name = "upd_date")
@@ -30,5 +30,5 @@ public class BaseDomain {
 
     @LastModifiedBy
     @Column(name = "upd_id")
-    private String updId;
+    private Long updId;
 }

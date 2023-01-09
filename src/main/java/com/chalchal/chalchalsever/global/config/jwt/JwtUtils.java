@@ -149,4 +149,9 @@ public class JwtUtils {
     public long insertRefreshTokenInfo(TokenResponse tokenResponse) {
         return userTokenInfoService.clearUserTokenInfo(tokenResponse).getTokenIndex();
     }
+
+    public User getLoginUserInfo(HttpServletRequest httpServletRequest) {
+        Authentication authentication = getAuthentication(resolveToken(httpServletRequest));
+        return (User) authentication.getPrincipal();
+    }
 }

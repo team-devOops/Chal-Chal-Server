@@ -19,22 +19,22 @@ public class Mail extends BaseDomain {
 
     @Id
     @Comment("서비스번호")
-    @Column(name = "SVC_NO", nullable = false)
+    @Column(name = "SVC_NO", nullable = false, columnDefinition = "varchar(32)")
     private String svcNo;
 
     @Comment("보낸 이메일")
-    @Column(name = "FROM_MAIL")
+    @Column(name = "FROM_MAIL", columnDefinition = "varchar(64)")
     private String fromMail;
 
     @Comment("받는 이메일")
-    @Column(name = "TO_MAIL")
+    @Column(name = "TO_MAIL", columnDefinition = "varchar(64)")
     private String toMail;
 
     @Comment("제목")
-    @Column(name = "SUBJECT")
+    @Column(name = "SUBJECT", columnDefinition = "varchar(128)")
     private String subject;
 
     @Comment("내용")
-    @Column(name = "CONTENT")
+    @Column(name = "CONTENT", columnDefinition = "text")
     private String content;
 }

@@ -5,7 +5,6 @@ import com.chalchal.chalchalsever.domain.todo.dto.TodoListUpdateRequest;
 import com.chalchal.chalchalsever.domain.todo.entity.TodoList;
 import com.chalchal.chalchalsever.domain.todo.repository.TodoRepository;
 import com.chalchal.chalchalsever.global.generate.SvcNo;
-import com.chalchal.chalchalsever.global.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

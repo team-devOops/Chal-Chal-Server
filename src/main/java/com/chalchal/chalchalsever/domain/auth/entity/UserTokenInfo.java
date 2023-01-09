@@ -18,7 +18,7 @@ import javax.persistence.*;
 public class UserTokenInfo extends BaseDomain {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "TOKEN_INDEX", nullable = false, columnDefinition = "bigint")
     private Long tokenIndex;
 

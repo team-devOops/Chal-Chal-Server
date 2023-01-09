@@ -26,38 +26,38 @@ public class TodoList extends BaseDomain {
 
     @Id
     @Comment("서비스번호")
-    @Column(name = "SVC_NO", nullable = false)
+    @Column(name = "SVC_NO", nullable = false, columnDefinition = "varchar(32)")
     private String svcNo;
 
     @Comment("참조서비스번호")
-    @Column(name = "RE_SVC_NO")
+    @Column(name = "RE_SVC_NO", columnDefinition = "varchar(32)")
     private String reSvcNo;
 
     @Comment("그룹키")
-    @Column(name = "GROUP_KEY")
+    @Column(name = "GROUP_KEY", columnDefinition = "varchar(32)")
     private String groupKey;
 
     @Comment("정렬 시퀀스")
-    @Column(name = "ORDER_SEQ")
+    @Column(name = "ORDER_SEQ", columnDefinition = "bigint")
     private long orderSeq;
 
     @Comment("할 일 제목")
-    @Column(name = "TITLE")
+    @Column(name = "TITLE", columnDefinition = "varchar(128)")
     private String title;
 
     @Comment("할 일 메모")
-    @Column(name = "MEMO")
+    @Column(name = "MEMO", columnDefinition = "varchar(256)")
     private String memo;
 
     @Comment("사용여부")
-    @Column(name = "USE_YN")
+    @Column(name = "USE_YN", columnDefinition = "char(1)")
     private char useYn;
 
     @Comment("완료여부")
-    @Column(name = "SUCCESS_YN")
+    @Column(name = "SUCCESS_YN", columnDefinition = "char(1)")
     private char successYn;
 
     @Comment("완료일자")
-    @Column(name = "SUCCESS_DATE")
+    @Column(name = "SUCCESS_DATE", columnDefinition = "datetime")
     private DateTime successDate;
 }

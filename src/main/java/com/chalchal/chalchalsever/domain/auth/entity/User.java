@@ -20,35 +20,35 @@ public class User extends BaseDomain implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Comment("유저 KEY")
-    @Column(name = "ID", nullable = false)
+    @Column(name = "ID", nullable = false, columnDefinition = "bigint")
     private Long id;
 
     @Comment("이메일")
-    @Column(unique = true)
+    @Column(unique = true, nullable = false, columnDefinition = "varchar(128)")
     private String email;
 
     @Comment("유저 ID")
-    @Column(name = "USER_ID", nullable = false)
+    @Column(name = "USER_ID", nullable = false, columnDefinition = "varchar(16)")
     private String userId;
 
     @Comment("닉네임")
-    @Column(name = "NICKNAME")
+    @Column(name = "NICKNAME", columnDefinition = "varchar(32)")
     private String nickname;
 
     @Comment("비밀번호")
-    @Column(name = "PASSWORD", nullable = false)
+    @Column(name = "PASSWORD", nullable = false, columnDefinition = "varchar(64)")
     private String password;
 
     @Comment("사용여부")
-    @Column(name = "USE_YN", nullable = false)
+    @Column(name = "USE_YN", nullable = false, columnDefinition = "char(1)")
     private String useYn;
 
     @Comment("자기소개")
-    @Column(name = "INTRO")
+    @Column(name = "INTRO", columnDefinition = "varchar(512)")
     private String intro;
 
-    @Column(name = "PRIVATE_YN")
     @Comment("사용여부")
+    @Column(name = "PRIVATE_YN", columnDefinition = "char(1)")
     private String privateYn;
 
     @Column

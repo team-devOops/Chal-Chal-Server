@@ -3,6 +3,7 @@ package com.chalchal.chalchalsever.domain.auth.service;
 import com.chalchal.chalchalsever.domain.auth.repository.UserAuthRepository;
 import com.chalchal.chalchalsever.domain.auth.entity.UserJoinAuth;
 import com.chalchal.chalchalsever.domain.auth.dto.UserAuthRequest;
+import com.chalchal.chalchalsever.global.generate.SvcNo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ public class UserAuthServiceImpl implements UserAuthService {
     @Override
     public UserJoinAuth createUserAuth(UserAuthRequest userAuthRequest) {
         return userAuthRepository.save(UserJoinAuth.builder()
-                    .reqSvcNo("@@@")
+                    .reqSvcNo(SvcNo.getSvcNo())
                     .id(userAuthRequest.getId())
                     .sendEmail(userAuthRequest.getEmail())
                     .authCode(userAuthRequest.getCode())

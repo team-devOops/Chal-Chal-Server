@@ -18,7 +18,7 @@ import java.util.*;
 public class User extends BaseDomain implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Comment("유저 KEY")
     @Column(name = "ID", nullable = false, columnDefinition = "bigint")
     private Long id;
@@ -58,7 +58,7 @@ public class User extends BaseDomain implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<GrantedAuthority> roles = new HashSet<>();
-        roles.add(new SimpleGrantedAuthority(userRole.getValue()));
+        //roles.add(new SimpleGrantedAuthority(userRole.getValue()));
         return roles;
     }
 

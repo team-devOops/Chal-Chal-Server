@@ -1,6 +1,7 @@
 package com.chalchal.chalchalsever.domain.todo.entity;
 
 import com.chalchal.chalchalsever.domain.BaseDomain;
+import com.chalchal.chalchalsever.global.util.StringUtils;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -51,13 +52,50 @@ public class TodoList extends BaseDomain {
 
     @Comment("사용여부")
     @Column(name = "USE_YN")
-    private char useYn;
+    private String useYn;
 
     @Comment("완료여부")
     @Column(name = "SUCCESS_YN")
-    private char successYn;
+    private String successYn;
 
     @Comment("완료일자")
     @Column(name = "SUCCESS_DATE")
     private DateTime successDate;
+
+    public void changeGroupKey(String groupKey) {
+        this.groupKey = groupKey;
+    }
+
+    public void changeTitle(String title) {
+        if(StringUtils.isEmpty(title)) {
+            return;
+        }
+        this.title = title;
+    }
+
+    public void changeMemo(String memo) {
+        if(StringUtils.isEmpty(memo)) {
+            return;
+        }
+        this.memo = memo;
+    }
+
+    public void changeSuccessYn(String successYn) {
+        if(StringUtils.isEmpty(successYn)) {
+            return;
+        }
+        this.successYn = successYn;
+        updateSuccessDate();
+    }
+
+    public void changeUseYn(String useYn) {
+        if(StringUtils.isEmpty(useYn)) {
+            return;
+        }
+        this.useYn = useYn;
+    }
+
+    public void updateSuccessDate() {
+        this.successDate = DateTime.now();
+    }
 }

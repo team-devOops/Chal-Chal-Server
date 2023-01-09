@@ -15,7 +15,12 @@ public class StringUtils {
      * @return 값이 있으면 true. 없으면 false
      */
     public static boolean isNotEmpty(String str) {
-        if(str != null && !ObjectUtils.isEmpty(str)) return true;
+        if(!isEmpty(str)) return true;
+        return false;
+    }
+
+    public static boolean isEmpty(String str) {
+        if(str == null || ObjectUtils.isEmpty(str)) return true;
         return false;
     }
 }

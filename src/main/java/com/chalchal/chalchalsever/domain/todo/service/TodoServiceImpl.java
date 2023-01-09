@@ -40,26 +40,11 @@ public class TodoServiceImpl implements TodoService {
     public TodoList updateTodoList(TodoListUpdateRequest todoListUpdateRequest) {
         TodoList todoList = this.findTodoListBySvcNo(todoListUpdateRequest.getSvcNo());
 
-        if(StringUtils.isNotEmpty(todoListUpdateRequest.getGroupKey())) {
-            todoList.changeGroupKey(todoListUpdateRequest.getGroupKey());
-        }
-
-        if(StringUtils.isNotEmpty(todoListUpdateRequest.getTitle())) {
-            todoList.changeTitle(todoListUpdateRequest.getTitle());
-        }
-
-        if(StringUtils.isNotEmpty(todoListUpdateRequest.getMemo())) {
-            todoList.changeMemo(todoListUpdateRequest.getMemo());
-        }
-
-        if(StringUtils.isNotEmpty(todoListUpdateRequest.getUseYn())) {
-            todoList.changeUseYn(todoListUpdateRequest.getUseYn());
-        }
-
-        if(StringUtils.isNotEmpty(todoListUpdateRequest.getSuccessYn())) {
-            todoList.changeSuccessYn(todoListUpdateRequest.getSuccessYn());
-            todoList.updateSuccessDate();
-        }
+        todoList.changeGroupKey(todoListUpdateRequest.getGroupKey());
+        todoList.changeTitle(todoListUpdateRequest.getTitle());
+        todoList.changeMemo(todoListUpdateRequest.getMemo());
+        todoList.changeUseYn(todoListUpdateRequest.getUseYn());
+        todoList.changeSuccessYn(todoListUpdateRequest.getSuccessYn());
 
         return todoList;
     }

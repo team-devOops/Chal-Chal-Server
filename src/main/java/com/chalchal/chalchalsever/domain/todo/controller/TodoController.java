@@ -28,7 +28,7 @@ public class TodoController {
     /**
      * 할 일 조회
      */
-    @PostMapping(value = "/")
+    @GetMapping(value = "/")
     @ApiOperation(value = "TODO 조회")
     public ResponseEntity<ResultResponse> selectAll(HttpServletRequest httpServletRequest) {
         return ResponseEntity.ok()
@@ -41,7 +41,7 @@ public class TodoController {
     /**
      * 할 일 등록하는 메소드
      */
-    @PostMapping(value = "/save")
+    @PostMapping(value = "/")
     @ApiOperation(value = "TODO 작성")
     public ResponseEntity<ResultResponse> save(@RequestBody TodoListSaveRequest todoListSaveRequest) {
         return ResponseEntity.ok()

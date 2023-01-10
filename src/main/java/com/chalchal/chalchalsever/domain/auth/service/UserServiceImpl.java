@@ -6,6 +6,7 @@ import com.chalchal.chalchalsever.domain.auth.entity.User;
 import com.chalchal.chalchalsever.domain.auth.entity.UserTokenInfo;
 import com.chalchal.chalchalsever.domain.auth.dto.TokenResponse;
 import com.chalchal.chalchalsever.domain.auth.dto.UserRequest;
+import com.chalchal.chalchalsever.global.dto.Flag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseCookie;
@@ -37,8 +38,8 @@ public class UserServiceImpl implements UserService {
                 .password(bCryptPasswordEncoder.encode(userRequest.getPassword()))
                 .userId(userRequest.getUserId())
                 .nickname(userRequest.getNickName())
-                .useYn("Y")
-                .privateYn("N")
+                .useYn(Flag.Y.getValue())
+                .privateYn(Flag.N.getValue())
                 .build());
 
         return user;

@@ -1,5 +1,6 @@
 package com.chalchal.chalchalsever.domain.auth.dto;
 
+import com.chalchal.chalchalsever.global.dto.Flag;
 import lombok.*;
 
 @Getter
@@ -11,5 +12,5 @@ public class UserAuthResponse {
     private String code;
     private String limitDate;
     private String limitTime;
-    private String authYn;
+    private Flag authYn;
 }

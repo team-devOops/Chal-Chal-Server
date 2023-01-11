@@ -9,7 +9,7 @@ import lombok.Getter;
 @Getter
 public class TodoListUpdateRequest {
     private String svcNo;
-    private String groupKey;
+    private String topicKey;
     private String title;
     private String memo;
     private Flag useYn;

@@ -1,6 +1,7 @@
 package com.chalchal.chalchalsever.domain.auth.entity;
 
 import com.chalchal.chalchalsever.domain.BaseDomain;
+import com.chalchal.chalchalsever.global.dto.Flag;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -43,6 +44,7 @@ public class UserJoinAuth extends BaseDomain {
     private String validTime;
 
     @Comment("인증여부")
+    @Enumerated(EnumType.STRING)
     @Column(name = "AUTH_YN", nullable = false, columnDefinition = "char(1)")
-    private String authYn;
+    private Flag authYn;
 }

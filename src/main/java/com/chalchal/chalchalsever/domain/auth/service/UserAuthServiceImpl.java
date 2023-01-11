@@ -3,6 +3,7 @@ package com.chalchal.chalchalsever.domain.auth.service;
 import com.chalchal.chalchalsever.domain.auth.repository.UserAuthRepository;
 import com.chalchal.chalchalsever.domain.auth.entity.UserJoinAuth;
 import com.chalchal.chalchalsever.domain.auth.dto.UserAuthRequest;
+import com.chalchal.chalchalsever.global.dto.Flag;
 import com.chalchal.chalchalsever.global.generate.SvcNo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +25,7 @@ public class UserAuthServiceImpl implements UserAuthService {
                     .authCode(userAuthRequest.getCode())
                     .validDate(userAuthRequest.getLimitDate())
                     .validTime(userAuthRequest.getLimitTime())
-                    .authYn("N")
+                    .authYn(Flag.N)
                 .build());
     }
 }

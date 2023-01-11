@@ -4,11 +4,12 @@ import com.chalchal.chalchalsever.domain.todo.dto.TodoListSaveRequest;
 import com.chalchal.chalchalsever.domain.todo.dto.TodoListUpdateRequest;
 import com.chalchal.chalchalsever.domain.todo.entity.TodoList;
 import com.chalchal.chalchalsever.domain.todo.repository.TodoRepository;
+import com.chalchal.chalchalsever.global.dto.Flag;
 import com.chalchal.chalchalsever.global.generate.SvcNo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -24,12 +25,12 @@ public class TodoServiceImpl implements TodoService {
         return todoRepository.save(TodoList.builder()
                         .svcNo(SvcNo.getSvcNo())
                         .reSvcNo(null)
-                        .groupKey(todoListSaveRequest.getGroupKey())
+                        .topicKey(todoListSaveRequest.getTopicKey())
                         .orderSeq(1)
                         .title(todoListSaveRequest.getTitle())
                         .memo(todoListSaveRequest.getMemo())
-                        .useYn("Y")
-                        .successYn("N")
+                        .useYn(Flag.Y)
+                        .successYn(Flag.N)
                         .successDate(null)
                 .build());
     }
@@ -39,7 +40,7 @@ public class TodoServiceImpl implements TodoService {
     public TodoList updateTodoList(TodoListUpdateRequest todoListUpdateRequest) {
         TodoList todoList = this.findTodoListBySvcNo(todoListUpdateRequest.getSvcNo());
 
-        todoList.changeGroupKey(todoListUpdateRequest.getGroupKey());
+        todoList.changeTopicKey(todoListUpdateRequest.getTopicKey());
         todoList.changeTitle(todoListUpdateRequest.getTitle());
         todoList.changeMemo(todoListUpdateRequest.getMemo());
         todoList.changeUseYn(todoListUpdateRequest.getUseYn());
@@ -52,20 +53,21 @@ public class TodoServiceImpl implements TodoService {
     @Transactional
     public TodoList deleteTodoList(String svcNo) {
         TodoList todoList = this.findTodoListBySvcNo(svcNo);
-        todoList.changeUseYn("Y");
+        todoList.changeUseYn(Flag.Y);
         return todoList;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public TodoList findTodoListBySvcNo(String svcNo) {
         return Optional.ofNullable(todoRepository.findBySvcNo(svcNo))
                 .orElseThrow(() -> new NoSuchElementException("검색된 결과가 없습니다."));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<TodoList> findTodoListByRegId(Long id) {
         return Optional.ofNullable(todoRepository.findByRegId(id))
                 .orElseThrow(() -> new NoSuchElementException("등록된 일정 없음"));
     }
-
 }

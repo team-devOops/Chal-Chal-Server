@@ -1,6 +1,5 @@
 package com.chalchal.chalchalsever.auth;
 
-import com.chalchal.chalchalsever.global.mail.entity.MailAuthNum;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -12,7 +11,7 @@ public class AuthTest {
     void 인증번호_자릿수_오류() {
         String randomNum = "1234567";
         assertThatIllegalArgumentException().isThrownBy(() -> {
-            MailAuthNum mailAuthNum = new MailAuthNum(randomNum);
+            //MailAuthNum mailAuthNum = new MailAuthNum(randomNum);
         });
     }
 

@@ -1,6 +1,7 @@
 package com.chalchal.chalchalsever.domain.todo.entity;
 
 import com.chalchal.chalchalsever.domain.BaseDomain;
+import com.chalchal.chalchalsever.global.dto.Flag;
 import com.chalchal.chalchalsever.global.util.StringUtils;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,11 +9,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 import org.joda.time.DateTime;
+import org.springframework.util.ObjectUtils;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * to do 내용에 대한 도메인
@@ -34,9 +33,9 @@ public class TodoList extends BaseDomain {
     @Column(name = "RE_SVC_NO", columnDefinition = "varchar(32)")
     private String reSvcNo;
 
-    @Comment("그룹키")
-    @Column(name = "GROUP_KEY", columnDefinition = "varchar(32)")
-    private String groupKey;
+    @Comment("토픽키")
+    @Column(name = "TOPIC_KEY", columnDefinition = "varchar(32)")
+    private String topicKey;
 
     @Comment("정렬 시퀀스")
     @Column(name = "ORDER_SEQ", columnDefinition = "bigint")
@@ -51,19 +50,21 @@ public class TodoList extends BaseDomain {
     private String memo;
 
     @Comment("사용여부")
+    @Enumerated(EnumType.STRING)
     @Column(name = "USE_YN", columnDefinition = "char(1)")
-    private String useYn;
+    private Flag useYn;
 
     @Comment("완료여부")
+    @Enumerated(EnumType.STRING)
     @Column(name = "SUCCESS_YN", columnDefinition = "char(1)")
-    private String successYn;
+    private Flag successYn;
 
     @Comment("완료일자")
     @Column(name = "SUCCESS_DATE", columnDefinition = "datetime")
     private DateTime successDate;
 
-    public void changeGroupKey(String groupKey) {
-        this.groupKey = groupKey;
+    public void changeTopicKey(String topicKey) {
+        this.topicKey = topicKey;
     }
 
     public void changeTitle(String title) {
@@ -80,16 +81,16 @@ public class TodoList extends BaseDomain {
         this.memo = memo;
     }
 
-    public void changeSuccessYn(String successYn) {
-        if(StringUtils.isEmpty(successYn)) {
+    public void changeSuccessYn(Flag successYn) {
+        if(ObjectUtils.isEmpty(successYn)) {
             return;
         }
         this.successYn = successYn;
         updateSuccessDate();
     }
 
-    public void changeUseYn(String useYn) {
-        if(StringUtils.isEmpty(useYn)) {
+    public void changeUseYn(Flag useYn) {
+        if(ObjectUtils.isEmpty(useYn)) {
             return;
         }
         this.useYn = useYn;

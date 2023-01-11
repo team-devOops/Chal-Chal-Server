@@ -1,21 +1,21 @@
 package com.chalchal.chalchalsever.domain.todo.dto;
 
 import com.chalchal.chalchalsever.domain.todo.entity.TodoList;
+import com.chalchal.chalchalsever.global.dto.Flag;
 import lombok.Getter;
 
 @Getter
 public class TodoListSaveResponse {
     private String svcNo;
-
-    private String groupKey;
+    private String topicKey;
     private String title;
     private String memo;
-    private String useYn;
-    private String successYn;
+    private Flag useYn;
+    private Flag successYn;
 
-    public TodoListSaveResponse(String svcNo, String groupKey, String title, String memo, String useYn, String successYn) {
+    public TodoListSaveResponse(String svcNo, String topicKey, String title, String memo, Flag useYn, Flag successYn) {
         this.svcNo = svcNo;
-        this.groupKey = groupKey;
+        this.topicKey = topicKey;
         this.title = title;
         this.memo = memo;
         this.useYn = useYn;
@@ -23,6 +23,6 @@ public class TodoListSaveResponse {
     }
 
     public static TodoListSaveResponse from(TodoList todoList) {
-        return new TodoListSaveResponse(todoList.getSvcNo(), todoList.getGroupKey(), todoList.getTitle(), todoList.getMemo(), todoList.getUseYn(), todoList.getSuccessYn());
+        return new TodoListSaveResponse(todoList.getSvcNo(), todoList.getTopicKey(), todoList.getTitle(), todoList.getMemo(), todoList.getUseYn(), todoList.getSuccessYn());
     }
 }

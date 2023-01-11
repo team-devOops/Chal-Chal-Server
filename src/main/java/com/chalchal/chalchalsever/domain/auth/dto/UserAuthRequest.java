@@ -1,5 +1,6 @@
 package com.chalchal.chalchalsever.domain.auth.dto;
 
+import com.chalchal.chalchalsever.domain.auth.entity.MailAuthNum;
 import lombok.*;
 
 @Builder
@@ -11,7 +12,7 @@ public class UserAuthRequest {
     private Long id;
     private String email;
     private String code;
-    private String limitDate;
-    private String limitTime;
+    private String validDate;
+    private String validTime;
     private String authYn;
 }

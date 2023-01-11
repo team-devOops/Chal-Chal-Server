@@ -13,12 +13,19 @@ import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
+/**
+ * 메일 발송 관련 service
+ *
+ * @author zinzoddari
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class MailService {
     @Value("${spring.mail.username}")
     private String MAIL_FROM;
+
+    public static final String MAIL_SEND_ENCODING = "UTF-8";
     private final JavaMailSender mailSender;
 
     private final MailRepository mailRepository;
@@ -27,14 +34,13 @@ public class MailService {
         MimeMessage message = mailSender.createMimeMessage();
 
         try {
-            MimeMessageHelper helper = new MimeMessageHelper(message, true, "utf-8");
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, MAIL_SEND_ENCODING);
             helper.setFrom(MAIL_FROM);
             helper.setTo(mailRequest.getTo());
             helper.setSubject(mailRequest.getSubject());
             helper.setText(mailRequest.getContent(), true);
             mailSender.send(message);
 
-            //TODO : [20221016] AOP로 개선필요
             crateMail(mailRequest);
         } catch ( MessagingException e) {
             e.printStackTrace();

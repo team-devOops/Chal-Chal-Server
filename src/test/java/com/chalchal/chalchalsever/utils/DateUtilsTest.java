@@ -1,5 +1,6 @@
 package com.chalchal.chalchalsever.utils;
 
+import com.chalchal.chalchalsever.domain.auth.entity.UserJoinAuth;
 import com.chalchal.chalchalsever.global.util.DateUtils;
 import org.junit.jupiter.api.Test;
 
@@ -82,6 +83,42 @@ public class DateUtilsTest {
                 () -> assertThat(plus5Year).isEqualTo("20280112"),
                 () -> assertThat(plus13Year).isEqualTo("20360112")
         );
+    }
+
+    @Test
+    void 특정날짜에서_hour_더하기() {
+        //given
+        String date = "20230112230000";
+
+        //when
+        String plus4Hour = DateUtils.plusHourByDate(date, 4);
+
+        //then
+        assertAll(
+                () -> assertThat(plus4Hour).isEqualTo("20230113030000")
+        );
+    }
+
+    @Test
+    void 특정날짜에서_minute_더하기() {
+        //given
+        String date = "20230111232000";
+
+        //when
+        String plus50Min = DateUtils.plusMinuteByDate(date, 50);
+        String plus2Min = DateUtils.plusMinuteByDate(date, 2);
+
+        //then
+        assertAll(
+                () -> assertThat(plus50Min).isEqualTo("20230112001000"),
+                () -> assertThat(plus2Min).isEqualTo("20230111232200")
+        );
+    }
+
+    @Test
+    void 테스트() {
+        String str = DateUtils.plusMinuteByCurrentDay(10);
+        System.out.println(DateUtils.getDateByPattern(str, "HH:mm:ss"));
     }
 
 //    @Test

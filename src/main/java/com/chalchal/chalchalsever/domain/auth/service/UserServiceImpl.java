@@ -6,6 +6,7 @@ import com.chalchal.chalchalsever.domain.auth.entity.User;
 import com.chalchal.chalchalsever.domain.auth.entity.UserTokenInfo;
 import com.chalchal.chalchalsever.domain.auth.dto.TokenResponse;
 import com.chalchal.chalchalsever.domain.auth.dto.UserRequest;
+import com.chalchal.chalchalsever.global.dto.Flag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseCookie;
@@ -37,8 +38,8 @@ public class UserServiceImpl implements UserService {
                 .password(bCryptPasswordEncoder.encode(userRequest.getPassword()))
                 .userId(userRequest.getUserId())
                 .nickname(userRequest.getNickName())
-                .useYn("Y")
-                .privateYn("N")
+                .useYn(Flag.Y)
+                .privateYn(Flag.N)
                 .build());
 
         return user;
@@ -52,12 +53,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findUserById(long id) {
-        return Optional.ofNullable(userRepository.findById(id)).orElseThrow(()->new BadCredentialsException("유효하지 않은 아이디입니다."));
+        return Optional.ofNullable(userRepository.findById(id))
+                .orElseThrow(()->new BadCredentialsException("유효하지 않은 아이디입니다."));
     }
 
     @Override
     public User findByEmailAndPassword(String email, String password) {
-        User user = Optional.ofNullable(userRepository.findByEmailAndUseYn(email, "Y")).orElseThrow(()->new BadCredentialsException("이메일이나 비밀번호를 확인해주세요."));
+        User user = Optional.ofNullable(userRepository.findByEmailAndUseYn(email, "Y"))
+                .orElseThrow(()->new BadCredentialsException("이메일이나 비밀번호를 확인해주세요."));
 
         if (bCryptPasswordEncoder.matches(password, user.getPassword()) == false) {
             throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
@@ -70,7 +73,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User resignUser(long id) {
         User user = userRepository.findById(id);
-        user.changeUseYn("N");
+        user.changeUseYn(Flag.N);
 
         return user;
     }

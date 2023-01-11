@@ -1,7 +1,5 @@
 package com.chalchal.chalchalsever.domain.todo.controller;
 
-import com.chalchal.chalchalsever.domain.todo.dto.TodoGroupSaveRequest;
-import com.chalchal.chalchalsever.domain.todo.dto.TodoGroupUpdateRequest;
 import com.chalchal.chalchalsever.domain.todo.dto.TodoListSaveRequest;
 import com.chalchal.chalchalsever.domain.todo.dto.TodoListUpdateRequest;
 import com.chalchal.chalchalsever.domain.todo.service.TodoService;
@@ -75,41 +73,6 @@ public class TodoController {
     @ApiOperation(value = "TODO 삭제")
     public ResponseEntity<ResultResponse> delete(@PathVariable String svcNo) {
         todoService.deleteTodoList(svcNo);
-
-        return ResponseEntity.ok()
-                .body(ResultResponse.builder()
-                        .status(HttpStatus.OK.value())
-                        .message("삭제 완료 되었습니다.")
-                        .data(null)
-                        .build());
-    }
-
-    @PostMapping(value = "/group")
-    @ApiOperation(value = "TODO 그룹 생성")
-    public ResponseEntity<ResultResponse> saveGroup(@RequestBody TodoGroupSaveRequest todoGroupSaveRequest) {
-        return ResponseEntity.ok()
-                .body(ResultResponse.builder()
-                        .status(HttpStatus.OK.value())
-                        .message("등록 되었습니다.")
-                        .data(todoService.createTodoGroup(todoGroupSaveRequest))
-                        .build());
-    }
-
-    @PatchMapping(value = "/group/{svcNo}")
-    @ApiOperation(value = "TODO 그룹 수정")
-    public ResponseEntity<ResultResponse> saveGroup(@RequestBody TodoGroupUpdateRequest todoGroupUpdateRequest) {
-        return ResponseEntity.ok()
-                .body(ResultResponse.builder()
-                        .status(HttpStatus.OK.value())
-                        .message("수정 되었습니다.")
-                        .data(todoService.updateTodoGroup(todoGroupUpdateRequest))
-                        .build());
-    }
-
-    @DeleteMapping(value = "/group/{svcNo}")
-    @ApiOperation(value = "TODO 그룹 수정")
-    public ResponseEntity<ResultResponse> saveGroup(@PathVariable String svcNo) {
-        todoService.deleteTodoGroup(svcNo);
 
         return ResponseEntity.ok()
                 .body(ResultResponse.builder()

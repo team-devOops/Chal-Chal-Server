@@ -33,9 +33,9 @@ public class TodoList extends BaseDomain {
     @Column(name = "RE_SVC_NO", columnDefinition = "varchar(32)")
     private String reSvcNo;
 
-    @Comment("그룹키")
-    @Column(name = "GROUP_KEY", columnDefinition = "varchar(32)")
-    private String groupKey;
+    @Comment("토픽키")
+    @Column(name = "TOPIC_KEY", columnDefinition = "varchar(32)")
+    private String topicKey;
 
     @Comment("정렬 시퀀스")
     @Column(name = "ORDER_SEQ", columnDefinition = "bigint")
@@ -63,8 +63,8 @@ public class TodoList extends BaseDomain {
     @Column(name = "SUCCESS_DATE", columnDefinition = "datetime")
     private DateTime successDate;
 
-    public void changeGroupKey(String groupKey) {
-        this.groupKey = groupKey;
+    public void changeTopicKey(String topicKey) {
+        this.topicKey = topicKey;
     }
 
     public void changeTitle(String title) {

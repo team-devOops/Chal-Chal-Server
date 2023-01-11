@@ -16,9 +16,12 @@ public class DateUtils {
     public static final String DATE_PATTERN = "yyyy-MM-dd";
     public static final String DATE_PATTERN_FORMAT = "yyyyMMdd";
     /** Date Time format */
-    public static final String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
+    public static final String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm";
+    public static final String DATE_TIME = "yyyyMMddHHmmss";
 
-    public static final String DATE_TIME_FORMAT = "HHmmss";
+    public static final String DATE_TIME_FORMAT = "HHmm";
+
+    public static final String DATE_TIME_HMS_FORMAT = "HHmmss";
 
     /**
      * 현재 날짜를 가져온다.
@@ -150,8 +153,14 @@ public class DateUtils {
      * @return String pattern에 의한 날짜 및 시간
      */
     public static String getDateByPattern(String date, String pattern) {
-        DateTime dt = new DateTime(date);
-        return getDateByPattern(dt, pattern);
+        DateTimeFormatter formatter = DateTimeFormat.forPattern(pattern);
+        System.out.println("date : " + date);
+
+        DateTime datetime = new DateTime(date);
+        System.out.println(formatter.parseLocalDateTime(date));
+        //DateTime dt = DateTime.parse(date, DateTimeFormat.forPattern(pattern));
+        //return getDateByPattern(dt, pattern);
+        return datetime.toString();
     }
 
     /**
@@ -163,5 +172,67 @@ public class DateUtils {
     public static String getDateByPattern(DateTime date, String pattern) {
         DateTimeFormatter fmt = DateTimeFormat.forPattern(pattern);
         return fmt.print(date);
+    }
+
+    /**
+     * 현재 날짜 기준으로 hour만큼 시간을 더한 결과 값을 반환
+     * @param hour 더할 시간
+     * @return String pattern에 의한 날짜 및 시간
+     */
+    public static String plusHourByCurrentDay(int hour) {
+        return plusHourByDate(getCurrentDay(DATE_TIME), hour);
+    }
+
+    /**
+     * 입력된 날짜 기준으로 hour만큼 시간을 더한 결과 값을 반환
+     * @param date 기준 날짜
+     * @param hour 더할 시간
+     * @return String pattern에 의한 날짜 및 시간
+     */
+    public static String plusHourByDate(String date, int hour) {
+        return plusHourByDate(date, hour, DATE_TIME);
+    }
+
+    /**
+     * 입력된 날짜 기준으로 hour만큼 시간을 더한 결과를 pattern에 맞는 값 반환
+     * @param date 기준 날짜
+     * @param hour 더할 시간
+     * @param pattern 출력 할 패턴 값
+     * @return String pattern에 의한 날짜 및 시간
+     */
+    public static String plusHourByDate(String date, int hour, String pattern) {
+        DateTime dt = DateTime.parse(date, DateTimeFormat.forPattern(pattern));
+        return getDateByPattern(dt.plusHours(hour), pattern);
+    }
+
+    /**
+     * 현재 날짜 기준으로 minute만큼 시간을 더한 결과 값을 반환
+     * @param minute 더할 분
+     * @return String pattern에 의한 날짜 및 시간
+     */
+    public static String plusMinuteByCurrentDay(int minute) {
+        return plusMinuteByDate(getCurrentDay(DATE_TIME), minute);
+    }
+
+    /**
+     * 입력된 날짜 기준으로 minute만큼 시간을 더한 결과 값을 반환
+     * @param date 기준 날짜
+     * @param minute 더할 분
+     * @return String pattern에 의한 날짜 및 시간
+     */
+    public static String plusMinuteByDate(String date, int minute) {
+        return plusMinuteByDate(date, minute, DATE_TIME);
+    }
+
+    /**
+     * 입력된 날짜 기준으로 hour만큼 시간을 더한 결과를 pattern에 맞는 값 반환
+     * @param date 기준 날짜
+     * @param minute 더할 분
+     * @param pattern 출력 할 패턴 값
+     * @return String pattern에 의한 날짜 및 시간
+     */
+    public static String plusMinuteByDate(String date, int minute, String pattern) {
+        DateTime dt = DateTime.parse(date, DateTimeFormat.forPattern(pattern));
+        return getDateByPattern(dt.plusMinutes(minute), pattern);
     }
 }

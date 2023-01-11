@@ -22,8 +22,8 @@ public class UserAuthServiceImpl implements UserAuthService {
                     .id(userAuthRequest.getId())
                     .sendEmail(userAuthRequest.getEmail())
                     .authCode(userAuthRequest.getCode())
-                    .validDate(userAuthRequest.getLimitDate())
-                    .validTime(userAuthRequest.getLimitTime())
+                    .validDate(userAuthRequest.getValidDate())
+                    .validTime(userAuthRequest.getValidTime())
                     .authYn("N")
                 .build());
     }

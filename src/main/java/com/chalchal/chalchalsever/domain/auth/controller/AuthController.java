@@ -13,6 +13,7 @@ import com.chalchal.chalchalsever.domain.auth.entity.UserTokenInfo;
 import com.chalchal.chalchalsever.global.dto.ResultResponse;
 import com.chalchal.chalchalsever.global.generate.SvcNo;
 import com.chalchal.chalchalsever.global.mail.dto.MailRequest;
+import com.chalchal.chalchalsever.domain.auth.entity.MailAuthNum;
 import com.chalchal.chalchalsever.global.mail.service.MailService;
 import com.chalchal.chalchalsever.global.util.DateUtils;
 import io.swagger.annotations.Api;
@@ -117,22 +118,20 @@ public class AuthController {
         Authentication authentication = jwtUtils.getAuthentication(jwtUtils.resolveToken(httpServletRequest));
         User user = (User) authentication.getPrincipal();
 
-        String authCode = "123456";
+        MailAuthNum mailAuthNum = new MailAuthNum();
 
         UserJoinAuth userJoinAuth = userAuthService.createUserAuth(UserAuthRequest.builder()
                     .reqSvcNo(SvcNo.getSvcNo())
                     .id(user.getId())
                     .email(user.getEmail())
-                    .code(authCode)
-                    .limitDate(DateUtils.getCurrentDay("YYYYMMDD"))
-                    .limitTime(DateUtils.getCurrentTime("HHmm"))
+                    .code(mailAuthNum.getAuthNum())
                     .authYn("N")
                 .build());
 
         MailRequest mailRequest = MailRequest.builder()
                     .to(user.getEmail())
                     .subject("TEST")
-                    .content(authCode)
+                    .content(mailAuthNum.getAuthNum())
                 .build();
 
         mailService.mailSend(mailRequest);

@@ -1,11 +1,13 @@
 package com.chalchal.chalchalsever.domain.todo.entity;
 
+import com.chalchal.chalchalsever.global.dto.Flag;
 import com.chalchal.chalchalsever.global.util.StringUtils;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
+import org.springframework.util.ObjectUtils;
 
 import javax.persistence.*;
 
@@ -33,8 +35,9 @@ public class TodoGroup {
     private String bgColor;
 
     @Comment("사용여부")
+    @Enumerated(EnumType.STRING)
     @Column(name = "USE_YN", columnDefinition = "char(1)")
-    private String useYn;
+    private Flag useYn;
 
     @Comment("정렬 시퀀스")
     @Column(name = "ORDER_SEQ", columnDefinition = "bigint")
@@ -54,8 +57,8 @@ public class TodoGroup {
         this.bgColor = bgColor;
     }
 
-    public void changeUseYn(String useYn) {
-        if(StringUtils.isEmpty(useYn)) {
+    public void changeUseYn(Flag useYn) {
+        if(ObjectUtils.isEmpty(useYn)) {
             return;
         }
         this.useYn = useYn;

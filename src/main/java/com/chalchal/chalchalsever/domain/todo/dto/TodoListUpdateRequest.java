@@ -1,5 +1,6 @@
 package com.chalchal.chalchalsever.domain.todo.dto;
 
+import com.chalchal.chalchalsever.global.dto.Flag;
 import lombok.Getter;
 
 /**
@@ -11,6 +12,6 @@ public class TodoListUpdateRequest {
     private String groupKey;
     private String title;
     private String memo;
-    private String useYn;
-    private String successYn;
+    private Flag useYn;
+    private Flag successYn;
 }

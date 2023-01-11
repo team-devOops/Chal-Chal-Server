@@ -8,8 +8,7 @@ import com.chalchal.chalchalsever.global.dto.Flag;
 import com.chalchal.chalchalsever.global.generate.SvcNo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -39,6 +38,7 @@ public class TodoTopicServiceImpl implements TodoTopicService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public TodoTopic findTodoTopicBySvcNo(String svcNo) {
         return todoTopicRepository.findBySvcNo(svcNo);
     }

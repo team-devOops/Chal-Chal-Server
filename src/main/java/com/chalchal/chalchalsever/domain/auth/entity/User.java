@@ -1,5 +1,6 @@
 package com.chalchal.chalchalsever.domain.auth.entity;
 import com.chalchal.chalchalsever.domain.BaseDomain;
+import com.chalchal.chalchalsever.global.dto.Flag;
 import lombok.*;
 import org.hibernate.annotations.Comment;
 import org.springframework.security.core.GrantedAuthority;
@@ -40,16 +41,18 @@ public class User extends BaseDomain implements UserDetails {
     private String password;
 
     @Comment("사용여부")
+    @Enumerated(EnumType.STRING)
     @Column(name = "USE_YN", nullable = false, columnDefinition = "char(1)")
-    private String useYn;
+    private Flag useYn;
 
     @Comment("자기소개")
     @Column(name = "INTRO", columnDefinition = "varchar(512)")
     private String intro;
 
     @Comment("사용여부")
+    @Enumerated(EnumType.STRING)
     @Column(name = "PRIVATE_YN", columnDefinition = "char(1)")
-    private String privateYn;
+    private Flag privateYn;
 
     @Column
     @Enumerated(EnumType.STRING)
@@ -92,7 +95,7 @@ public class User extends BaseDomain implements UserDetails {
         return true;
     }
 
-    public void changeUseYn(String useYn) {
+    public void changeUseYn(Flag useYn) {
         this.useYn = useYn;
     }
 }

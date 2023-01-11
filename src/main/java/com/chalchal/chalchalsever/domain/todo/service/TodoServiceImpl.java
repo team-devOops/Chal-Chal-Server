@@ -34,8 +34,8 @@ public class TodoServiceImpl implements TodoService {
                         .orderSeq(1)
                         .title(todoListSaveRequest.getTitle())
                         .memo(todoListSaveRequest.getMemo())
-                        .useYn(Flag.Y.getValue())
-                        .successYn(Flag.N.getValue())
+                        .useYn(Flag.Y)
+                        .successYn(Flag.N)
                         .successDate(null)
                 .build());
     }
@@ -58,7 +58,7 @@ public class TodoServiceImpl implements TodoService {
     @Transactional
     public TodoList deleteTodoList(String svcNo) {
         TodoList todoList = this.findTodoListBySvcNo(svcNo);
-        todoList.changeUseYn(Flag.Y.getValue());
+        todoList.changeUseYn(Flag.Y);
         return todoList;
     }
 
@@ -80,7 +80,7 @@ public class TodoServiceImpl implements TodoService {
                 .svcNo(SvcNo.getSvcNo())
                         .emoji(todoGroupSaveRequest.getEmoji())
                         .bgColor(todoGroupSaveRequest.getBgColor())
-                        .useYn(Flag.Y.getValue())
+                        .useYn(Flag.Y)
                 .build());
     }
 
@@ -105,7 +105,7 @@ public class TodoServiceImpl implements TodoService {
     @Transactional
     public TodoGroup deleteTodoGroup(String svcNo) {
         TodoGroup todoGroup = this.findTodoGroupBySvcNo(svcNo);
-        todoGroup.changeUseYn(Flag.Y.getValue());
+        todoGroup.changeUseYn(Flag.Y);
         return todoGroup;
     }
 }

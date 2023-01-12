@@ -1,5 +1,6 @@
 package com.chalchal.chalchalsever.domain.auth.controller;
 
+import com.chalchal.chalchalsever.domain.auth.dto.LoginUserRequest;
 import com.chalchal.chalchalsever.domain.auth.dto.UserAuthRequest;
 import com.chalchal.chalchalsever.domain.auth.dto.UserRequest;
 import com.chalchal.chalchalsever.domain.auth.dto.UserResponse;
@@ -74,7 +75,7 @@ public class AuthController {
 
     @PostMapping("/sign-in")
     @ApiOperation(value = "로그인")
-    public ResponseEntity<ResultResponse> login(@RequestBody UserRequest userRequest) {
+    public ResponseEntity<ResultResponse> login(@RequestBody LoginUserRequest userRequest) {
         User user = userService.findByEmailAndPassword(userRequest.getEmail(), userRequest.getPassword());
 
         return ResponseEntity.ok()

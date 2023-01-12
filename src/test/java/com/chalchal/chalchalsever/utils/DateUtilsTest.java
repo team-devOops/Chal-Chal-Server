@@ -1,8 +1,15 @@
 package com.chalchal.chalchalsever.utils;
 
+import com.chalchal.chalchalsever.domain.auth.entity.User;
 import com.chalchal.chalchalsever.domain.auth.entity.UserJoinAuth;
 import com.chalchal.chalchalsever.global.util.DateUtils;
+import com.mysql.cj.x.protobuf.MysqlxSession;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.junit.jupiter.api.Test;
+
+import java.time.LocalDateTime;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -26,12 +33,12 @@ public class DateUtilsTest {
         String date = "2023-01-12";
 
         //when
-        String plusDay = DateUtils.plusDayByDate(date, 3, DateUtils.DATE_PATTERN);
+        String plusDay = DateUtils.plusDayByDate(date, 3, DateUtils.DATE_PATTERN, DateUtils.DATE_PATTERN);
 
         //then
         assertAll(
                 () -> assertThat(plusDay).isEqualTo("2023-01-15"),
-                () -> assertThat(DateUtils.getDateByPattern(plusDay, DateUtils.DATE_PATTERN_FORMAT)).isEqualTo("20230115")
+                () -> assertThat(DateUtils.getDateByPattern(plusDay, DateUtils.DATE_PATTERN_FORMAT, DateUtils.DATE_PATTERN_FORMAT)).isEqualTo("20230115")
         );
     }
 
@@ -57,15 +64,15 @@ public class DateUtilsTest {
         String date = "2023-01-12";
 
         //when
-        String plus5Month = DateUtils.plusMonthByDate(date, 5, DateUtils.DATE_PATTERN);
-        String plus13Month = DateUtils.plusMonthByDate(date, 13, DateUtils.DATE_PATTERN);
+        String plus5Month = DateUtils.plusMonthByDate(date, 5, DateUtils.DATE_PATTERN, DateUtils.DATE_PATTERN);
+        String plus13Month = DateUtils.plusMonthByDate(date, 13, DateUtils.DATE_PATTERN, DateUtils.DATE_PATTERN);
 
         //then
         assertAll(
                 () -> assertThat(plus5Month).isEqualTo("2023-06-12"),
                 () -> assertThat(plus13Month).isEqualTo("2024-02-12"),
-                () -> assertThat(DateUtils.getDateByPattern(plus5Month, DateUtils.DATE_PATTERN_FORMAT)).isEqualTo("20230612"),
-                () -> assertThat(DateUtils.getDateByPattern(plus13Month, DateUtils.DATE_PATTERN_FORMAT)).isEqualTo("20240212")
+                () -> assertThat(DateUtils.getDateByPattern(plus5Month, DateUtils.DATE_PATTERN_FORMAT, DateUtils.DATE_PATTERN_FORMAT)).isEqualTo("20230612"),
+                () -> assertThat(DateUtils.getDateByPattern(plus13Month, DateUtils.DATE_PATTERN_FORMAT, DateUtils.DATE_PATTERN_FORMAT)).isEqualTo("20240212")
         );
     }
 
@@ -117,8 +124,13 @@ public class DateUtilsTest {
 
     @Test
     void 테스트() {
-        String str = DateUtils.plusMinuteByCurrentDay(10);
-        System.out.println(DateUtils.getDateByPattern(str, "HH:mm:ss"));
+        String date = DateUtils.plusMinuteByCurrentDay(10);
+        System.out.println(date);
+        System.out.println(DateUtils.getDateByPattern(date, DateUtils.DATE_TIME, DateUtils.DATE_TIME_HMS_FORMAT));
+//        System.out.println(DateUtils.plusMinuteByDate(str, 1, DateUtils.DATE_TIME, DateUtils.DATE_TIME_HMS_FORMAT));
+//
+//        System.out.println(DateUtils.getCurrentTime("yyyyMMdd"));
+//        System.out.println(UserJoinAuth.applyValidDate());
     }
 
 //    @Test

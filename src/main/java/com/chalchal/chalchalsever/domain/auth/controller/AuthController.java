@@ -10,6 +10,7 @@ import com.chalchal.chalchalsever.domain.auth.entity.UserJoinAuth;
 import com.chalchal.chalchalsever.global.config.jwt.JwtUtils;
 import com.chalchal.chalchalsever.domain.auth.entity.User;
 import com.chalchal.chalchalsever.domain.auth.entity.UserTokenInfo;
+import com.chalchal.chalchalsever.global.dto.Flag;
 import com.chalchal.chalchalsever.global.dto.ResultResponse;
 import com.chalchal.chalchalsever.global.generate.SvcNo;
 import com.chalchal.chalchalsever.global.mail.dto.MailRequest;
@@ -125,7 +126,7 @@ public class AuthController {
                     .id(user.getId())
                     .email(user.getEmail())
                     .code(mailAuthNum.getAuthNum())
-                    .authYn("N")
+                    .authYn(Flag.N)
                 .build());
 
         MailRequest mailRequest = MailRequest.builder()

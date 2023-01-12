@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findUser(String email) {
-        return Optional.ofNullable(userRepository.findByEmailAndUseYn(email, "Y"))
+        return Optional.ofNullable(userRepository.findByEmailAndUseYn(email, Flag.Y))
                 .orElseThrow(() -> new BadCredentialsException("유효하지 않은 아이디입니다."));
     }
 
@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByEmailAndPassword(String email, String password) {
-        User user = Optional.ofNullable(userRepository.findByEmailAndUseYn(email, "Y"))
+        User user = Optional.ofNullable(userRepository.findByEmailAndUseYn(email, Flag.Y))
                 .orElseThrow(()->new BadCredentialsException("이메일이나 비밀번호를 확인해주세요."));
 
         if (bCryptPasswordEncoder.matches(password, user.getPassword()) == false) {

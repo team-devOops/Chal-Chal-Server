@@ -18,6 +18,7 @@ public class DateUtils {
     public static final String DATE_PATTERN_FORMAT = "yyyyMMdd";
     /** Date Time format */
     public static final String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm";
+    public static final String DATE_TIME_FULL_PATTERN = "yyyy-MM-dd HH:mm:ss";
     public static final String DATE_TIME = "yyyyMMddHHmmss";
 
     public static final String DATE_TIME_FORMAT = "HHmm";

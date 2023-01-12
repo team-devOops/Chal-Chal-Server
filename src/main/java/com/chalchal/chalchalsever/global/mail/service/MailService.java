@@ -1,11 +1,15 @@
 package com.chalchal.chalchalsever.global.mail.service;
 
+import com.chalchal.chalchalsever.domain.auth.dto.UserResponse;
+import com.chalchal.chalchalsever.global.dto.ResultResponse;
 import com.chalchal.chalchalsever.global.mail.entity.Mail;
 import com.chalchal.chalchalsever.global.mail.dto.MailRequest;
 import com.chalchal.chalchalsever.global.mail.repository.MailRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -30,7 +34,7 @@ public class MailService {
 
     private final MailRepository mailRepository;
 
-    public void mailSend(MailRequest mailRequest) {
+    public HttpStatus mailSend(MailRequest mailRequest) {
         MimeMessage message = mailSender.createMimeMessage();
 
         try {
@@ -42,9 +46,12 @@ public class MailService {
             mailSender.send(message);
 
             crateMail(mailRequest);
-        } catch ( MessagingException e) {
+        } catch (MessagingException e) {
             e.printStackTrace();
+            return HttpStatus.INTERNAL_SERVER_ERROR;
         }
+
+        return HttpStatus.OK;
     }
 
     public Mail crateMail(MailRequest mailRequest) {

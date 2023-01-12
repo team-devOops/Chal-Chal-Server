@@ -16,10 +16,8 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
 
 @Slf4j
 @RestController
@@ -34,10 +32,7 @@ public class AuthMailController {
     @PostMapping(value = "/")
     @ApiOperation(value = "이메일 발송")
     public ResponseEntity<ResultResponse> sendEmail(@RequestBody UserAuthMailRequest userAuthMailRequest,
-                                                    HttpServletRequest httpServletRequest) {
-        Authentication authentication = jwtUtils.getAuthentication(jwtUtils.resolveToken(httpServletRequest));
-        User user = (User) authentication.getPrincipal();
-
+                                                    @AuthenticationPrincipal User user) {
         MailAuthNum mailAuthNum = new MailAuthNum();
 
         UserJoinAuth userJoinAuth = userAuthService.createUserAuth(UserAuthRequest.builder()
@@ -64,13 +59,9 @@ public class AuthMailController {
     }
 
     @GetMapping(value = "/{authNum}")
-    @ApiOperation(value = "개인정보")
+    @ApiOperation(value = "인증코드 비교")
     public ResponseEntity<ResultResponse> compareAuthNum(@PathVariable String authNum,
-                                                         HttpServletRequest httpServletRequest) {
-        //TODO: Q.아래 이 부분 중복을 제거하는 방법이 있을까여
-        Authentication authentication = jwtUtils.getAuthentication(jwtUtils.resolveToken(httpServletRequest));
-        User user = (User) authentication.getPrincipal();
-
+                                                         @AuthenticationPrincipal User user) {
         userAuthService.compareAuthNum(user.getId(), authNum);
 
         //TODO: 결과값도 처리 해야함 ...

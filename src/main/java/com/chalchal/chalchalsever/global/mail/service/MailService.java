@@ -49,6 +49,7 @@ public class MailService {
 
     public Mail crateMail(MailRequest mailRequest) {
         return mailRepository.save(Mail.builder()
+                .svcNo(mailRequest.getSvcNo())
                 .toMail(mailRequest.getTo())
                 .fromMail(MAIL_FROM)
                 .subject(mailRequest.getSubject())

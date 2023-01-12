@@ -2,7 +2,8 @@ package com.chalchal.chalchalsever.global.util;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
+
+import java.time.format.DateTimeFormatter;
 
 /**
  * 날짜 관련 util 정의한 class입니다.
@@ -65,19 +66,20 @@ public class DateUtils {
      * @return 특정 날짜에서 day만큼 더해진 날짜 값
      */
     public static String plusDayByDate(String date, int day) {
-        return plusDayByDate(date, day, DATE_PATTERN_FORMAT);
+        return plusDayByDate(date, day, DATE_PATTERN_FORMAT, DATE_PATTERN_FORMAT);
     }
 
     /**
      * 입력된 날짜에서 day만큼 날을 더한다.
      * @param date 입력된 특정 날짜
      * @param day 더하고자 하는 날짜
-     * @param pattern 날짜 패턴
+     * @param inputPattern 입력 할 패턴 값
+     * @param outputPattern 출력 할 패턴 값
      * @return 특정 날짜에서 day만큼 더해진 날짜 값
      */
-    public static String plusDayByDate(String date, int day, String pattern) {
-        DateTime dt = DateTime.parse(date, DateTimeFormat.forPattern(pattern));
-        return getDateByPattern(dt.plusDays(day), pattern);
+    public static String plusDayByDate(String date, int day, String inputPattern, String outputPattern) {
+        DateTime dt = DateTime.parse(date, DateTimeFormat.forPattern(inputPattern));
+        return getDateByPattern(dt.plusDays(day), outputPattern);
     }
 
     /**
@@ -95,7 +97,7 @@ public class DateUtils {
      * @return 특정 날의 월이 month만큼 더해진 날짜 값
      */
     public static String plusMonthByDate(String date, int month) {
-        return plusMonthByDate(date, month, DATE_PATTERN_FORMAT);
+        return plusMonthByDate(date, month, DATE_PATTERN_FORMAT, DATE_PATTERN_FORMAT);
     }
 
     /**
@@ -103,9 +105,9 @@ public class DateUtils {
      * @param month 더하고자 하는 개월 수
      * @return 특정 날의 월이 month만큼 더해진 날짜 값
      */
-    public static String plusMonthByDate(String date, int month, String pattern) {
-        DateTime dt = DateTime.parse(date, DateTimeFormat.forPattern(pattern));
-        return getDateByPattern(dt.plusMonths(month), pattern);
+    public static String plusMonthByDate(String date, int month, String inputPattern, String outputPattern) {
+        DateTime dt = DateTime.parse(date, DateTimeFormat.forPattern(inputPattern));
+        return getDateByPattern(dt.plusMonths(month), outputPattern);
     }
 
     /**
@@ -120,12 +122,13 @@ public class DateUtils {
     /**
      * 입력된 날짜에서 year만큼 년을 더한다.
      * @param year 더하고자 하는 년 수
-     * @param pattern 날짜 패턴
+     * @param inputPattern 입력 할 패턴 값
+     * @param outputPattern 출력 할 패턴 값
      * @return 특정 날의 월이 year만큼 더해진 날짜 값
      */
-    public static String plusYearByDate(String date, int year, String pattern) {
-        DateTime dt = DateTime.parse(date, DateTimeFormat.forPattern(pattern));
-        return getDateByPattern(dt.plusYears(year), pattern);
+    public static String plusYearByDate(String date, int year, String inputPattern, String outputPattern) {
+        DateTime dt = DateTime.parse(date, DateTimeFormat.forPattern(inputPattern));
+        return getDateByPattern(dt.plusYears(year), outputPattern);
     }
 
     /**
@@ -134,7 +137,7 @@ public class DateUtils {
      * @return 특정 날의 월이 year만큼 더해진 날짜 값
      */
     public static String plusYearByDate(String date, int year) {
-        return plusYearByDate(date, year, DATE_PATTERN_FORMAT);
+        return plusYearByDate(date, year, DATE_PATTERN_FORMAT, DATE_PATTERN_FORMAT);
     }
 
     /**
@@ -148,30 +151,27 @@ public class DateUtils {
 
     /**
      * 주어진 날짜 및 시간을 패턴에 맞게 가져온다.
-     * @param date 날짜 및 시간
-     * @param pattern 패턴
+     * @param date 날짜 및 시간 (yyyyMMddHHmmss)
      * @return String pattern에 의한 날짜 및 시간
      */
-    public static String getDateByPattern(String date, String pattern) {
-        DateTimeFormatter formatter = DateTimeFormat.forPattern(pattern);
-        System.out.println("date : " + date);
-
-        DateTime datetime = new DateTime(date);
-        System.out.println(formatter.parseLocalDateTime(date));
-        //DateTime dt = DateTime.parse(date, DateTimeFormat.forPattern(pattern));
-        //return getDateByPattern(dt, pattern);
-        return datetime.toString();
+    public static String getDateByPattern(String date) {
+        DateTime dt = new DateTime(date);
+        return getDateByPattern(dt, DATE_TIME);
     }
 
     /**
      * 주어진 날짜 및 시간을 패턴에 맞게 가져온다.
      * @param date DateTime
-     * @param pattern 패턴
+     * @param outputPattern 출력 할 패턴 값
      * @return String pattern에 의한 날짜 및 시간
      */
-    public static String getDateByPattern(DateTime date, String pattern) {
-        DateTimeFormatter fmt = DateTimeFormat.forPattern(pattern);
-        return fmt.print(date);
+    public static String getDateByPattern(DateTime date, String outputPattern) {
+        return date.toString(outputPattern);
+    }
+
+    public static String getDateByPattern(String date, String inputPattern, String outputPattern) {
+        DateTime dt = DateTime.parse(date, DateTimeFormat.forPattern(inputPattern));
+        return getDateByPattern(dt, outputPattern);
     }
 
     /**
@@ -190,19 +190,20 @@ public class DateUtils {
      * @return String pattern에 의한 날짜 및 시간
      */
     public static String plusHourByDate(String date, int hour) {
-        return plusHourByDate(date, hour, DATE_TIME);
+        return plusHourByDate(date, hour, DATE_TIME, DATE_TIME);
     }
 
     /**
      * 입력된 날짜 기준으로 hour만큼 시간을 더한 결과를 pattern에 맞는 값 반환
      * @param date 기준 날짜
      * @param hour 더할 시간
-     * @param pattern 출력 할 패턴 값
+     * @param inputPattern 입력 할 패턴 값
+     * @param outputPattern 출력 할 패턴 값
      * @return String pattern에 의한 날짜 및 시간
      */
-    public static String plusHourByDate(String date, int hour, String pattern) {
-        DateTime dt = DateTime.parse(date, DateTimeFormat.forPattern(pattern));
-        return getDateByPattern(dt.plusHours(hour), pattern);
+    public static String plusHourByDate(String date, int hour, String inputPattern, String outputPattern) {
+        DateTime dt = DateTime.parse(date, DateTimeFormat.forPattern(inputPattern));
+        return getDateByPattern(dt.plusHours(hour), outputPattern);
     }
 
     /**
@@ -221,18 +222,19 @@ public class DateUtils {
      * @return String pattern에 의한 날짜 및 시간
      */
     public static String plusMinuteByDate(String date, int minute) {
-        return plusMinuteByDate(date, minute, DATE_TIME);
+        return plusMinuteByDate(date, minute, DATE_TIME, DATE_TIME);
     }
 
     /**
      * 입력된 날짜 기준으로 hour만큼 시간을 더한 결과를 pattern에 맞는 값 반환
      * @param date 기준 날짜
      * @param minute 더할 분
-     * @param pattern 출력 할 패턴 값
+     * @param inputPattern 입력 할 패턴 값
+     * @param outputPattern 출력 할 패턴 값
      * @return String pattern에 의한 날짜 및 시간
      */
-    public static String plusMinuteByDate(String date, int minute, String pattern) {
-        DateTime dt = DateTime.parse(date, DateTimeFormat.forPattern(pattern));
-        return getDateByPattern(dt.plusMinutes(minute), pattern);
+    public static String plusMinuteByDate(String date, int minute, String inputPattern, String outputPattern) {
+        DateTime dt = DateTime.parse(date, DateTimeFormat.forPattern(inputPattern));
+        return getDateByPattern(dt.plusMinutes(minute), outputPattern);
     }
 }

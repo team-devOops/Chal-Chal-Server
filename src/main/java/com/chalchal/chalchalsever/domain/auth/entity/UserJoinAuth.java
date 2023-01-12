@@ -1,6 +1,7 @@
 package com.chalchal.chalchalsever.domain.auth.entity;
 
 import com.chalchal.chalchalsever.domain.BaseDomain;
+import com.chalchal.chalchalsever.global.dto.Flag;
 import com.chalchal.chalchalsever.global.util.DateUtils;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -46,8 +47,9 @@ public class UserJoinAuth extends BaseDomain {
     private String validTime = applyValidTime();
 
     @Comment("인증여부")
+    @Enumerated(EnumType.STRING)
     @Column(name = "AUTH_YN", nullable = false, columnDefinition = "char(1)")
-    private String authYn;
+    private Flag authYn;
 
     /**
      * 인증 유효 기간 설정
@@ -55,15 +57,28 @@ public class UserJoinAuth extends BaseDomain {
     //TODO: 230111 하단 로직 고민 더 해보기
     public static String applyValidDate() {
         String date = getValidity();
-        return DateUtils.getDateByPattern(date, DateUtils.DATE_PATTERN_FORMAT);
+        return DateUtils.getDateByPattern(date, DateUtils.DATE_TIME, DateUtils.DATE_PATTERN_FORMAT);
     }
 
     public static String applyValidTime() {
         String date = getValidity();
-        return DateUtils.getDateByPattern(date, DateUtils.DATE_TIME_HMS_FORMAT);
+        return DateUtils.getDateByPattern(date, DateUtils.DATE_TIME, DateUtils.DATE_TIME_HMS_FORMAT);
     }
 
     private static String getValidity() {
         return DateUtils.plusMinuteByCurrentDay(10);
+    }
+
+    @Override
+    public String toString() {
+        return "UserJoinAuth{" +
+                "reqSvcNo='" + reqSvcNo + '\'' +
+                ", id=" + id +
+                ", sendEmail='" + sendEmail + '\'' +
+                ", authCode='" + authCode + '\'' +
+                ", validDate='" + validDate + '\'' +
+                ", validTime='" + validTime + '\'' +
+                ", authYn='" + authYn + '\'' +
+                '}';
     }
 }

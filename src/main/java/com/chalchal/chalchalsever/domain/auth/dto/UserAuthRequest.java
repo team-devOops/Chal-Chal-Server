@@ -1,6 +1,7 @@
 package com.chalchal.chalchalsever.domain.auth.dto;
 
-import com.chalchal.chalchalsever.domain.auth.entity.MailAuthNum;
+import com.chalchal.chalchalsever.domain.auth.entity.UserJoinAuth;
+import com.chalchal.chalchalsever.global.dto.Flag;
 import lombok.*;
 
 @Builder
@@ -12,7 +13,10 @@ public class UserAuthRequest {
     private Long id;
     private String email;
     private String code;
-    private String validDate;
-    private String validTime;
-    private String authYn;
+    private Flag authYn;
+
+    @Builder.Default
+    private String validDate = UserJoinAuth.applyValidDate();
+    @Builder.Default
+    private String validTime = UserJoinAuth.applyValidTime();
 }

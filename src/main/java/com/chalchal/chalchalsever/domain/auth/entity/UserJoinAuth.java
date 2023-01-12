@@ -2,14 +2,16 @@ package com.chalchal.chalchalsever.domain.auth.entity;
 
 import com.chalchal.chalchalsever.domain.BaseDomain;
 import com.chalchal.chalchalsever.global.dto.Flag;
-import com.chalchal.chalchalsever.global.util.DateUtils;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
+import org.joda.time.DateTime;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Builder
 @Getter
@@ -19,10 +21,11 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class UserJoinAuth extends BaseDomain {
 
+    public static final int AUTH_VALID_MAX_TIME = 10;
     @Id
     @Comment("서비스번호")
     @Column(name = "SVC_NO", nullable = false, columnDefinition = "varchar(32)")
-    private String reqSvcNo;
+    private String svcNo;
 
     @Comment("유저 KEY")
     @Column(name = "ID", nullable = false, columnDefinition = "bigint")
@@ -37,47 +40,41 @@ public class UserJoinAuth extends BaseDomain {
     private String authCode;
 
     @Builder.Default
-    @Comment("인증유효날짜(YYYYMMDD)")
-    @Column(name = "VALID_DATE", nullable = false, columnDefinition = "char(8)")
-    private String validDate = applyValidDate();
-
-    @Builder.Default
-    @Comment("인증유효시간(HHmmss)")
-    @Column(name = "VALID_TIME", nullable = false, columnDefinition = "char(6)")
-    private String validTime = applyValidTime();
+    @Comment("인증유효시간")
+    @Column(name = "VALID_DATE", nullable = false, columnDefinition = "datetime")
+    private LocalDateTime validDate = getValidity();
 
     @Comment("인증여부")
     @Enumerated(EnumType.STRING)
     @Column(name = "AUTH_YN", nullable = false, columnDefinition = "char(1)")
     private Flag authYn;
 
-    /**
-     * 인증 유효 기간 설정
-     */
-    //TODO: 230111 하단 로직 고민 더 해보기
-    public static String applyValidDate() {
-        String date = getValidity();
-        return DateUtils.getDateByPattern(date, DateUtils.DATE_TIME, DateUtils.DATE_PATTERN_FORMAT);
+    @Comment("인증성공일자")
+    @Column(name = "SUCCESS_AUTH_DATE", columnDefinition = "datetime")
+    private LocalDateTime successAuthDate;
+
+    public void successAuth() {
+        this.authYn = Flag.Y;
+        this.successAuthDate = LocalDateTime.now();
     }
 
-    public static String applyValidTime() {
-        String date = getValidity();
-        return DateUtils.getDateByPattern(date, DateUtils.DATE_TIME, DateUtils.DATE_TIME_HMS_FORMAT);
+    public static LocalDateTime getValidity() {
+        return LocalDateTime.now().plusMinutes(AUTH_VALID_MAX_TIME);
     }
 
-    private static String getValidity() {
-        return DateUtils.plusMinuteByCurrentDay(10);
+    @Override
+    public int hashCode() {
+        return Objects.hash(authCode);
     }
 
     @Override
     public String toString() {
         return "UserJoinAuth{" +
-                "reqSvcNo='" + reqSvcNo + '\'' +
+                "reqSvcNo='" + svcNo + '\'' +
                 ", id=" + id +
                 ", sendEmail='" + sendEmail + '\'' +
                 ", authCode='" + authCode + '\'' +
                 ", validDate='" + validDate + '\'' +
-                ", validTime='" + validTime + '\'' +
                 ", authYn='" + authYn + '\'' +
                 '}';
     }

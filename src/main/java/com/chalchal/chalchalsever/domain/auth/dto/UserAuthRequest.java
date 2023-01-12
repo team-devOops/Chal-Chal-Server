@@ -4,19 +4,19 @@ import com.chalchal.chalchalsever.domain.auth.entity.UserJoinAuth;
 import com.chalchal.chalchalsever.global.dto.Flag;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Builder
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserAuthRequest {
-    private String reqSvcNo;
+    private String svcNo;
     private Long id;
     private String email;
     private String code;
     private Flag authYn;
 
     @Builder.Default
-    private String validDate = UserJoinAuth.applyValidDate();
-    @Builder.Default
-    private String validTime = UserJoinAuth.applyValidTime();
+    private LocalDateTime validDate = UserJoinAuth.getValidity();
 }

@@ -8,10 +8,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
-import org.joda.time.DateTime;
 import org.springframework.util.ObjectUtils;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 /**
  * to do 내용에 대한 도메인
@@ -61,7 +61,7 @@ public class TodoList extends BaseDomain {
 
     @Comment("완료일자")
     @Column(name = "SUCCESS_DATE", columnDefinition = "datetime")
-    private DateTime successDate;
+    private LocalDateTime successDate;
 
     public void changeTopicKey(String topicKey) {
         this.topicKey = topicKey;
@@ -82,7 +82,7 @@ public class TodoList extends BaseDomain {
     }
 
     public void changeSuccessYn(Flag successYn) {
-        if(ObjectUtils.isEmpty(successYn)) {
+        if(ObjectUtils.isEmpty(successYn) || successYn.equals(Flag.N)) {
             return;
         }
         this.successYn = successYn;
@@ -97,6 +97,6 @@ public class TodoList extends BaseDomain {
     }
 
     public void updateSuccessDate() {
-        this.successDate = DateTime.now();
+        this.successDate = LocalDateTime.now();
     }
 }

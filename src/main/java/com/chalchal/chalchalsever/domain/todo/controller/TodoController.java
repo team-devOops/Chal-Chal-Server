@@ -1,5 +1,6 @@
 package com.chalchal.chalchalsever.domain.todo.controller;
 
+import com.chalchal.chalchalsever.domain.auth.entity.User;
 import com.chalchal.chalchalsever.domain.todo.dto.TodoListSaveRequest;
 import com.chalchal.chalchalsever.domain.todo.dto.TodoListUpdateRequest;
 import com.chalchal.chalchalsever.domain.todo.service.TodoService;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,11 +32,11 @@ public class TodoController {
      */
     @GetMapping(value = "/")
     @ApiOperation(value = "TODO 조회")
-    public ResponseEntity<ResultResponse> selectAll(HttpServletRequest httpServletRequest) {
+    public ResponseEntity<ResultResponse> selectAll(@AuthenticationPrincipal User user) {
         return ResponseEntity.ok()
                 .body(ResultResponse.builder()
                         .status(HttpStatus.OK.value())
-                        .data(todoService.findTodoListByRegId(jwtUtils.getLoginUserInfo(httpServletRequest).getId()))
+                        .data(todoService.findTodoListByRegId(user.getId()))
                         .build());
     }
 

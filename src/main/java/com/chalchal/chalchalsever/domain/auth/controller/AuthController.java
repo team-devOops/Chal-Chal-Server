@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -42,13 +43,13 @@ public class AuthController {
 
     @PostMapping(value = "/refresh")
     @ApiOperation(value = "access token 재발급")
-    public ResponseEntity<ResultResponse> accessTokenRefresh(HttpServletRequest httpServletRequest) {
+    public ResponseEntity<ResultResponse> accessTokenRefresh(@AuthenticationPrincipal User user, HttpServletRequest httpServletRequest) {
         long refreshTokenIndex = jwtUtils.getRefreshTokenByCookieIndex(httpServletRequest, REFRESH_TOKEN_INDEX);
 
         UserTokenInfo userTokenInfo = userTokenInfoService.getTokenInfo(refreshTokenIndex);
 
         if(jwtUtils.isValidRefreshToken(userTokenInfo)) {
-            User user = userService.findUserById(userTokenInfo.getId());
+            //User user = userService.findUserById(userTokenInfo.getId());
 
             return ResponseEntity.ok()
                     .header(HttpHeaders.AUTHORIZATION, jwtUtils.createToken(user))

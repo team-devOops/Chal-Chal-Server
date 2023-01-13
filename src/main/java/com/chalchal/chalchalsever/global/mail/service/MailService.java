@@ -2,6 +2,7 @@ package com.chalchal.chalchalsever.global.mail.service;
 
 import com.chalchal.chalchalsever.domain.auth.dto.UserResponse;
 import com.chalchal.chalchalsever.global.dto.ResultResponse;
+import com.chalchal.chalchalsever.global.exception.BaseException;
 import com.chalchal.chalchalsever.global.mail.entity.Mail;
 import com.chalchal.chalchalsever.global.mail.dto.MailRequest;
 import com.chalchal.chalchalsever.global.mail.repository.MailRepository;
@@ -34,7 +35,7 @@ public class MailService {
 
     private final MailRepository mailRepository;
 
-    public HttpStatus mailSend(MailRequest mailRequest) {
+    public void mailSend(MailRequest mailRequest) {
         MimeMessage message = mailSender.createMimeMessage();
 
         try {
@@ -48,10 +49,7 @@ public class MailService {
             crateMail(mailRequest);
         } catch (MessagingException e) {
             e.printStackTrace();
-            return HttpStatus.INTERNAL_SERVER_ERROR;
         }
-
-        return HttpStatus.OK;
     }
 
     public Mail crateMail(MailRequest mailRequest) {

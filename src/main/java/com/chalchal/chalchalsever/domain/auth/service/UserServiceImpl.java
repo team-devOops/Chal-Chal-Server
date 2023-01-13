@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean validateRegister(String email) {
+    public boolean isRegister(String email) {
         if(userRepository.countByEmail(email) > 0) {
             return false;
         }

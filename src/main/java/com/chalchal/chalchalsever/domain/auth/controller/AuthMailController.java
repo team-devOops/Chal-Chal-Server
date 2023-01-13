@@ -43,19 +43,16 @@ public class AuthMailController {
                     .authYn(Flag.N)
                 .build());
 
-        MailRequest mailRequest = MailRequest.builder()
-                    .svcNo(userJoinAuth.getSvcNo())
-                    .to(userAuthMailRequest.getEmail())
-                    .subject("TEST")
-                    .content(authNum)
-                .build();
+        mailService.mailSend(MailRequest.builder()
+                .svcNo(userJoinAuth.getSvcNo())
+                .to(userAuthMailRequest.getEmail())
+                .subject("TEST")
+                .content(authNum)
+                .build());
 
-        //TODO:에러메세지 처리법이 필요해 보인다... ㅠ ㅠ
-        return ResponseEntity.ok()
-                .body(ResultResponse.builder()
-                .status(mailService.mailSend(mailRequest).value())
-                .build()
-        );
+        return ResultResponse.toResponse(ResultResponse.builder()
+                        .data(userJoinAuth)
+                    .build());
     }
 
     @GetMapping(value = "/{authNum}")
@@ -64,10 +61,7 @@ public class AuthMailController {
                                                          @AuthenticationPrincipal User user) {
         userAuthService.compareAuthNum(user.getId(), authNum);
 
-        //TODO: 결과값도 처리 해야함 ...
-        return ResponseEntity.ok()
-                .body(ResultResponse.builder())
-                .status(200)
-                .build();
+        return ResultResponse.toResponse(ResultResponse.builder()
+                .build());
     }
 }

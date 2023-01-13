@@ -33,13 +33,13 @@ public class AuthMailController {
     @ApiOperation(value = "이메일 발송")
     public ResponseEntity<ResultResponse> sendEmail(@RequestBody UserAuthMailRequest userAuthMailRequest,
                                                     @AuthenticationPrincipal User user) {
-        MailAuthNum mailAuthNum = new MailAuthNum();
+        String authNum = MailAuthNum.creteMailAuthNum().getAuthNum();
 
         UserJoinAuth userJoinAuth = userAuthService.createUserAuth(UserAuthRequest.builder()
                     .svcNo(SvcNo.getSvcNo())
                     .id(user.getId())
                     .email(userAuthMailRequest.getEmail())
-                    .code(mailAuthNum.getAuthNum())
+                    .code(authNum)
                     .authYn(Flag.N)
                 .build());
 
@@ -47,7 +47,7 @@ public class AuthMailController {
                     .svcNo(userJoinAuth.getSvcNo())
                     .to(userAuthMailRequest.getEmail())
                     .subject("TEST")
-                    .content(mailAuthNum.getAuthNum())
+                    .content(authNum)
                 .build();
 
         //TODO:에러메세지 처리법이 필요해 보인다... ㅠ ㅠ

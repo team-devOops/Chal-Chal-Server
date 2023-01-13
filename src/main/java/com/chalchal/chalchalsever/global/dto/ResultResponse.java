@@ -4,10 +4,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 
+import java.time.LocalDateTime;
+
 
 @Builder
 @AllArgsConstructor
 public class ResultResponse<T> {
+
+    @JsonProperty
+    private final LocalDateTime timestamp = LocalDateTime.now();
 
     @JsonProperty
     private int status;

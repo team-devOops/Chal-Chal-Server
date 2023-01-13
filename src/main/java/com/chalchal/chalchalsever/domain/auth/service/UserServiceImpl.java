@@ -7,10 +7,11 @@ import com.chalchal.chalchalsever.domain.auth.entity.UserTokenInfo;
 import com.chalchal.chalchalsever.domain.auth.dto.TokenResponse;
 import com.chalchal.chalchalsever.domain.auth.dto.UserRequest;
 import com.chalchal.chalchalsever.global.dto.Flag;
+import com.chalchal.chalchalsever.global.exception.BaseException;
+import com.chalchal.chalchalsever.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseCookie;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.http.HttpHeaders;
@@ -48,22 +49,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findUser(String email) {
         return Optional.ofNullable(userRepository.findByEmailAndUseYn(email, Flag.Y))
-                .orElseThrow(() -> new BadCredentialsException("유효하지 않은 아이디입니다."));
+                .orElseThrow(() -> new BaseException(ErrorCode.MEMBER_NOT_FOUND));
     }
 
     @Override
     public User findUserById(long id) {
         return Optional.ofNullable(userRepository.findById(id))
-                .orElseThrow(()->new BadCredentialsException("유효하지 않은 아이디입니다."));
+                .orElseThrow(() -> new BaseException(ErrorCode.MEMBER_NOT_FOUND));
     }
 
     @Override
     public User findByEmailAndPassword(String email, String password) {
         User user = Optional.ofNullable(userRepository.findByEmailAndUseYn(email, Flag.Y))
-                .orElseThrow(()->new BadCredentialsException("이메일이나 비밀번호를 확인해주세요."));
+                .orElseThrow(() -> new BaseException(ErrorCode.MEMBER_NOT_FOUND));
 
         if (bCryptPasswordEncoder.matches(password, user.getPassword()) == false) {
-            throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
+            throw new BaseException(ErrorCode.MEMBER_NOT_FOUND);
         }
 
         return user;

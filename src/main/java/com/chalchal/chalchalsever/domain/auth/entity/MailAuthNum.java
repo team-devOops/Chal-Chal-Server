@@ -6,10 +6,10 @@ import lombok.Getter;
 @Getter
 public class MailAuthNum {
     public static final int MAX_AUTH_NUM = 6;
-    private final String authNum;
+    private final String value;
 
     public MailAuthNum() {
-        this.authNum = validateAuthNum(RandomUtils.getRandomIntByLength(MAX_AUTH_NUM));
+        this.value = validateAuthNum(RandomUtils.getRandomIntByLength(MAX_AUTH_NUM));
     }
 
     public static MailAuthNum creteMailAuthNum() {

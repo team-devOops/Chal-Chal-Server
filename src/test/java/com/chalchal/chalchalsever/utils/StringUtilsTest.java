@@ -1,43 +1,38 @@
 package com.chalchal.chalchalsever.utils;
 
 import com.chalchal.chalchalsever.global.util.StringUtils;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class StringUtilsTest {
 
-    @Test
-    void 빈문자열_isNotEmpty_체크() {
-        String str1 = "";
-        String str2 = null;
+    @ParameterizedTest
+    @NullAndEmptySource
+    void 빈문자열_isNotEmpty_체크(String input) {
+        boolean result = StringUtils.isNotEmpty(input);
 
-        boolean result1 = StringUtils.isNotEmpty(str1);
-        boolean result2 = StringUtils.isNotEmpty(str2);
-
-        assertThat(result1).isEqualTo(false);
-        assertThat(result2).isEqualTo(false);
+        assertThat(result).isEqualTo(false);
     }
 
-    @Test
-    void 문자열_isNotEmpty_체크() {
-        assertThat(StringUtils.isNotEmpty("zz")).isEqualTo(true);
+    @ParameterizedTest
+    @ValueSource(strings = { "zz" })
+    void 문자열_isNotEmpty_체크(String input) {
+        assertThat(StringUtils.isNotEmpty(input)).isTrue();
     }
 
-    @Test
-    void 빈문자열_isEmpty_체크() {
-        String str1 = "";
-        String str2 = null;
-
-        boolean result1 = StringUtils.isEmpty(str1);
-        boolean result2 = StringUtils.isEmpty(str2);
-
-        assertThat(result1).isTrue();
-        assertThat(result2).isTrue();
+    @ParameterizedTest
+    @NullAndEmptySource
+    void 빈문자열_isEmpty_체크(String input) {
+        boolean value = StringUtils.isEmpty(input);
+        assertThat(value).isTrue();
     }
 
-    @Test
-    void 문자열_isEmpty_체크() {
-        assertThat(StringUtils.isEmpty("zz")).isFalse();
+    @ParameterizedTest
+    @ValueSource(strings = { "zz" })
+    void 문자열_isEmpty_체크(String input) {
+        assertThat(StringUtils.isEmpty(input)).isFalse();
     }
 }

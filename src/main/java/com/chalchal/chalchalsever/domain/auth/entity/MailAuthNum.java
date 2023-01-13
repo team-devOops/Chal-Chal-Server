@@ -9,14 +9,14 @@ public class MailAuthNum {
     private final String authNum;
 
     public MailAuthNum() {
-        this.authNum = validateAuthNum(creteMailAuthNum());
+        this.authNum = validateAuthNum(RandomUtils.getRandomIntByLength(MAX_AUTH_NUM));
     }
 
-    private String creteMailAuthNum() {
-        return RandomUtils.getRandomIntByLength(MAX_AUTH_NUM);
+    public static MailAuthNum creteMailAuthNum() {
+        return new MailAuthNum();
     }
 
-    private String validateAuthNum(String authNum) {
+    private static String validateAuthNum(String authNum) {
         if(MAX_AUTH_NUM == authNum.length()) return authNum;
         throw new IllegalArgumentException("[ERROR] " + MAX_AUTH_NUM + "자 여야 합니다.");
     }

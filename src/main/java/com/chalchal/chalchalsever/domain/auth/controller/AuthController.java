@@ -6,7 +6,9 @@ import com.chalchal.chalchalsever.domain.auth.service.UserTokenInfoService;
 import com.chalchal.chalchalsever.global.config.jwt.JwtUtils;
 import com.chalchal.chalchalsever.domain.auth.entity.User;
 import com.chalchal.chalchalsever.domain.auth.entity.UserTokenInfo;
+import com.chalchal.chalchalsever.global.dto.ErrorResponse;
 import com.chalchal.chalchalsever.global.dto.ResultResponse;
+import com.chalchal.chalchalsever.global.exception.ErrorCode;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -26,37 +28,35 @@ import javax.servlet.http.HttpServletRequest;
 public class AuthController {
 
     private final static  String REFRESH_TOKEN_INDEX = "REFRESHTOKENINDEX";
-
     private final UserService userService;
     private final UserTokenInfoService userTokenInfoService;
     private final JwtUtils jwtUtils;
 
     @PostMapping(value = "/join")
     @ApiOperation(value = "회원가입")
-    public ResponseEntity<UserResponse> signUp(@RequestBody UserRequest userRequest) {
-        if(userService.validateRegister(userRequest.getEmail())) {
-            return new ResponseEntity<>(UserResponse.from(userService.createUser(userRequest)), HttpStatus.OK);
+    public ResponseEntity signUp(@RequestBody UserRequest userRequest) {
+        if(!userService.isRegister(userRequest.getEmail())) {
+            return ErrorResponse.toErrorResponse(ErrorCode.DUPLICATE_RESOURCE);
         }
 
-        return new ResponseEntity<>(HttpStatus.CONFLICT);
+        return ResultResponse.toResponse(ResultResponse.builder()
+                    .data(UserResponse.from(userService.createUser(userRequest)))
+                .build());
     }
 
     @PostMapping(value = "/refresh")
     @ApiOperation(value = "access token 재발급")
-    public ResponseEntity<ResultResponse> accessTokenRefresh(@AuthenticationPrincipal User user, HttpServletRequest httpServletRequest) {
+    public ResponseEntity accessTokenRefresh(@AuthenticationPrincipal User user, HttpServletRequest httpServletRequest) {
         long refreshTokenIndex = jwtUtils.getRefreshTokenByCookieIndex(httpServletRequest, REFRESH_TOKEN_INDEX);
 
         UserTokenInfo userTokenInfo = userTokenInfoService.getTokenInfo(refreshTokenIndex);
 
-        if(jwtUtils.isValidRefreshToken(userTokenInfo)) {
-            //User user = userService.findUserById(userTokenInfo.getId());
-
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.AUTHORIZATION, jwtUtils.createToken(user))
-                    .build();
+        if(!jwtUtils.isValidRefreshToken(userTokenInfo)) {
+            return ErrorResponse.toErrorResponse(ErrorCode.NOT_AUTHORIZED);
         }
 
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+        return ResponseEntity.ok()
+                .header(HttpHeaders.AUTHORIZATION, jwtUtils.createToken(user))
                 .build();
     }
 
@@ -97,7 +97,9 @@ public class AuthController {
 
     @PostMapping(value = "/info/{email}")
     @ApiOperation(value = "개인정보")
-    public ResponseEntity<UserResponse> getInfo(@PathVariable String email) {
-        return ResponseEntity.ok(UserResponse.from(userService.findUser(email)));
+    public ResponseEntity getInfo(@PathVariable String email) {
+        return ResultResponse.toResponse(ResultResponse.builder()
+                    .data(UserResponse.from(userService.findUser(email)))
+                .build());
     }
 }

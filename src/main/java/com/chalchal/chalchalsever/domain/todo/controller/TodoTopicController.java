@@ -8,7 +8,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,36 +22,28 @@ public class TodoTopicController {
 
     @PostMapping(value = "/")
     @ApiOperation(value = "TODO 토픽 생성")
-    public ResponseEntity<ResultResponse> save(@RequestBody TodoTopicSaveRequest todoTopicSaveRequest) {
-        return ResponseEntity.ok()
-                .body(ResultResponse.builder()
-                        .status(HttpStatus.OK.value())
-                        .message("등록 되었습니다.")
-                        .data(todoTopicService.createTodoTopic(todoTopicSaveRequest))
-                        .build());
+    public ResponseEntity save(@RequestBody TodoTopicSaveRequest todoTopicSaveRequest) {
+        return ResultResponse.toResponse(ResultResponse.builder()
+                    .data(todoTopicService.createTodoTopic(todoTopicSaveRequest))
+                    .message("등록 되었습니다.")
+                .build());
     }
 
     @PatchMapping(value = "/{svcNo}")
     @ApiOperation(value = "TODO 토픽 수정")
-    public ResponseEntity<ResultResponse> update(@RequestBody TodoTopicUpdateRequest todoTopicUpdateRequest) {
-        return ResponseEntity.ok()
-                .body(ResultResponse.builder()
-                        .status(HttpStatus.OK.value())
-                        .message("수정 되었습니다.")
-                        .data(todoTopicService.updateTodoTopic(todoTopicUpdateRequest))
-                        .build());
+    public ResponseEntity update(@RequestBody TodoTopicUpdateRequest todoTopicUpdateRequest) {
+        return ResultResponse.toResponse(ResultResponse.builder()
+                    .data(todoTopicService.updateTodoTopic(todoTopicUpdateRequest))
+                    .message("수정 되었습니다.")
+                .build());
     }
 
     @DeleteMapping(value = "/{svcNo}")
     @ApiOperation(value = "TODO 토픽 삭제")
-    public ResponseEntity<ResultResponse> delete(@PathVariable String svcNo) {
-        todoTopicService.deleteTodoTopic(svcNo);
-
-        return ResponseEntity.ok()
-                .body(ResultResponse.builder()
-                        .status(HttpStatus.OK.value())
-                        .message("삭제 완료 되었습니다.")
-                        .data(null)
-                        .build());
+    public ResponseEntity delete(@PathVariable String svcNo) {
+        return ResultResponse.toResponse(ResultResponse.builder()
+                    .data(todoTopicService.deleteTodoTopic(svcNo))
+                    .message("삭제 완료 되었습니다.")
+                .build());
     }
 }

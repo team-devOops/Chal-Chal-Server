@@ -1,11 +1,15 @@
 package com.chalchal.chalchalsever.global.mail.service;
 
+import com.chalchal.chalchalsever.domain.auth.dto.UserResponse;
+import com.chalchal.chalchalsever.global.dto.ResultResponse;
 import com.chalchal.chalchalsever.global.mail.entity.Mail;
 import com.chalchal.chalchalsever.global.mail.dto.MailRequest;
 import com.chalchal.chalchalsever.global.mail.repository.MailRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -13,36 +17,46 @@ import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
+/**
+ * 메일 발송 관련 service
+ *
+ * @author zinzoddari
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class MailService {
     @Value("${spring.mail.username}")
     private String MAIL_FROM;
+
+    public static final String MAIL_SEND_ENCODING = "UTF-8";
     private final JavaMailSender mailSender;
 
     private final MailRepository mailRepository;
 
-    public void mailSend(MailRequest mailRequest) {
+    public HttpStatus mailSend(MailRequest mailRequest) {
         MimeMessage message = mailSender.createMimeMessage();
 
         try {
-            MimeMessageHelper helper = new MimeMessageHelper(message, true, "utf-8");
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, MAIL_SEND_ENCODING);
             helper.setFrom(MAIL_FROM);
             helper.setTo(mailRequest.getTo());
             helper.setSubject(mailRequest.getSubject());
             helper.setText(mailRequest.getContent(), true);
             mailSender.send(message);
 
-            //TODO : [20221016] AOP로 개선필요
             crateMail(mailRequest);
-        } catch ( MessagingException e) {
+        } catch (MessagingException e) {
             e.printStackTrace();
+            return HttpStatus.INTERNAL_SERVER_ERROR;
         }
+
+        return HttpStatus.OK;
     }
 
     public Mail crateMail(MailRequest mailRequest) {
         return mailRepository.save(Mail.builder()
+                .svcNo(mailRequest.getSvcNo())
                 .toMail(mailRequest.getTo())
                 .fromMail(MAIL_FROM)
                 .subject(mailRequest.getSubject())

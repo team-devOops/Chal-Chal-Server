@@ -1,15 +1,15 @@
 package com.chalchal.chalchalsever.domain.auth.entity;
 
 import com.chalchal.chalchalsever.global.util.RandomUtils;
-import lombok.Getter;
 
-@Getter
+import java.util.Objects;
+
 public class MailAuthNum {
     public static final int MAX_AUTH_NUM = 6;
-    private final String value;
+    private final String authNum;
 
-    public MailAuthNum() {
-        this.value = validateAuthNum(RandomUtils.getRandomIntByLength(MAX_AUTH_NUM));
+    private MailAuthNum() {
+        this.authNum = validateAuthNum(RandomUtils.getRandomIntByLength(MAX_AUTH_NUM));
     }
 
     public static MailAuthNum creteMailAuthNum() {
@@ -19,5 +19,22 @@ public class MailAuthNum {
     private static String validateAuthNum(String authNum) {
         if(MAX_AUTH_NUM == authNum.length()) return authNum;
         throw new IllegalArgumentException("[ERROR] " + MAX_AUTH_NUM + "자 여야 합니다.");
+    }
+
+    public String value() {
+        return authNum;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MailAuthNum that = (MailAuthNum) o;
+        return Objects.equals(authNum, that.authNum);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(authNum);
     }
 }

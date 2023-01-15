@@ -33,7 +33,7 @@ public class AuthMailController {
     @ApiOperation(value = "이메일 발송")
     public ResponseEntity<ResultResponse> sendEmail(@RequestBody UserAuthMailRequest userAuthMailRequest,
                                                     @AuthenticationPrincipal User user) {
-        String authNum = MailAuthNum.creteMailAuthNum().getAuthNum();
+        String authNum = MailAuthNum.creteMailAuthNum().value();
 
         UserJoinAuth userJoinAuth = userAuthService.createUserAuth(UserAuthRequest.builder()
                     .svcNo(SvcNo.getSvcNo())

@@ -1,17 +1,19 @@
 package com.chalchal.chalchalsever.global.dto;
 
-import com.chalchal.chalchalsever.global.exception.ErrorCode;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
 
 
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class ResultResponse<T> {
 
     @JsonProperty
@@ -24,18 +26,20 @@ public class ResultResponse<T> {
     @JsonProperty
     private String message;
 
+    @Builder.Default
     @JsonProperty
-    private T data;
+    @Nullable
+    private T data = null;
 
     public void setData(T data) {
         this.data = data;
     }
 
-    public static ResponseEntity<ResultResponse> toResponse() {
-        return toResponse(ResultResponse.builder().build());
+    public static ResponseEntity<ResultResponse<Void>> ok() {
+        return ResponseEntity.ok(new ResultResponse<>());
     }
 
-    public static ResponseEntity<ResultResponse> toResponse(ResultResponse resultResponse) {
+    public static ResponseEntity<ResultResponse> ok(ResultResponse resultResponse) {
         return ResponseEntity
                 .ok()
                 .body(ResultResponse.builder()

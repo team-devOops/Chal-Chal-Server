@@ -39,7 +39,7 @@ public class AuthController {
             return ErrorResponse.toErrorResponse(ErrorCode.DUPLICATE_RESOURCE);
         }
 
-        return ResultResponse.toResponse(ResultResponse.builder()
+        return ResultResponse.ok(ResultResponse.builder()
                     .data(UserResponse.from(userService.createUser(userRequest)))
                 .build());
     }
@@ -98,7 +98,7 @@ public class AuthController {
     @PostMapping(value = "/info/{email}")
     @ApiOperation(value = "개인정보")
     public ResponseEntity getInfo(@PathVariable String email) {
-        return ResultResponse.toResponse(ResultResponse.builder()
+        return ResultResponse.ok(ResultResponse.builder()
                     .data(UserResponse.from(userService.findUser(email)))
                 .build());
     }

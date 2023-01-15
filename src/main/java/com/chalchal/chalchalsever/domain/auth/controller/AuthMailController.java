@@ -50,7 +50,7 @@ public class AuthMailController {
                 .content(authNum)
                 .build());
 
-        return ResultResponse.toResponse(ResultResponse.builder()
+        return ResultResponse.ok(ResultResponse.builder()
                         .data(userJoinAuth)
                     .build());
     }
@@ -61,7 +61,7 @@ public class AuthMailController {
                                                          @AuthenticationPrincipal User user) {
         userAuthService.compareAuthNum(user.getId(), authNum);
 
-        return ResultResponse.toResponse(ResultResponse.builder()
+        return ResultResponse.ok(ResultResponse.builder()
                 .build());
     }
 }

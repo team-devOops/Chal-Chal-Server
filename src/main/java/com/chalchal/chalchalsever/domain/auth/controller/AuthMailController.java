@@ -31,7 +31,7 @@ public class AuthMailController {
 
     @PostMapping(value = "/")
     @ApiOperation(value = "이메일 발송")
-    public ResponseEntity<ResultResponse> sendEmail(@RequestBody UserAuthMailRequest userAuthMailRequest,
+    public ResponseEntity<ResultResponse<Object>> sendEmail(@RequestBody UserAuthMailRequest userAuthMailRequest,
                                                     @AuthenticationPrincipal User user) {
         String authNum = MailAuthNum.creteMailAuthNum().value();
 
@@ -57,11 +57,10 @@ public class AuthMailController {
 
     @GetMapping(value = "/{authNum}")
     @ApiOperation(value = "인증코드 비교")
-    public ResponseEntity<ResultResponse> compareAuthNum(@PathVariable String authNum,
+    public ResponseEntity<ResultResponse<Void>> compareAuthNum(@PathVariable String authNum,
                                                          @AuthenticationPrincipal User user) {
         userAuthService.compareAuthNum(user.getId(), authNum);
 
-        return ResultResponse.ok(ResultResponse.builder()
-                .build());
+        return ResultResponse.ok();
     }
 }

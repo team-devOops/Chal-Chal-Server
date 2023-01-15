@@ -22,7 +22,7 @@ public class TodoTopicController {
 
     @PostMapping(value = "/")
     @ApiOperation(value = "TODO 토픽 생성")
-    public ResponseEntity save(@RequestBody TodoTopicSaveRequest todoTopicSaveRequest) {
+    public ResponseEntity<ResultResponse<Object>> save(@RequestBody TodoTopicSaveRequest todoTopicSaveRequest) {
         return ResultResponse.ok(ResultResponse.builder()
                     .data(todoTopicService.createTodoTopic(todoTopicSaveRequest))
                     .message("등록 되었습니다.")
@@ -31,7 +31,7 @@ public class TodoTopicController {
 
     @PatchMapping(value = "/{svcNo}")
     @ApiOperation(value = "TODO 토픽 수정")
-    public ResponseEntity update(@RequestBody TodoTopicUpdateRequest todoTopicUpdateRequest) {
+    public ResponseEntity<ResultResponse<Object>> update(@RequestBody TodoTopicUpdateRequest todoTopicUpdateRequest) {
         return ResultResponse.ok(ResultResponse.builder()
                     .data(todoTopicService.updateTodoTopic(todoTopicUpdateRequest))
                     .message("수정 되었습니다.")
@@ -40,7 +40,7 @@ public class TodoTopicController {
 
     @DeleteMapping(value = "/{svcNo}")
     @ApiOperation(value = "TODO 토픽 삭제")
-    public ResponseEntity delete(@PathVariable String svcNo) {
+    public ResponseEntity<ResultResponse<Object>> delete(@PathVariable String svcNo) {
         return ResultResponse.ok(ResultResponse.builder()
                     .data(todoTopicService.deleteTodoTopic(svcNo))
                     .message("삭제 완료 되었습니다.")

@@ -39,14 +39,8 @@ public class ResultResponse<T> {
         return ResponseEntity.ok(new ResultResponse<>());
     }
 
-    public static ResponseEntity<ResultResponse> ok(ResultResponse resultResponse) {
+    public static ResponseEntity<ResultResponse<Object>> ok(ResultResponse resultResponse) {
         return ResponseEntity
-                .ok()
-                .body(ResultResponse.builder()
-                        .status(resultResponse.status)
-                        .data(resultResponse.data)
-                        .message(resultResponse.message)
-                        .build()
-                );
+                .ok(resultResponse);
     }
 }

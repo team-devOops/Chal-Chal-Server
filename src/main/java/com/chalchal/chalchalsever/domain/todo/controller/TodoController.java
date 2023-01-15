@@ -28,7 +28,7 @@ public class TodoController {
     @GetMapping(value = "/")
     @ApiOperation(value = "TODO 조회")
     public ResponseEntity selectAll(@AuthenticationPrincipal User user) {
-        return ResultResponse.toResponse(ResultResponse.builder()
+        return ResultResponse.ok(ResultResponse.builder()
                     .data(todoService.findTodoListByRegId(user.getId()))
                 .build());
     }
@@ -39,7 +39,7 @@ public class TodoController {
     @PostMapping(value = "/")
     @ApiOperation(value = "TODO 작성")
     public ResponseEntity save(@RequestBody TodoListSaveRequest todoListSaveRequest) {
-        return ResultResponse.toResponse(ResultResponse.builder()
+        return ResultResponse.ok(ResultResponse.builder()
                     .message("등록 되었습니다.")
                     .data(todoService.createTodoList(todoListSaveRequest))
                 .build());
@@ -50,11 +50,9 @@ public class TodoController {
      */
     @PatchMapping(value = "/{svcNo}")
     @ApiOperation(value = "TODO 수정")
-    public ResponseEntity update(@RequestBody TodoListUpdateRequest todoListUpdateRequest) {
-        return ResultResponse.toResponse(ResultResponse.builder()
-                    .data(todoService.updateTodoList(todoListUpdateRequest))
-                    .message("수정 되었습니다.")
-                .build());
+    public ResponseEntity<ResultResponse<Void>> update(@RequestBody TodoListUpdateRequest todoListUpdateRequest) {
+        todoService.updateTodoList(todoListUpdateRequest);
+        return ResultResponse.ok();
     }
 
     /**
@@ -63,7 +61,7 @@ public class TodoController {
     @DeleteMapping(value = "/{svcNo}")
     @ApiOperation(value = "TODO 삭제")
     public ResponseEntity delete(@PathVariable String svcNo) {
-        return ResultResponse.toResponse(ResultResponse.builder()
+        return ResultResponse.ok(ResultResponse.builder()
                     .data(todoService.deleteTodoList(svcNo))
                     .message("삭제 되었습니다.")
                 .build());

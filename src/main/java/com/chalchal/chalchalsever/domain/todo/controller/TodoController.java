@@ -27,7 +27,7 @@ public class TodoController {
      */
     @GetMapping(value = "/")
     @ApiOperation(value = "TODO 조회")
-    public ResponseEntity selectAll(@AuthenticationPrincipal User user) {
+    public ResponseEntity<ResultResponse<Object>> selectAll(@AuthenticationPrincipal User user) {
         return ResultResponse.ok(ResultResponse.builder()
                     .data(todoService.findTodoListByRegId(user.getId()))
                 .build());
@@ -38,7 +38,7 @@ public class TodoController {
      */
     @PostMapping(value = "/")
     @ApiOperation(value = "TODO 작성")
-    public ResponseEntity save(@RequestBody TodoListSaveRequest todoListSaveRequest) {
+    public ResponseEntity<ResultResponse<Object>> save(@RequestBody TodoListSaveRequest todoListSaveRequest) {
         return ResultResponse.ok(ResultResponse.builder()
                     .message("등록 되었습니다.")
                     .data(todoService.createTodoList(todoListSaveRequest))
@@ -60,7 +60,7 @@ public class TodoController {
      */
     @DeleteMapping(value = "/{svcNo}")
     @ApiOperation(value = "TODO 삭제")
-    public ResponseEntity delete(@PathVariable String svcNo) {
+    public ResponseEntity<ResultResponse<Object>> delete(@PathVariable String svcNo) {
         return ResultResponse.ok(ResultResponse.builder()
                     .data(todoService.deleteTodoList(svcNo))
                     .message("삭제 되었습니다.")

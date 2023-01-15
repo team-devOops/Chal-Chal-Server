@@ -38,7 +38,7 @@ public class DateUtilsTest {
         //then
         assertAll(
                 () -> assertThat(plusDay).isEqualTo("2023-01-15"),
-                () -> assertThat(DateUtils.getDateByPattern(plusDay, DateUtils.DATE_PATTERN_FORMAT, DateUtils.DATE_PATTERN_FORMAT)).isEqualTo("20230115")
+                () -> assertThat(DateUtils.getDateByPattern(plusDay, DateUtils.DATE_PATTERN, DateUtils.DATE_PATTERN_FORMAT)).isEqualTo("20230115")
         );
     }
 
@@ -71,8 +71,8 @@ public class DateUtilsTest {
         assertAll(
                 () -> assertThat(plus5Month).isEqualTo("2023-06-12"),
                 () -> assertThat(plus13Month).isEqualTo("2024-02-12"),
-                () -> assertThat(DateUtils.getDateByPattern(plus5Month, DateUtils.DATE_PATTERN_FORMAT, DateUtils.DATE_PATTERN_FORMAT)).isEqualTo("20230612"),
-                () -> assertThat(DateUtils.getDateByPattern(plus13Month, DateUtils.DATE_PATTERN_FORMAT, DateUtils.DATE_PATTERN_FORMAT)).isEqualTo("20240212")
+                () -> assertThat(DateUtils.getDateByPattern(plus5Month, DateUtils.DATE_PATTERN, DateUtils.DATE_PATTERN_FORMAT)).isEqualTo("20230612"),
+                () -> assertThat(DateUtils.getDateByPattern(plus13Month, DateUtils.DATE_PATTERN, DateUtils.DATE_PATTERN_FORMAT)).isEqualTo("20240212")
         );
     }
 

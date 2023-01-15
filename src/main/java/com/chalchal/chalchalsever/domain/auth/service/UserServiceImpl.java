@@ -32,6 +32,8 @@ public class UserServiceImpl implements UserService {
     private final JwtUtils jwtUtils;
     private final UserTokenInfoService userTokenInfoService;
 
+    private final static BaseException MENEBER_NOT_FOUND_EXCEPTION = new BaseException(ErrorCode.MEMBER_NOT_FOUND);
+
     @Override
     public User createUser(UserRequest userRequest) {
         User user = userRepository.save(User.builder()
@@ -49,22 +51,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findUser(String email) {
         return Optional.ofNullable(userRepository.findByEmailAndUseYn(email, Flag.Y))
-                .orElseThrow(() -> new BaseException(ErrorCode.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> MENEBER_NOT_FOUND_EXCEPTION);
     }
 
     @Override
     public User findUserById(long id) {
         return Optional.ofNullable(userRepository.findById(id))
-                .orElseThrow(() -> new BaseException(ErrorCode.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> MENEBER_NOT_FOUND_EXCEPTION);
     }
 
     @Override
     public User findByEmailAndPassword(String email, String password) {
         User user = Optional.ofNullable(userRepository.findByEmailAndUseYn(email, Flag.Y))
-                .orElseThrow(() -> new BaseException(ErrorCode.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> MENEBER_NOT_FOUND_EXCEPTION);
 
         if (bCryptPasswordEncoder.matches(password, user.getPassword()) == false) {
-            throw new BaseException(ErrorCode.MEMBER_NOT_FOUND);
+            throw MENEBER_NOT_FOUND_EXCEPTION;
         }
 
         return user;
@@ -80,7 +82,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean isRegister(String email) {
+    public boolean validateRegister(String email) {
         if(userRepository.countByEmail(email) > 0) {
             return false;
         }
@@ -106,7 +108,6 @@ public class UserServiceImpl implements UserService {
                 .maxAge(0)
                 .secure(true)
                 .path("/")
-                .domain("localhost")
                 .secure(true)
                 .build();
 
@@ -131,7 +132,6 @@ public class UserServiceImpl implements UserService {
                 .httpOnly(true)
                 .secure(true)
                 .path("/")
-                .domain("localhost")
                 .secure(true)
                 .build();
 

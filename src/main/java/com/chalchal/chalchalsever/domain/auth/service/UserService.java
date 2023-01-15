@@ -18,7 +18,7 @@ public interface UserService {
 
     User resignUser(long id);
 
-    boolean isRegister(String email);
+    boolean validateRegister(String email);
 
     HttpHeaders setLogout(HttpServletRequest httpServletRequest);
     ResponseCookie setCookie(TokenResponse tokenResponse);

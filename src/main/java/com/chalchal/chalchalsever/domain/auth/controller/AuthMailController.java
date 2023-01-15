@@ -31,9 +31,9 @@ public class AuthMailController {
 
     @PostMapping(value = "/")
     @ApiOperation(value = "이메일 발송")
-    public ResponseEntity<ResultResponse> sendEmail(@RequestBody UserAuthMailRequest userAuthMailRequest,
+    public ResponseEntity<ResultResponse<Object>> sendEmail(@RequestBody UserAuthMailRequest userAuthMailRequest,
                                                     @AuthenticationPrincipal User user) {
-        String authNum = MailAuthNum.creteMailAuthNum().getValue();
+        String authNum = MailAuthNum.creteMailAuthNum().value();
 
         UserJoinAuth userJoinAuth = userAuthService.createUserAuth(UserAuthRequest.builder()
                     .svcNo(SvcNo.getSvcNo())
@@ -43,31 +43,24 @@ public class AuthMailController {
                     .authYn(Flag.N)
                 .build());
 
-        MailRequest mailRequest = MailRequest.builder()
-                    .svcNo(userJoinAuth.getSvcNo())
-                    .to(userAuthMailRequest.getEmail())
-                    .subject("TEST")
-                    .content(authNum)
-                .build();
+        mailService.mailSend(MailRequest.builder()
+                .svcNo(userJoinAuth.getSvcNo())
+                .to(userAuthMailRequest.getEmail())
+                .subject("TEST")
+                .content(authNum)
+                .build());
 
-        //TODO:에러메세지 처리법이 필요해 보인다... ㅠ ㅠ
-        return ResponseEntity.ok()
-                .body(ResultResponse.builder()
-                .status(mailService.mailSend(mailRequest).value())
-                .build()
-        );
+        return ResultResponse.ok(ResultResponse.builder()
+                        .data(userJoinAuth)
+                    .build());
     }
 
     @GetMapping(value = "/{authNum}")
     @ApiOperation(value = "인증코드 비교")
-    public ResponseEntity<ResultResponse> compareAuthNum(@PathVariable String authNum,
+    public ResponseEntity<ResultResponse<Void>> compareAuthNum(@PathVariable String authNum,
                                                          @AuthenticationPrincipal User user) {
         userAuthService.compareAuthNum(user.getId(), authNum);
 
-        //TODO: 결과값도 처리 해야함 ...
-        return ResponseEntity.ok()
-                .body(ResultResponse.builder())
-                .status(200)
-                .build();
+        return ResultResponse.ok();
     }
 }

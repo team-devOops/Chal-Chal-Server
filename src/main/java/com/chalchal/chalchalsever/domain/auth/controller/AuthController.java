@@ -35,7 +35,7 @@ public class AuthController {
     @PostMapping(value = "/join")
     @ApiOperation(value = "회원가입")
     public ResponseEntity signUp(@RequestBody UserRequest userRequest) {
-        if(!userService.isRegister(userRequest.getEmail())) {
+        if(!userService.validateRegister(userRequest.getEmail())) {
             return ErrorResponse.toErrorResponse(ErrorCode.DUPLICATE_RESOURCE);
         }
 

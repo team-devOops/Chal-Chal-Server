@@ -1,4 +1,12 @@
-FROM amazoncorretto:17
+FROM eclipse-temurin:17.0.5_8-jdk-alpine
 
-COPY  build/libs/Chal-Chal-Server-0.0.1-SNAPSHOT-*.jar app.jar
+WORKDIR /home
+
+COPY . .
+RUN ./gradlew clean bootJar
+
+WORKDIR /home/build/libs
+RUN cp *.jar app.jar
+
 ENTRYPOINT ["java", "-jar", "app.jar"]
+EXPOSE 8080

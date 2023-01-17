@@ -19,6 +19,11 @@ public class UserAuthServiceImpl implements UserAuthService {
 
     private final UserAuthRepository userAuthRepository;
 
+    /**
+     * 인증 내역 저장
+     * 인증 번호 이메일 전송 내역 저장
+     * @return UserJoinAuth 저장된 내용 반환
+     */
     @Override
     public UserJoinAuth createUserAuth(UserAuthRequest userAuthRequest) {
         return userAuthRepository.save(UserJoinAuth.builder()
@@ -47,7 +52,6 @@ public class UserAuthServiceImpl implements UserAuthService {
      */
     @Override
     public UserJoinAuth getUserJoinAuth(Long id) {
-        //TODO: 유효시간 조건도 걸어주어야 함
         return userAuthRepository.findTop1ByIdAndAuthYnOrderByRegDateDesc(id, Flag.N);
     }
 

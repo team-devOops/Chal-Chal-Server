@@ -9,5 +9,5 @@ public enum Flag {
     Y("Y"),
     N("N");
 
-    private String value;
+    public String value;
 }

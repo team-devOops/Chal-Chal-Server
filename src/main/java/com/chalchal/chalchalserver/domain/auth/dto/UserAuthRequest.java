@@ -4,6 +4,8 @@ import com.chalchal.chalchalserver.domain.auth.entity.UserJoinAuth;
 import com.chalchal.chalchalserver.global.dto.Flag;
 import lombok.*;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 
 @Builder
@@ -13,7 +15,9 @@ import java.time.LocalDateTime;
 public class UserAuthRequest {
     private String svcNo;
     private Long id;
+    @Email
     private String email;
+    @NotEmpty
     private String code;
     private Flag authYn;
 

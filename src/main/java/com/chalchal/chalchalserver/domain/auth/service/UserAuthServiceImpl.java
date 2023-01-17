@@ -4,6 +4,8 @@ import com.chalchal.chalchalserver.domain.auth.repository.UserAuthRepository;
 import com.chalchal.chalchalserver.domain.auth.entity.UserJoinAuth;
 import com.chalchal.chalchalserver.domain.auth.dto.UserAuthRequest;
 import com.chalchal.chalchalserver.global.dto.Flag;
+import com.chalchal.chalchalserver.global.exception.BaseException;
+import com.chalchal.chalchalserver.global.exception.ErrorCode;
 import com.chalchal.chalchalserver.global.generate.SvcNo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 
 @Slf4j
 @Service
@@ -43,7 +46,7 @@ public class UserAuthServiceImpl implements UserAuthService {
      */
     @Override
     public boolean isAuth(Long id) {
-        UserJoinAuth userJoinAuth = userAuthRepository.findTop1ByIdAndAuthYnOrderByRegDateDesc(id, Flag.Y);
+        UserJoinAuth userJoinAuth = userAuthRepository.findTop1ByIdAndAuthYnAndValidDateAfterOrderByRegDateDesc(id, Flag.Y, LocalDateTime.now());
         return ObjectUtils.isEmpty(userJoinAuth) ? false : true;
     }
 
@@ -52,7 +55,7 @@ public class UserAuthServiceImpl implements UserAuthService {
      */
     @Override
     public UserJoinAuth getUserJoinAuth(Long id) {
-        return userAuthRepository.findTop1ByIdAndAuthYnOrderByRegDateDesc(id, Flag.N);
+        return userAuthRepository.findTop1ByIdAndAuthYnAndValidDateAfterOrderByRegDateDesc(id, Flag.Y, LocalDateTime.now());
     }
 
     /**
@@ -61,18 +64,17 @@ public class UserAuthServiceImpl implements UserAuthService {
     @Override
     @Transactional
     public UserJoinAuth compareAuthNum(Long id, String authNum) {
-        //이미 인증 한 유저
         if(isAuth(id)) {
-            //return 에러 메세지
+            throw new BaseException(ErrorCode.AUTH_ALREADY_DONE);
         }
+
         UserJoinAuth userJoinAuth = this.getUserJoinAuth(id);
 
         if(authNum.equals(userJoinAuth.getAuthCode())) {
-            //인증 성공
             this.successAuth(userJoinAuth);
         }
         else {
-            //인증 실패
+            throw new BaseException(ErrorCode.AUTH_NUM_IS_NOT_COMPARE);
         }
 
         return userJoinAuth;
@@ -87,6 +89,4 @@ public class UserAuthServiceImpl implements UserAuthService {
         userJoinAuth.successAuth();
         return userJoinAuth;
     }
-
-
 }

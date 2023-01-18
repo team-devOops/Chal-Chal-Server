@@ -1,8 +1,10 @@
 package com.chalchal.chalchalserver.domain.auth.controllerAdvice;
 
-import org.springframework.http.HttpStatus;
+import com.chalchal.chalchalserver.global.dto.ErrorResponse;
+import com.chalchal.chalchalserver.global.exception.ErrorCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -11,8 +13,11 @@ public class AuthControllerAdvice {
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity badCredentialsExceptionHandler(BadCredentialsException e) {
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body("인증되지 않은 요청입니다.");
+        return ErrorResponse.toErrorResponse(ErrorCode.NOT_AUTHORIZED);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    protected ResponseEntity methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
+        return ErrorResponse.toErrorResponse(ErrorCode.INVALID_INPUT);
     }
 }

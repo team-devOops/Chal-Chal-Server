@@ -14,7 +14,6 @@ import org.springframework.util.ObjectUtils;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -23,6 +22,11 @@ public class UserAuthServiceImpl implements UserAuthService {
 
     private final UserAuthRepository userAuthRepository;
 
+    /**
+     * 인증 내역 저장
+     * 인증 번호 이메일 전송 내역 저장
+     * @return UserJoinAuth 저장된 내용 반환
+     */
     @Override
     public UserJoinAuth createUserAuth(UserAuthRequest userAuthRequest) {
         return userAuthRepository.save(UserJoinAuth.builder()
@@ -51,8 +55,7 @@ public class UserAuthServiceImpl implements UserAuthService {
      */
     @Override
     public UserJoinAuth getUserJoinAuth(Long id) {
-        return Optional.ofNullable(userAuthRepository.findTop1ByIdAndAuthYnAndValidDateAfterOrderByRegDateDesc(id, Flag.N, LocalDateTime.now()))
-                .orElseThrow(() -> new BaseException(ErrorCode.AUTH_NOT_FOUND));
+        return userAuthRepository.findTop1ByIdAndAuthYnAndValidDateAfterOrderByRegDateDesc(id, Flag.Y, LocalDateTime.now());
     }
 
     /**

@@ -10,6 +10,7 @@ import static org.springframework.http.HttpStatus.*;
 @AllArgsConstructor
 public enum ErrorCode {
     INVALID_REFRESH_TOKEN(BAD_REQUEST, "리프레시 토큰이 유효하지 않습니다"),
+    INVALID_INPUT(BAD_REQUEST, "잘못된 입력값입니다."),
     NOT_AUTHORIZED(UNAUTHORIZED, "아직 인증되지 않았습니다"),
 
     AUTH_ALREADY_DONE(BAD_REQUEST, "이미 인증 완료한 유저"),

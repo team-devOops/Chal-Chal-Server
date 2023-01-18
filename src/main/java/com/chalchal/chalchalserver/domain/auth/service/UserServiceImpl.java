@@ -34,6 +34,12 @@ public class UserServiceImpl implements UserService {
 
     private final static BaseException MENEBER_NOT_FOUND_EXCEPTION = new BaseException(ErrorCode.MEMBER_NOT_FOUND);
 
+    /**
+     * 회원 가입
+     * 회원 가입때 저장 할 때 사용
+     *
+     * @return User 저장 된 후 내용 반환
+     */
     @Override
     public User createUser(UserRequest userRequest) {
         User user = userRepository.save(User.builder()
@@ -48,18 +54,33 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    /**
+     * EMAIL, USE_YN이 'Y'인 회원 정보 단건 조회
+     *
+     * @return User 조회 된 내용 반환
+     */
     @Override
     public User findUser(String email) {
         return Optional.ofNullable(userRepository.findByEmailAndUseYn(email, Flag.Y))
                 .orElseThrow(() -> MENEBER_NOT_FOUND_EXCEPTION);
     }
 
+    /**
+     * ID 기준 회원 정보 단건 조회
+     *
+     * @return User 조회 된 내용 반환
+     */
     @Override
     public User findUserById(long id) {
         return Optional.ofNullable(userRepository.findById(id))
                 .orElseThrow(() -> MENEBER_NOT_FOUND_EXCEPTION);
     }
 
+    /**
+     * EMAIL, PASSWORD, USE_YN이 'Y'인 회원 조회
+     *
+     * @return User PASSWORD가 일치하는 회원 결과 반환
+     */
     @Override
     public User findByEmailAndPassword(String email, String password) {
         User user = Optional.ofNullable(userRepository.findByEmailAndUseYn(email, Flag.Y))
@@ -72,6 +93,12 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    /**
+     * 회원 탈퇴
+     * 탈퇴한 회원의 USE_YN을 'N'으로 수정
+     *
+     * @return User 수정된 회원 정보 반환
+     */
     @Override
     @Transactional
     public User resignUser(long id) {
@@ -81,6 +108,12 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    /**
+     * EMAIL 기준으로 데이터가 있는지 유효성 검사
+     *
+     * @return true : 데이터가 없는 경우 (미가입)
+     *         false : 데이터가 있는 경우 (중복된 이메일)
+     */
     @Override
     public boolean validateRegister(String email) {
         if(userRepository.countByEmail(email) > 0) {
@@ -90,6 +123,10 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
+    /**
+     * 로그아웃
+     * 기존 token 및 cookie 정보 삭제
+     */
     @Override
     public HttpHeaders setLogout(HttpServletRequest httpServletRequest) {
         long refreshTokenIndex = jwtUtils.getRefreshTokenByCookieIndex(httpServletRequest, REFRESH_TOKEN_INDEX);
@@ -119,21 +156,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseCookie setCookie(TokenResponse tokenResponse) {
-        return generateRefreshTokenCookie(tokenResponse.getRefreshTokenIndex());
+        return setRefreshTokenIndexCookie(tokenResponse.getRefreshTokenIndex());
     }
 
     @Override
     public ResponseCookie setRefreshTokenIndexCookie(long refreshTokenIndex) {
-        return generateRefreshTokenCookie(refreshTokenIndex);
-    }
-
-    private ResponseCookie generateRefreshTokenCookie(long refreshTokenIndex) {
         return ResponseCookie.from(REFRESH_TOKEN_INDEX, String.valueOf(refreshTokenIndex))
                 .httpOnly(true)
                 .secure(true)
                 .path("/")
                 .secure(true)
                 .build();
-
     }
 }

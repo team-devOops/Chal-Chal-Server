@@ -1,16 +1,11 @@
 package com.chalchal.chalchalserver.global.mail.service;
 
-import com.chalchal.chalchalserver.domain.auth.dto.UserResponse;
-import com.chalchal.chalchalserver.global.dto.ResultResponse;
-import com.chalchal.chalchalserver.global.exception.BaseException;
 import com.chalchal.chalchalserver.global.mail.entity.Mail;
 import com.chalchal.chalchalserver.global.mail.dto.MailRequest;
 import com.chalchal.chalchalserver.global.mail.repository.MailRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -52,6 +47,9 @@ public class MailService {
         }
     }
 
+    /**
+     * Email 전송 내역 DB에 저장
+     */
     public Mail crateMail(MailRequest mailRequest) {
         return mailRepository.save(Mail.builder()
                 .svcNo(mailRequest.getSvcNo())

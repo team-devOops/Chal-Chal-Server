@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequestMapping("/api/todo/topic")
-@Api(tags = {"TODO TOPIC"})
+@Api(tags = {"TODO : TOPIC 관리"})
 @RequiredArgsConstructor
 public class TodoTopicController {
 

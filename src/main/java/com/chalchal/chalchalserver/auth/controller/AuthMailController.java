@@ -7,7 +7,6 @@ import com.chalchal.chalchalserver.auth.domain.MailAuthNum;
 import com.chalchal.chalchalserver.auth.domain.User;
 import com.chalchal.chalchalserver.auth.domain.UserJoinAuth;
 import com.chalchal.chalchalserver.auth.service.UserAuthService;
-import com.chalchal.chalchalserver.domain.auth.dto.*;
 import com.chalchal.chalchalserver.global.dto.Flag;
 import com.chalchal.chalchalserver.global.dto.ResultResponse;
 import com.chalchal.chalchalserver.global.generate.SvcNo;

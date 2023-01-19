@@ -2,7 +2,6 @@ package com.chalchal.chalchalserver.todo.controller;
 
 import com.chalchal.chalchalserver.todo.dto.TodoTopicSaveRequest;
 import com.chalchal.chalchalserver.todo.dto.TodoTopicUpdateRequest;
-import com.chalchal.chalchalserver.todo.service.TodoTopicService;
 import com.chalchal.chalchalserver.global.dto.ResultResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

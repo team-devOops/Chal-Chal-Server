@@ -1,6 +1,6 @@
 package com.chalchal.chalchalserver.auth;
 
-import com.chalchal.chalchalserver.domain.auth.entity.UserJoinAuth;
+import com.chalchal.chalchalserver.auth.domain.UserJoinAuth;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

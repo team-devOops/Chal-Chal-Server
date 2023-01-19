@@ -1,7 +1,7 @@
 package com.chalchal.chalchalserver.global.config.security;
 
-import com.chalchal.chalchalserver.global.config.jwt.JwtAuthenticationFilter;
-import com.chalchal.chalchalserver.global.config.jwt.JwtUtils;
+import com.chalchal.chalchalserver.auth.jwt.JwtAuthenticationFilter;
+import com.chalchal.chalchalserver.auth.jwt.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

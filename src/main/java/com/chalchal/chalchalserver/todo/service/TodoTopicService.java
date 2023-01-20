@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class TodoTopicService implements TodoTopicService {
+public class TodoTopicService {
     private final TodoTopicRepository todoTopicRepository;
 
     /**
@@ -21,7 +21,6 @@ public class TodoTopicService implements TodoTopicService {
      *
      * @return TodoTopic 저장 된 내용 반환
      */
-    @Override
     public TodoTopic createTodoTopic(TodoTopicSaveRequest todoTopicSaveRequest) {
         return todoTopicRepository.save(TodoTopic.builder()
                 .svcNo(SvcNo.getSvcNo())
@@ -37,7 +36,6 @@ public class TodoTopicService implements TodoTopicService {
      *
      * @return TodoTopic 수정 된 내용 반환
      */
-    @Override
     @Transactional
     public TodoTopic updateTodoTopic(TodoTopicUpdateRequest todoTopicUpdateRequest) {
         TodoTopic todoTopic = this.findTodoTopicBySvcNo(todoTopicUpdateRequest.getSvcNo());
@@ -55,7 +53,6 @@ public class TodoTopicService implements TodoTopicService {
      *
      * @return TodoTopic SVC_NO에 해당하는 단건 반환
      */
-    @Override
     @Transactional(readOnly = true)
     public TodoTopic findTodoTopicBySvcNo(String svcNo) {
         return todoTopicRepository.findBySvcNo(svcNo);
@@ -67,7 +64,6 @@ public class TodoTopicService implements TodoTopicService {
      *
      * @return TodoTopic 수정 된 할 일 주제 반환
      */
-    @Override
     @Transactional
     public TodoTopic deleteTodoTopic(String svcNo) {
         TodoTopic todoTopic = this.findTodoTopicBySvcNo(svcNo);

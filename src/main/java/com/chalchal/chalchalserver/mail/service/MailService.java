@@ -1,6 +1,6 @@
 package com.chalchal.chalchalserver.mail.service;
 
-import com.chalchal.chalchalserver.mail.entity.Mail;
+import com.chalchal.chalchalserver.mail.domain.Mail;
 import com.chalchal.chalchalserver.mail.dto.MailRequest;
 import com.chalchal.chalchalserver.mail.repository.MailRepository;
 import lombok.RequiredArgsConstructor;

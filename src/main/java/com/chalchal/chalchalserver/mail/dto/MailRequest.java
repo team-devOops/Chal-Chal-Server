@@ -1,7 +1,7 @@
 package com.chalchal.chalchalserver.mail.dto;
 
 import com.chalchal.chalchalserver.global.generate.SvcNo;
-import com.chalchal.chalchalserver.mail.entity.Mail;
+import com.chalchal.chalchalserver.mail.domain.Mail;
 import com.chalchal.chalchalserver.global.util.StringUtils;
 import lombok.Builder;
 import lombok.Getter;

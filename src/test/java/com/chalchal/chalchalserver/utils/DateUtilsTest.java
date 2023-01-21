@@ -1,15 +1,7 @@
 package com.chalchal.chalchalserver.utils;
 
-import com.chalchal.chalchalserver.domain.auth.entity.User;
-import com.chalchal.chalchalserver.domain.auth.entity.UserJoinAuth;
 import com.chalchal.chalchalserver.global.util.DateUtils;
-import com.mysql.cj.x.protobuf.MysqlxSession;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.junit.jupiter.api.Test;
-
-import java.time.LocalDateTime;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;

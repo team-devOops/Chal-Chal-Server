@@ -1,7 +1,7 @@
 package com.chalchal.chalchalserver.global.config.security;
 
-import com.chalchal.chalchalserver.global.config.jwt.JwtAuthenticationFilter;
-import com.chalchal.chalchalserver.global.config.jwt.JwtUtils;
+import com.chalchal.chalchalserver.auth.jwt.JwtAuthenticationFilter;
+import com.chalchal.chalchalserver.auth.jwt.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +13,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.firewall.DefaultHttpFirewall;
+import org.springframework.security.web.firewall.HttpFirewall;
 
 @Configuration
 @EnableWebSecurity
@@ -55,6 +57,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(customAuthenticationEntryPoint)
             .and()
             .formLogin().disable().headers().frameOptions().disable();
+    }
+
+    @Bean
+    public HttpFirewall defaultHttpFirewall() {
+        return new DefaultHttpFirewall();
     }
 
     @Bean

@@ -14,10 +14,11 @@ import org.springframework.retry.annotation.Retryable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.http.HttpHeaders;
+import org.springframework.transaction.annotation.Transactional;
+
 import static com.chalchal.chalchalserver.global.exception.BaseException.MENEBER_NOT_FOUND_EXCEPTION;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
 import java.sql.SQLException;
 
 @Slf4j
@@ -56,6 +57,7 @@ public class UserService {
      *
      * @return User 조회 된 내용 반환
      */
+    @Transactional(readOnly = true)
     public User findUser(String email) {
         return userRepository.findByEmailAndUseYn(email, Flag.Y)
                 .orElseThrow(() -> MENEBER_NOT_FOUND_EXCEPTION);
@@ -66,6 +68,7 @@ public class UserService {
      *
      * @return User 조회 된 내용 반환
      */
+    @Transactional(readOnly = true)
     public User findUserById(long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> MENEBER_NOT_FOUND_EXCEPTION);
@@ -76,6 +79,7 @@ public class UserService {
      *
      * @return User PASSWORD가 일치하는 회원 결과 반환
      */
+    @Transactional(readOnly = true)
     public User findByEmailAndPassword(String email, String password) {
         User user = userRepository.findByEmailAndUseYn(email, Flag.Y)
                 .orElseThrow(() -> MENEBER_NOT_FOUND_EXCEPTION);
@@ -109,6 +113,7 @@ public class UserService {
      * @return true : 데이터가 없는 경우 (미가입)
      *         false : 데이터가 있는 경우 (중복된 이메일)
      */
+    @Transactional(readOnly = true)
     public boolean validateRegister(String email) {
         if(userRepository.countByEmail(email) > 0L) {
             return false;

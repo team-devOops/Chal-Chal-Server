@@ -9,11 +9,14 @@ import com.chalchal.chalchalserver.global.exception.ErrorCode;
 import com.chalchal.chalchalserver.global.generate.SvcNo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 
 import javax.transaction.Transactional;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
+
+import static com.chalchal.chalchalserver.global.exception.BaseException.*;
 
 @Slf4j
 @Service
@@ -27,6 +30,7 @@ public class UserAuthService {
      * 인증 번호 이메일 전송 내역 저장
      * @return UserJoinAuth 저장된 내용 반환
      */
+    @Retryable(value = SQLException.class)
     public UserJoinAuth createUserAuth(UserAuthRequest userAuthRequest) {
         return userAuthRepository.save(UserJoinAuth.builder()
                     .svcNo(SvcNo.getSvcNo())
@@ -44,15 +48,17 @@ public class UserAuthService {
      *         false 인증 내역 없음 (신규회원)
      */
     public boolean isAuth(Long id) {
-        UserJoinAuth userJoinAuth = userAuthRepository.findTop1ByIdAndAuthYnAndValidDateAfterOrderByRegDateDesc(id, Flag.Y, LocalDateTime.now());
-        return ObjectUtils.isEmpty(userJoinAuth) ? false : true;
+        return userAuthRepository.findTop1ByIdAndAuthYnAndValidDateAfterOrderByRegDateDesc(id, Flag.Y, LocalDateTime.now())
+                .isEmpty();
     }
 
     /**
-     * 제일 최근 인증내역 조회
+     * 마지막(최근) 인증내역 조회
      */
-    public UserJoinAuth getUserJoinAuth(Long id) {
-        return userAuthRepository.findTop1ByIdAndAuthYnAndValidDateAfterOrderByRegDateDesc(id, Flag.Y, LocalDateTime.now());
+    public UserJoinAuth getLastUserJoinAuth(Long id) {
+        return userAuthRepository
+                .findTop1ByIdAndAuthYnAndValidDateAfterOrderByRegDateDesc(id, Flag.N, LocalDateTime.now())
+                .orElseThrow(() -> AUTH_NOT_FOUND_EXCEPTION);
     }
 
     /**
@@ -60,26 +66,24 @@ public class UserAuthService {
      */
     @Transactional
     public UserJoinAuth compareAuthNum(Long id, String authNum) {
-        if(isAuth(id)) {
-            throw new BaseException(ErrorCode.AUTH_ALREADY_DONE);
+        UserJoinAuth userJoinAuth = this.getLastUserJoinAuth(id);
+
+        if (isAuth(id)) {
+            throw AUTH_ALREADY_DONE_EXCEPTION;
         }
 
-        UserJoinAuth userJoinAuth = this.getUserJoinAuth(id);
-
-        if(authNum.equals(userJoinAuth.getAuthCode())) {
-            this.successAuth(userJoinAuth);
-        }
-        else {
+        if (userJoinAuth.isEqualAuthCode(authNum)) {
             throw new BaseException(ErrorCode.AUTH_NUM_IS_NOT_COMPARE);
         }
 
-        return userJoinAuth;
+        return this.successAuth(userJoinAuth);
     }
 
     /**
      * 인증 성공 시, 인증 여부 및 시간 업데이트
      */
     @Transactional
+    @Retryable(value = SQLException.class)
     public UserJoinAuth successAuth(UserJoinAuth userJoinAuth) {
         userJoinAuth.successAuth();
         return userJoinAuth;

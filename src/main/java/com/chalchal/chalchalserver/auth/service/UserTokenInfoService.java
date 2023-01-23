@@ -5,7 +5,13 @@ import com.chalchal.chalchalserver.auth.domain.UserTokenInfo;
 import com.chalchal.chalchalserver.auth.dto.TokenResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.sql.SQLException;
+
+import static com.chalchal.chalchalserver.global.exception.BaseException.RESOURCE_NOT_FOUND_EXCEPTION;
 
 @Slf4j
 @Service
@@ -13,6 +19,7 @@ import org.springframework.stereotype.Service;
 public class UserTokenInfoService {
     private final UserTokenInfoRepository userTokenInfoRepository;
 
+    @Retryable(value = SQLException.class)
     public UserTokenInfo createUserTokenInfo(TokenResponse tokenResponse) {
         return userTokenInfoRepository.save(UserTokenInfo.builder()
                 .id(tokenResponse.getId())
@@ -20,6 +27,7 @@ public class UserTokenInfoService {
                 .build());
     }
 
+    @Retryable(value = SQLException.class)
     public UserTokenInfo clearUserTokenInfo(TokenResponse tokenResponse) {
         return userTokenInfoRepository.save(UserTokenInfo.builder()
                 .id(tokenResponse.getId())
@@ -28,7 +36,9 @@ public class UserTokenInfoService {
                 .build());
     }
 
+    @Transactional(readOnly = true)
     public UserTokenInfo getTokenInfo(long tokenIndex) {
-        return userTokenInfoRepository.findByTokenIndex(tokenIndex);
+        return userTokenInfoRepository.findByTokenIndex(tokenIndex)
+                .orElseThrow(() -> RESOURCE_NOT_FOUND_EXCEPTION);
     }
 }

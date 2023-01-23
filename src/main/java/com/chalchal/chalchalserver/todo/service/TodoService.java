@@ -7,10 +7,14 @@ import com.chalchal.chalchalserver.todo.repository.TodoRepository;
 import com.chalchal.chalchalserver.global.dto.Flag;
 import com.chalchal.chalchalserver.global.generate.SvcNo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.SQLException;
 import java.util.List;
+
+import static com.chalchal.chalchalserver.global.exception.BaseException.*;
 
 @Service
 @RequiredArgsConstructor
@@ -24,18 +28,19 @@ public class TodoService {
      *
      * @return TodoList 저장 된 내용 반환
      */
+    @Retryable(value = SQLException.class)
     public TodoList createTodoList(TodoListSaveRequest todoListSaveRequest) {
         //TODO: orderSeq 처리 필요
         return todoRepository.save(TodoList.builder()
-                        .svcNo(SvcNo.getSvcNo())
-                        .reSvcNo(null)
-                        .topicKey(todoListSaveRequest.getTopicKey())
-                        .orderSeq(1)
-                        .title(todoListSaveRequest.getTitle())
-                        .memo(todoListSaveRequest.getMemo())
-                        .useYn(Flag.Y)
-                        .successYn(Flag.N)
-                        .successDate(null)
+                    .svcNo(SvcNo.getSvcNo())
+                    .reSvcNo(null)
+                    .topicKey(todoListSaveRequest.getTopicKey())
+                    .orderSeq(1)
+                    .title(todoListSaveRequest.getTitle())
+                    .memo(todoListSaveRequest.getMemo())
+                    .useYn(Flag.Y)
+                    .successYn(Flag.N)
+                    .successDate(null)
                 .build());
     }
 
@@ -46,6 +51,7 @@ public class TodoService {
      * @return TodoList 수정 된 내용 반환
      */
     @Transactional
+    @Retryable(value = SQLException.class)
     public TodoList updateTodoList(TodoListUpdateRequest todoListUpdateRequest) {
         TodoList todoList = this.findTodoListBySvcNo(todoListUpdateRequest.getSvcNo());
 
@@ -65,6 +71,7 @@ public class TodoService {
      * @return TodoList 삭제 처리 된 내역 반환
      */
     @Transactional
+    @Retryable(value = SQLException.class)
     public TodoList deleteTodoList(String svcNo) {
         TodoList todoList = this.findTodoListBySvcNo(svcNo);
         todoList.changeUseYn(Flag.N);
@@ -79,7 +86,8 @@ public class TodoService {
      */
     @Transactional(readOnly = true)
     public TodoList findTodoListBySvcNo(String svcNo) {
-        return todoRepository.findBySvcNoAndUseYn(svcNo, Flag.Y);
+        return todoRepository.findBySvcNoAndUseYn(svcNo, Flag.Y)
+                .orElseThrow(() -> RESOURCE_NOT_FOUND_EXCEPTION);
     }
 
     /**

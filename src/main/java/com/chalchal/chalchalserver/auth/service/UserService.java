@@ -7,18 +7,19 @@ import com.chalchal.chalchalserver.auth.domain.UserTokenInfo;
 import com.chalchal.chalchalserver.auth.dto.TokenResponse;
 import com.chalchal.chalchalserver.auth.dto.UserRequest;
 import com.chalchal.chalchalserver.global.dto.Flag;
-import com.chalchal.chalchalserver.global.exception.BaseException;
-import com.chalchal.chalchalserver.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseCookie;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.http.HttpHeaders;
+import org.springframework.transaction.annotation.Transactional;
+
+import static com.chalchal.chalchalserver.global.exception.BaseException.MENEBER_NOT_FOUND_EXCEPTION;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
-import java.util.Optional;
+import java.sql.SQLException;
 
 @Slf4j
 @Service
@@ -32,14 +33,13 @@ public class UserService {
     private final JwtUtils jwtUtils;
     private final UserTokenInfoService userTokenInfoService;
 
-    private final static BaseException MENEBER_NOT_FOUND_EXCEPTION = new BaseException(ErrorCode.MEMBER_NOT_FOUND);
-
     /**
      * 회원 가입
      * 회원 가입때 저장 할 때 사용
      *
      * @return User 저장 된 후 내용 반환
      */
+    @Retryable(value = SQLException.class)
     public User createUser(UserRequest userRequest) {
         User user = userRepository.save(User.builder()
                 .email(userRequest.getEmail())
@@ -49,7 +49,6 @@ public class UserService {
                 .useYn(Flag.Y)
                 .privateYn(Flag.N)
                 .build());
-
         return user;
     }
 
@@ -58,8 +57,9 @@ public class UserService {
      *
      * @return User 조회 된 내용 반환
      */
+    @Transactional(readOnly = true)
     public User findUser(String email) {
-        return Optional.ofNullable(userRepository.findByEmailAndUseYn(email, Flag.Y))
+        return userRepository.findByEmailAndUseYn(email, Flag.Y)
                 .orElseThrow(() -> MENEBER_NOT_FOUND_EXCEPTION);
     }
 
@@ -68,8 +68,9 @@ public class UserService {
      *
      * @return User 조회 된 내용 반환
      */
+    @Transactional(readOnly = true)
     public User findUserById(long id) {
-        return Optional.ofNullable(userRepository.findById(id))
+        return userRepository.findById(id)
                 .orElseThrow(() -> MENEBER_NOT_FOUND_EXCEPTION);
     }
 
@@ -78,11 +79,12 @@ public class UserService {
      *
      * @return User PASSWORD가 일치하는 회원 결과 반환
      */
+    @Transactional(readOnly = true)
     public User findByEmailAndPassword(String email, String password) {
-        User user = Optional.ofNullable(userRepository.findByEmailAndUseYn(email, Flag.Y))
+        User user = userRepository.findByEmailAndUseYn(email, Flag.Y)
                 .orElseThrow(() -> MENEBER_NOT_FOUND_EXCEPTION);
 
-        if (bCryptPasswordEncoder.matches(password, user.getPassword()) == false) {
+        if (!bCryptPasswordEncoder.matches(password, user.getPassword())) {
             throw MENEBER_NOT_FOUND_EXCEPTION;
         }
 
@@ -96,8 +98,10 @@ public class UserService {
      * @return User 수정된 회원 정보 반환
      */
     @Transactional
+    @Retryable(value = SQLException.class)
     public User resignUser(long id) {
-        User user = userRepository.findById(id);
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> MENEBER_NOT_FOUND_EXCEPTION);
         user.changeUseYn(Flag.N);
 
         return user;
@@ -109,8 +113,9 @@ public class UserService {
      * @return true : 데이터가 없는 경우 (미가입)
      *         false : 데이터가 있는 경우 (중복된 이메일)
      */
+    @Transactional(readOnly = true)
     public boolean validateRegister(String email) {
-        if(userRepository.countByEmail(email) > 0) {
+        if(userRepository.countByEmail(email) > 0L) {
             return false;
         }
 

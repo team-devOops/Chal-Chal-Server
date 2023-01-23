@@ -7,11 +7,13 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserAuthRepository extends JpaRepository<UserJoinAuth, String> {
     List<UserJoinAuth> findAll();
 
-    UserJoinAuth findOneById(long id);
-    UserJoinAuth findTop1ByIdAndAuthYnAndValidDateAfterOrderByRegDateDesc(Long id, Flag authYn, LocalDateTime now);
+    Optional<UserJoinAuth> findOneById(long id);
+
+    Optional<UserJoinAuth> findTop1ByIdAndAuthYnAndValidDateAfterOrderByRegDateDesc(Long id, Flag authYn, LocalDateTime now);
 }

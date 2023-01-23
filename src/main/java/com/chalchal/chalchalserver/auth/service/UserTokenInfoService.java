@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import static com.chalchal.chalchalserver.global.exception.BaseException.RESOURCE_NOT_FOUND_EXCEPTION;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -29,6 +31,7 @@ public class UserTokenInfoService {
     }
 
     public UserTokenInfo getTokenInfo(long tokenIndex) {
-        return userTokenInfoRepository.findByTokenIndex(tokenIndex);
+        return userTokenInfoRepository.findByTokenIndex(tokenIndex)
+                .orElseThrow(() -> RESOURCE_NOT_FOUND_EXCEPTION);
     }
 }

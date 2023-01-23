@@ -11,8 +11,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
@@ -47,6 +47,7 @@ public class UserAuthService {
      * @return true 인증 내역 있음
      *         false 인증 내역 없음 (신규회원)
      */
+    @Transactional(readOnly = true)
     public boolean isAuth(Long id) {
         return userAuthRepository.findTop1ByIdAndAuthYnAndValidDateAfterOrderByRegDateDesc(id, Flag.Y, LocalDateTime.now())
                 .isEmpty();
@@ -55,6 +56,7 @@ public class UserAuthService {
     /**
      * 마지막(최근) 인증내역 조회
      */
+    @Transactional(readOnly = true)
     public UserJoinAuth getLastUserJoinAuth(Long id) {
         return userAuthRepository
                 .findTop1ByIdAndAuthYnAndValidDateAfterOrderByRegDateDesc(id, Flag.N, LocalDateTime.now())

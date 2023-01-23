@@ -7,8 +7,13 @@ import com.chalchal.chalchalserver.todo.repository.TodoTopicRepository;
 import com.chalchal.chalchalserver.global.dto.Flag;
 import com.chalchal.chalchalserver.global.generate.SvcNo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.sql.SQLException;
+
+import static com.chalchal.chalchalserver.global.exception.BaseException.*;
 
 @Service
 @RequiredArgsConstructor
@@ -21,12 +26,13 @@ public class TodoTopicService {
      *
      * @return TodoTopic 저장 된 내용 반환
      */
+    @Retryable(value = SQLException.class)
     public TodoTopic createTodoTopic(TodoTopicSaveRequest todoTopicSaveRequest) {
         return todoTopicRepository.save(TodoTopic.builder()
-                .svcNo(SvcNo.getSvcNo())
-                        .emoji(todoTopicSaveRequest.getEmoji())
-                        .bgColor(todoTopicSaveRequest.getBgColor())
-                        .useYn(Flag.Y)
+                    .svcNo(SvcNo.getSvcNo())
+                    .emoji(todoTopicSaveRequest.getEmoji())
+                    .bgColor(todoTopicSaveRequest.getBgColor())
+                    .useYn(Flag.Y)
                 .build());
     }
 
@@ -37,6 +43,7 @@ public class TodoTopicService {
      * @return TodoTopic 수정 된 내용 반환
      */
     @Transactional
+    @Retryable(value = SQLException.class)
     public TodoTopic updateTodoTopic(TodoTopicUpdateRequest todoTopicUpdateRequest) {
         TodoTopic todoTopic = this.findTodoTopicBySvcNo(todoTopicUpdateRequest.getSvcNo());
 
@@ -55,7 +62,8 @@ public class TodoTopicService {
      */
     @Transactional(readOnly = true)
     public TodoTopic findTodoTopicBySvcNo(String svcNo) {
-        return todoTopicRepository.findBySvcNo(svcNo);
+        return todoTopicRepository.findBySvcNo(svcNo)
+                .orElseThrow(() -> RESOURCE_NOT_FOUND_EXCEPTION);
     }
 
     /**
@@ -65,6 +73,7 @@ public class TodoTopicService {
      * @return TodoTopic 수정 된 할 일 주제 반환
      */
     @Transactional
+    @Retryable(value = SQLException.class)
     public TodoTopic deleteTodoTopic(String svcNo) {
         TodoTopic todoTopic = this.findTodoTopicBySvcNo(svcNo);
         todoTopic.changeUseYn(Flag.N);

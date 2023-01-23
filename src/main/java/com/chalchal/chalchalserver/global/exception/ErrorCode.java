@@ -17,6 +17,7 @@ public enum ErrorCode {
     AUTH_NUM_IS_NOT_COMPARE(BAD_REQUEST, "잘못된 인증번호"),
     MEMBER_NOT_FOUND(NOT_FOUND, "해당 유저 정보를 찾을 수 없습니다"),
     AUTH_NOT_FOUND(NOT_FOUND, "유효한 인증 내역이 없습니다"),
+    RESOURCE_NOT_FOUND(NOT_FOUND, "데이터가 없습니다"),
 
     DUPLICATE_RESOURCE(CONFLICT, "데이터가 이미 존재합니다");
 

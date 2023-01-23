@@ -61,6 +61,10 @@ public class UserJoinAuth extends BaseDomain {
         return LocalDateTime.now().plusMinutes(AUTH_VALID_MAX_TIME);
     }
 
+    public boolean isEqualAuthCode(String authCode) {
+        return Objects.equals(this.authCode, authCode);
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(authCode);

@@ -4,9 +4,11 @@ import com.chalchal.chalchalserver.auth.domain.UserTokenInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface UserTokenInfoRepository extends JpaRepository<UserTokenInfo, Long> {
-    UserTokenInfo findByTokenIndex(long tokenIndex);
+    Optional<UserTokenInfo>  findByTokenIndex(long tokenIndex);
 
     long findIdByRefreshToken(String refreshToken);
 }

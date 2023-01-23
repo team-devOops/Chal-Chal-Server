@@ -26,7 +26,7 @@ import java.sql.SQLException;
 @RequiredArgsConstructor
 public class MailService {
     @Value("${spring.mail.username}")
-    private final String MAIL_FROM;
+    private String MAIL_FROM;
 
     public static final String MAIL_SEND_ENCODING = "UTF-8";
     private final JavaMailSender mailSender;
@@ -62,6 +62,6 @@ public class MailService {
                 .fromMail(MAIL_FROM)
                 .subject(mailRequest.getSubject())
                 .content(mailRequest.getContent())
-                .build());
+            .build());
     }
 }

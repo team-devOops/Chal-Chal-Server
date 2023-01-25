@@ -10,6 +10,7 @@ import com.chalchal.chalchalserver.auth.service.UserAuthService;
 import com.chalchal.chalchalserver.global.dto.Flag;
 import com.chalchal.chalchalserver.global.dto.ResultResponse;
 import com.chalchal.chalchalserver.global.generate.SvcNo;
+import com.chalchal.chalchalserver.mail.domain.MailDiv;
 import com.chalchal.chalchalserver.mail.dto.MailRequest;
 import com.chalchal.chalchalserver.mail.service.MailService;
 import io.swagger.annotations.Api;
@@ -45,10 +46,11 @@ public class AuthMailController {
 
         //TODO: 이메일 형식을 템플릿 형식으로 추가 개발 필요
         mailService.mailSend(MailRequest.builder()
-                .svcNo(userJoinAuth.getSvcNo())
-                .to(userAuthMailRequest.getEmail())
-                .subject("TEST")
-                .content(authNum)
+                    .svcNo(userJoinAuth.getSvcNo())
+                    .mailDiv(MailDiv.SIGN_UP)
+                    .to(userAuthMailRequest.getEmail())
+                    .subject("TEST")
+                    .content(authNum)
                 .build());
 
         return ResultResponse.ok(ResultResponse.builder()

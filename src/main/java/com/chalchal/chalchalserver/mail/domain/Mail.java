@@ -22,6 +22,11 @@ public class Mail extends BaseDomain {
     @Column(name = "SVC_NO", nullable = false, columnDefinition = "varchar(32)")
     private String svcNo;
 
+    @Comment("발송 구분")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "MAIL_DIV", columnDefinition = "varchar(16)")
+    private MailDiv mailDiv;
+
     @Comment("보낸 이메일")
     @Column(name = "FROM_MAIL", columnDefinition = "varchar(64)")
     private String fromMail;

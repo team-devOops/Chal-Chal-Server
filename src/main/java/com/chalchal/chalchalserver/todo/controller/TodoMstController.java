@@ -38,10 +38,11 @@ public class TodoMstController {
      */
     @PostMapping(value = "/")
     @ApiOperation(value = "TODO 작성", notes = "할 일 내용 등록")
-    public ResponseEntity<ResultResponse<Object>> save(@RequestBody TodoMstSaveRequest todoMstSaveRequest) {
+    public ResponseEntity<ResultResponse<Object>> save(@AuthenticationPrincipal User user,
+                                                       @RequestBody TodoMstSaveRequest todoMstSaveRequest) {
         return ResultResponse.ok(ResultResponse.builder()
                     .message("등록 되었습니다.")
-                    .data(todoMstService.createTodoMst(todoMstSaveRequest))
+                    .data(todoMstService.createTodoMst(todoMstSaveRequest, user.getId()))
                 .build());
     }
 

@@ -58,6 +58,7 @@ public class MailService {
     public Mail crateMail(MailRequest mailRequest) {
         return mailRepository.save(Mail.builder()
                 .svcNo(mailRequest.getSvcNo())
+                .mailDiv(mailRequest.getMailDiv())
                 .toMail(mailRequest.getTo())
                 .fromMail(MAIL_FROM)
                 .subject(mailRequest.getSubject())

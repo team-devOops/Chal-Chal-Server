@@ -100,7 +100,7 @@ public class TodoMstService {
         return todoMstRepository.findByRegIdAndUseYn(id, Flag.Y);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public int getTodoMstCount(Long id) {
         return todoMstRepository.countByRegId(id);
     }

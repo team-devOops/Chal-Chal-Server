@@ -13,4 +13,6 @@ public interface TodoMstRepository extends JpaRepository<TodoMst, String> {
     Optional<TodoMst> findBySvcNoAndUseYn(String svcNo, Flag useYn);
 
     List<TodoMst> findByRegIdAndUseYn(Long id, Flag useYn);
+
+    int countByRegId(Long id);
 }

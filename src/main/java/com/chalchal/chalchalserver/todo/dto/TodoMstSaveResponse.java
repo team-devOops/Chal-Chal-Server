@@ -2,6 +2,7 @@ package com.chalchal.chalchalserver.todo.dto;
 
 import com.chalchal.chalchalserver.global.dto.Flag;
 import com.chalchal.chalchalserver.todo.entity.TodoMst;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
@@ -13,6 +14,8 @@ public class TodoMstSaveResponse {
     private Flag useYn;
     private Flag successYn;
 
+
+    @Builder
     public TodoMstSaveResponse(String svcNo, String topicKey, String title, String memo, Flag useYn, Flag successYn) {
         this.svcNo = svcNo;
         this.topicKey = topicKey;
@@ -23,6 +26,13 @@ public class TodoMstSaveResponse {
     }
 
     public static TodoMstSaveResponse from(TodoMst todoMst) {
-        return new TodoMstSaveResponse(todoMst.getSvcNo(), todoMst.getTopicKey(), todoMst.getTitle(), todoMst.getMemo(), todoMst.getUseYn(), todoMst.getSuccessYn());
+        return TodoMstSaveResponse.builder()
+                    .svcNo(todoMst.getSvcNo())
+                    .topicKey(todoMst.getTopicKey())
+                    .title(todoMst.getTitle())
+                    .memo(todoMst.getMemo())
+                    .useYn(todoMst.getUseYn())
+                    .successYn(todoMst.getSuccessYn())
+                .build();
     }
 }

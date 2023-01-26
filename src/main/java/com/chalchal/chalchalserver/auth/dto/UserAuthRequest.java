@@ -1,6 +1,6 @@
 package com.chalchal.chalchalserver.auth.dto;
 
-import com.chalchal.chalchalserver.auth.domain.UserJoinAuth;
+import com.chalchal.chalchalserver.auth.domain.UserMailAuth;
 import com.chalchal.chalchalserver.global.dto.Flag;
 import lombok.*;
 
@@ -22,5 +22,5 @@ public class UserAuthRequest {
     private Flag authYn;
 
     @Builder.Default
-    private LocalDateTime validDate = UserJoinAuth.getValidity();
+    private LocalDateTime validDate = UserMailAuth.getValidity();
 }

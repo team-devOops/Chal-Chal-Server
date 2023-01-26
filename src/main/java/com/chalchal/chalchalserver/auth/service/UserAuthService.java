@@ -1,7 +1,7 @@
 package com.chalchal.chalchalserver.auth.service;
 
 import com.chalchal.chalchalserver.auth.repository.UserAuthRepository;
-import com.chalchal.chalchalserver.auth.domain.UserJoinAuth;
+import com.chalchal.chalchalserver.auth.domain.UserMailAuth;
 import com.chalchal.chalchalserver.auth.dto.UserAuthRequest;
 import com.chalchal.chalchalserver.global.dto.Flag;
 import com.chalchal.chalchalserver.global.exception.BaseException;
@@ -31,8 +31,8 @@ public class UserAuthService {
      * @return UserJoinAuth 저장된 내용 반환
      */
     @Retryable(value = SQLException.class)
-    public UserJoinAuth createUserAuth(UserAuthRequest userAuthRequest) {
-        return userAuthRepository.save(UserJoinAuth.builder()
+    public UserMailAuth createUserAuth(UserAuthRequest userAuthRequest) {
+        return userAuthRepository.save(UserMailAuth.builder()
                     .svcNo(SvcNo.getSvcNo())
                     .id(userAuthRequest.getId())
                     .sendEmail(userAuthRequest.getEmail())
@@ -57,7 +57,7 @@ public class UserAuthService {
      * 마지막(최근) 인증내역 조회
      */
     @Transactional(readOnly = true)
-    public UserJoinAuth getLastUserJoinAuth(Long id) {
+    public UserMailAuth getLastUserJoinAuth(Long id) {
         return userAuthRepository
                 .findTop1ByIdAndAuthYnAndValidDateAfterOrderByRegDateDesc(id, Flag.N, LocalDateTime.now())
                 .orElseThrow(() -> AUTH_NOT_FOUND_EXCEPTION);
@@ -67,18 +67,18 @@ public class UserAuthService {
      * 입력된 인증코드 비교 및 상태 저장
      */
     @Transactional
-    public UserJoinAuth compareAuthNum(Long id, String authNum) {
-        UserJoinAuth userJoinAuth = this.getLastUserJoinAuth(id);
+    public UserMailAuth compareAuthNum(Long id, String authNum) {
+        UserMailAuth userMailAuth = this.getLastUserJoinAuth(id);
 
         if (isAuth(id)) {
             throw AUTH_ALREADY_DONE_EXCEPTION;
         }
 
-        if (userJoinAuth.isEqualAuthCode(authNum)) {
+        if (userMailAuth.isEqualAuthCode(authNum)) {
             throw new BaseException(ErrorCode.AUTH_NUM_IS_NOT_COMPARE);
         }
 
-        return this.successAuth(userJoinAuth);
+        return this.successAuth(userMailAuth);
     }
 
     /**
@@ -86,8 +86,8 @@ public class UserAuthService {
      */
     @Transactional
     @Retryable(value = SQLException.class)
-    public UserJoinAuth successAuth(UserJoinAuth userJoinAuth) {
-        userJoinAuth.successAuth();
-        return userJoinAuth;
+    public UserMailAuth successAuth(UserMailAuth userMailAuth) {
+        userMailAuth.successAuth();
+        return userMailAuth;
     }
 }

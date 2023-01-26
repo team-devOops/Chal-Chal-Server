@@ -1,6 +1,6 @@
 package com.chalchal.chalchalserver.auth;
 
-import com.chalchal.chalchalserver.auth.domain.UserJoinAuth;
+import com.chalchal.chalchalserver.auth.domain.UserMailAuth;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -15,8 +15,8 @@ public class AuthTest {
 
     @Test
     void memTest(){
-        UserJoinAuth userJoinAuth = UserJoinAuth.builder().build();
+        UserMailAuth userMailAuth = UserMailAuth.builder().build();
 
-        System.out.println(userJoinAuth);
+        System.out.println(userMailAuth);
     }
 }

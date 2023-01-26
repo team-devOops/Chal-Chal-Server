@@ -1,6 +1,6 @@
 package com.chalchal.chalchalserver.auth.service;
 
-import com.chalchal.chalchalserver.auth.domain.ProfileImg;
+import com.chalchal.chalchalserver.auth.domain.UserProfileImg;
 import com.chalchal.chalchalserver.auth.repository.ProfileImgRepository;
 import com.chalchal.chalchalserver.global.generate.SvcNo;
 import lombok.RequiredArgsConstructor;
@@ -31,8 +31,8 @@ public class ProfileImgService {
      * 프로필 사진 기본 값 저장
      */
     @Retryable(value = SQLException.class)
-    public ProfileImg saveFirstProfileImg(Long id) {
-        return profileImgRepository.save(ProfileImg.builder()
+    public UserProfileImg saveFirstProfileImg(Long id) {
+        return profileImgRepository.save(UserProfileImg.builder()
                     .svcNo(SvcNo.getSvcNo())
                     .orderSeq(0)
                     .id(id)

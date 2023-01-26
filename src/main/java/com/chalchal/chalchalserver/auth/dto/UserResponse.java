@@ -1,6 +1,6 @@
 package com.chalchal.chalchalserver.auth.dto;
 
-import com.chalchal.chalchalserver.auth.domain.ProfileImg;
+import com.chalchal.chalchalserver.auth.domain.UserProfileImg;
 import com.chalchal.chalchalserver.auth.domain.User;
 import lombok.Getter;
 
@@ -20,8 +20,8 @@ public class UserResponse {
         this.url = url;
     }
 
-    public static UserResponse from(User user, ProfileImg profileImg) {
-        return new UserResponse(user.getEmail(), user.getUserId(), user.getNickname(), profileImg.getUrl());
+    public static UserResponse from(User user, UserProfileImg userProfileImg) {
+        return new UserResponse(user.getEmail(), user.getUserId(), user.getNickname(), userProfileImg.getUrl());
     }
 
     public static UserResponse from(User user) {

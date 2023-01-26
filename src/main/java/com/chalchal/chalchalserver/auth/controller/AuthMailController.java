@@ -5,7 +5,7 @@ import com.chalchal.chalchalserver.auth.dto.UserAuthMailRequest;
 import com.chalchal.chalchalserver.auth.dto.UserAuthRequest;
 import com.chalchal.chalchalserver.auth.domain.MailAuthNum;
 import com.chalchal.chalchalserver.auth.domain.User;
-import com.chalchal.chalchalserver.auth.domain.UserJoinAuth;
+import com.chalchal.chalchalserver.auth.domain.UserMailAuth;
 import com.chalchal.chalchalserver.auth.service.UserAuthService;
 import com.chalchal.chalchalserver.global.dto.Flag;
 import com.chalchal.chalchalserver.global.dto.ResultResponse;
@@ -36,7 +36,7 @@ public class AuthMailController {
                                                             @AuthenticationPrincipal User user) {
         String authNum = MailAuthNum.creteMailAuthNum().value();
 
-        UserJoinAuth userJoinAuth = userAuthService.createUserAuth(UserAuthRequest.builder()
+        UserMailAuth userMailAuth = userAuthService.createUserAuth(UserAuthRequest.builder()
                     .svcNo(SvcNo.getSvcNo())
                     .id(user.getId())
                     .email(userAuthMailRequest.getEmail())
@@ -46,7 +46,7 @@ public class AuthMailController {
 
         //TODO: 이메일 형식을 템플릿 형식으로 추가 개발 필요
         mailService.mailSend(MailRequest.builder()
-                    .svcNo(userJoinAuth.getSvcNo())
+                    .svcNo(userMailAuth.getSvcNo())
                     .mailDiv(MailDiv.SIGN_UP)
                     .to(userAuthMailRequest.getEmail())
                     .subject("TEST")
@@ -54,7 +54,7 @@ public class AuthMailController {
                 .build());
 
         return ResultResponse.ok(ResultResponse.builder()
-                    .data(userJoinAuth)
+                    .data(userMailAuth)
                 .build());
     }
 

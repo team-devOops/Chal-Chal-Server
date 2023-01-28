@@ -38,8 +38,11 @@ public class TodoMst extends BaseDomain {
     private String topicKey;
 
     @Comment("정렬 시퀀스")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ORDER_SEQ", columnDefinition = "bigint")
     private long orderSeq;
+
+    //TODO: Display Index도 추가 개발 필요. (회원이 순서 정할 수 있는 기능)
 
     @Comment("할 일 제목")
     @Column(name = "TITLE", columnDefinition = "varchar(128)")

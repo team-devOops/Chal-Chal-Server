@@ -26,6 +26,7 @@ public class UserProfileImg extends BaseDomain {
     private Long id;
 
     @Comment("정렬 시퀀스")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ORDER_SEQ", nullable = false, columnDefinition = "int")
     private int orderSeq;
 

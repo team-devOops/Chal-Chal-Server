@@ -1,5 +1,6 @@
 package com.chalchal.chalchalserver.mail.service;
 
+import com.chalchal.chalchalserver.global.exception.BaseException;
 import com.chalchal.chalchalserver.mail.domain.Mail;
 import com.chalchal.chalchalserver.mail.dto.MailRequest;
 import com.chalchal.chalchalserver.mail.repository.MailRepository;
@@ -46,7 +47,9 @@ public class MailService {
 
             crateMail(mailRequest);
         } catch (MessagingException e) {
-            e.printStackTrace();
+            log.error("email error:{}", e.getMessage());
+
+
         }
     }
 

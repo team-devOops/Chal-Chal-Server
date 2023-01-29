@@ -1,5 +1,6 @@
 package com.chalchal.chalchalserver.todo.entity;
 
+import com.chalchal.chalchalserver.global.BaseDomain;
 import com.chalchal.chalchalserver.global.dto.Flag;
 import com.chalchal.chalchalserver.global.util.StringUtils;
 import lombok.AllArgsConstructor;
@@ -21,7 +22,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Table(name = "t_todo_topic")
 @NoArgsConstructor
-public class TodoTopic {
+public class TodoTopic extends BaseDomain {
     @Id
     @Column(name = "SVC_NO", columnDefinition = "varchar(32)")
     private String svcNo;
@@ -40,6 +41,7 @@ public class TodoTopic {
     private Flag useYn;
 
     @Comment("정렬 시퀀스")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ORDER_SEQ", columnDefinition = "bigint")
     private Long orderSeq;
 

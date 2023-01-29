@@ -34,7 +34,6 @@ public class TodoMstService {
                     .svcNo(SvcNo.getSvcNo())
                     .reSvcNo(null)
                     .topicKey(todoMstSaveRequest.getTopicKey())
-                    .orderSeq(this.getTodoMstCount(id) + 1) //orderSeq를 위해, 별도의 count 값을 가져와 그 값에서 + 1를 해주는 형식으로 해주었어요. 괜찮을까요?
                     .title(todoMstSaveRequest.getTitle())
                     .memo(todoMstSaveRequest.getMemo())
                     .useYn(Flag.Y)

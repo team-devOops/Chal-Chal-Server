@@ -8,5 +8,4 @@ public class TodoTopicSaveRequest {
     private String emoji;
     private String bgColor;
     private Flag useYn;
-    //private Long orderSeq;
 }

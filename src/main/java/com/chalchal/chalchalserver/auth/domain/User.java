@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.Comment;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
 import java.util.*;
@@ -96,5 +97,11 @@ public class User extends BaseDomain implements UserDetails {
 
     public void changeUseYn(Flag useYn) {
         this.useYn = useYn;
+    }
+
+    public void encodePassword(String password) {
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+
+        this.password = bCryptPasswordEncoder.encode(password);
     }
 }

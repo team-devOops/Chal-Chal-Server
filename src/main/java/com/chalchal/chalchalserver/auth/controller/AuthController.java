@@ -2,6 +2,7 @@ package com.chalchal.chalchalserver.auth.controller;
 
 import com.chalchal.chalchalserver.auth.domain.UserProfileImg;
 import com.chalchal.chalchalserver.auth.dto.LoginUserRequest;
+import com.chalchal.chalchalserver.auth.dto.ResetRequest;
 import com.chalchal.chalchalserver.auth.dto.UserRequest;
 import com.chalchal.chalchalserver.auth.dto.UserResponse;
 import com.chalchal.chalchalserver.auth.service.ProfileImgService;
@@ -109,9 +110,18 @@ public class AuthController {
 
     @GetMapping(value = "/info/{email}")
     @ApiOperation(value = "개인정보 조회", notes = "사용자의 email을 통해 사용자의 정보를 조회한다.")
-    public ResponseEntity getInfo(@PathVariable String email) {
+    public ResponseEntity<ResultResponse<Object>> getInfo(@PathVariable String email) {
         return ResultResponse.ok(ResultResponse.builder()
                     .data(UserResponse.from(userService.findUser(email)))
                 .build());
+    }
+
+    @PostMapping(value = "/reset")
+    @ApiOperation(value = "비밀번호 재설정", notes = "비밀번호를 재설정한다.")
+    public ResponseEntity<ResultResponse<Void>> reset(@AuthenticationPrincipal User user,
+                                      @RequestBody ResetRequest resetRequest) {
+        userService.resetPassword(user.getId(), resetRequest.getPassword());
+
+        return ResultResponse.ok();
     }
 }

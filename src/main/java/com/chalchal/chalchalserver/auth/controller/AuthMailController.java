@@ -1,7 +1,6 @@
 package com.chalchal.chalchalserver.auth.controller;
 
 import com.chalchal.chalchalserver.auth.dto.AuthNumCompareRequest;
-import com.chalchal.chalchalserver.auth.dto.UserAuthMailRequest;
 import com.chalchal.chalchalserver.auth.dto.UserAuthRequest;
 import com.chalchal.chalchalserver.auth.domain.MailAuthNum;
 import com.chalchal.chalchalserver.auth.domain.User;

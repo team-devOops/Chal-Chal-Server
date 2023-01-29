@@ -1,5 +1,6 @@
 package com.chalchal.chalchalserver.auth.service;
 
+import com.chalchal.chalchalserver.auth.domain.UserMailAuth;
 import com.chalchal.chalchalserver.auth.repository.UserRepository;
 import com.chalchal.chalchalserver.auth.jwt.JwtUtils;
 import com.chalchal.chalchalserver.auth.domain.User;
@@ -164,5 +165,18 @@ public class UserService {
                 .path("/")
                 .secure(true)
                 .build();
+    }
+
+
+
+    /**
+     * 비밀번호 업데이트
+     */
+    @Transactional
+    @Retryable(value = SQLException.class)
+    public User resetPassword(long id, String password) {
+        User user = this.findUserById(id);
+        user.encodePassword(password);
+        return user;
     }
 }

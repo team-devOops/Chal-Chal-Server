@@ -1,6 +1,5 @@
 package com.chalchal.chalchalserver.auth.service;
 
-import com.chalchal.chalchalserver.auth.domain.User;
 import com.chalchal.chalchalserver.auth.repository.UserAuthRepository;
 import com.chalchal.chalchalserver.auth.domain.UserMailAuth;
 import com.chalchal.chalchalserver.auth.dto.UserAuthRequest;

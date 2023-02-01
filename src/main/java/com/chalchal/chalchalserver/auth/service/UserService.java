@@ -16,8 +16,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.http.HttpHeaders;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 
 import static com.chalchal.chalchalserver.global.exception.BaseException.MENEBER_NOT_FOUND_EXCEPTION;
 
@@ -169,9 +167,7 @@ public class UserService {
                 .build();
     }
 
-    public boolean isEqualsPassword(String password, String checkPassword) {
-        return password.equals(checkPassword);
-    }
+
 
     /**
      * 비밀번호 업데이트

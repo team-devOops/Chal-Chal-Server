@@ -120,9 +120,7 @@ public class AuthController {
     @ApiOperation(value = "비밀번호 재설정", notes = "비밀번호를 재설정한다.")
     public ResponseEntity<ResultResponse<Void>> reset(@AuthenticationPrincipal User user,
                                       @RequestBody ResetRequest resetRequest) {
-        if(userService.isEqualsPassword(resetRequest.getPassword(), resetRequest.getCheckPassword())) {
-            userService.resetPassword(user.getId(), resetRequest.getPassword());
-        }
+        userService.resetPassword(user.getId(), resetRequest.getPassword());
 
         return ResultResponse.ok();
     }

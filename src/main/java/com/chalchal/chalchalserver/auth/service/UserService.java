@@ -49,6 +49,7 @@ public class UserService {
                 .useYn(Flag.Y)
                 .privateYn(Flag.N)
                 .build());
+
         return user;
     }
 

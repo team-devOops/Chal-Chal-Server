@@ -20,9 +20,9 @@ import java.time.LocalDateTime;
 @Getter
 @Entity
 @AllArgsConstructor
-@Table(name = "t_todo_list")
+@Table(name = "t_todo_mst")
 @NoArgsConstructor
-public class TodoList extends BaseDomain {
+public class TodoMst extends BaseDomain {
 
     @Id
     @Comment("서비스번호")

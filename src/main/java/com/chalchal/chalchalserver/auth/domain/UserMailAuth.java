@@ -16,9 +16,9 @@ import java.util.Objects;
 @Getter
 @Entity
 @AllArgsConstructor
-@Table(name = "T_USER_JOIN_AUTH")
+@Table(name = "T_USER_MAIL_AUTH")
 @NoArgsConstructor
-public class UserJoinAuth extends BaseDomain {
+public class UserMailAuth extends BaseDomain {
 
     public static final int AUTH_VALID_MAX_TIME = 10;
     @Id

@@ -1,7 +1,8 @@
 package com.chalchal.chalchalserver.auth.controller;
 
-import com.chalchal.chalchalserver.auth.domain.ProfileImg;
+import com.chalchal.chalchalserver.auth.domain.UserProfileImg;
 import com.chalchal.chalchalserver.auth.dto.LoginUserRequest;
+import com.chalchal.chalchalserver.auth.dto.ResetRequest;
 import com.chalchal.chalchalserver.auth.dto.UserRequest;
 import com.chalchal.chalchalserver.auth.dto.UserResponse;
 import com.chalchal.chalchalserver.auth.service.ProfileImgService;
@@ -46,13 +47,13 @@ public class AuthController {
         }
 
         User user = userService.createUser(userRequest);
-        ProfileImg profileImg = profileImgService.saveFirstProfileImg(user.getId());
+        UserProfileImg userProfileImg = profileImgService.saveFirstProfileImg(user.getId());
         // Auth 관련 컨트롤러 부분에 회원 프로필사진 부분을 추가 했는데 괜찮을까요?
         // 또 반환 값을 동시에 주고 싶어 아래 처럼 표기를 했습니다...
         // 반환 값 관려해서 UserResponse보다 [ signUpResponse ] 같은게 더 정확할지 궁금해요
 
         return ResultResponse.ok(ResultResponse.builder()
-                    .data(UserResponse.from(user, profileImg))
+                    .data(UserResponse.from(user, userProfileImg))
                 .build());
     }
 
@@ -109,9 +110,18 @@ public class AuthController {
 
     @GetMapping(value = "/info/{email}")
     @ApiOperation(value = "개인정보 조회", notes = "사용자의 email을 통해 사용자의 정보를 조회한다.")
-    public ResponseEntity getInfo(@PathVariable String email) {
+    public ResponseEntity<ResultResponse<Object>> getInfo(@PathVariable String email) {
         return ResultResponse.ok(ResultResponse.builder()
                     .data(UserResponse.from(userService.findUser(email)))
                 .build());
+    }
+
+    @PostMapping(value = "/reset")
+    @ApiOperation(value = "비밀번호 재설정", notes = "비밀번호를 재설정한다.")
+    public ResponseEntity<ResultResponse<Void>> reset(@AuthenticationPrincipal User user,
+                                      @RequestBody ResetRequest resetRequest) {
+        userService.resetPassword(user.getId(), resetRequest.getPassword());
+
+        return ResultResponse.ok();
     }
 }

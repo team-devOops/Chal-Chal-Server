@@ -13,9 +13,9 @@ import javax.persistence.*;
 @Getter
 @Entity
 @AllArgsConstructor
-@Table(name = "T_PROFILE_IMG")
+@Table(name = "T_USER_PROFILE_IMG")
 @NoArgsConstructor
-public class ProfileImg extends BaseDomain {
+public class UserProfileImg extends BaseDomain {
     @Id
     @Comment("서비스 요청 번호")
     @Column(name = "SVC_NO", nullable = false)
@@ -26,6 +26,7 @@ public class ProfileImg extends BaseDomain {
     private Long id;
 
     @Comment("정렬 시퀀스")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ORDER_SEQ", nullable = false, columnDefinition = "int")
     private int orderSeq;
 

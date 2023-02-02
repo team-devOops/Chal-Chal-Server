@@ -1,15 +1,15 @@
 package com.chalchal.chalchalserver.auth.controller;
 
 import com.chalchal.chalchalserver.auth.dto.AuthNumCompareRequest;
-import com.chalchal.chalchalserver.auth.dto.UserAuthMailRequest;
 import com.chalchal.chalchalserver.auth.dto.UserAuthRequest;
 import com.chalchal.chalchalserver.auth.domain.MailAuthNum;
 import com.chalchal.chalchalserver.auth.domain.User;
-import com.chalchal.chalchalserver.auth.domain.UserJoinAuth;
+import com.chalchal.chalchalserver.auth.domain.UserMailAuth;
 import com.chalchal.chalchalserver.auth.service.UserAuthService;
 import com.chalchal.chalchalserver.global.dto.Flag;
 import com.chalchal.chalchalserver.global.dto.ResultResponse;
 import com.chalchal.chalchalserver.global.generate.SvcNo;
+import com.chalchal.chalchalserver.mail.domain.MailDiv;
 import com.chalchal.chalchalserver.mail.dto.MailRequest;
 import com.chalchal.chalchalserver.mail.service.MailService;
 import io.swagger.annotations.Api;
@@ -23,36 +23,37 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequestMapping("/api/auth/mail")
-@Api(tags = {"회원가입 : 이메일 인증코드 인증"})
+@Api(tags = {"회원가입 : 이메일 발송 관련"})
 @RequiredArgsConstructor
 public class AuthMailController {
     private final UserAuthService userAuthService;
     private final MailService mailService;
 
-    @PostMapping(value = "/")
-    @ApiOperation(value = "인증번호 이메일 발송", notes = "가입인증을 위한 인증코드를 담은 이메일 전송")
-    public ResponseEntity<ResultResponse<Object>> sendEmail(@RequestBody UserAuthMailRequest userAuthMailRequest,
+    @PostMapping(value = "/{mailDiv}")
+    @ApiOperation(value = "인증번호 이메일 발송", notes = "인증코드를 담은 이메일 전송")
+    public ResponseEntity<ResultResponse<Object>> sendEmail(@PathVariable MailDiv mailDiv,
                                                             @AuthenticationPrincipal User user) {
         String authNum = MailAuthNum.creteMailAuthNum().value();
 
-        UserJoinAuth userJoinAuth = userAuthService.createUserAuth(UserAuthRequest.builder()
+        UserMailAuth userMailAuth = userAuthService.createUserAuth(UserAuthRequest.builder()
                     .svcNo(SvcNo.getSvcNo())
                     .id(user.getId())
-                    .email(userAuthMailRequest.getEmail())
+                    .email(user.getEmail())
                     .code(authNum)
                     .authYn(Flag.N)
                 .build());
 
         //TODO: 이메일 형식을 템플릿 형식으로 추가 개발 필요
         mailService.mailSend(MailRequest.builder()
-                .svcNo(userJoinAuth.getSvcNo())
-                .to(userAuthMailRequest.getEmail())
-                .subject("TEST")
-                .content(authNum)
+                    .svcNo(userMailAuth.getSvcNo())
+                    .mailDiv(mailDiv)
+                    .to(userMailAuth.getSendEmail())
+                    .subject("TEST")
+                    .content(authNum)
                 .build());
 
         return ResultResponse.ok(ResultResponse.builder()
-                    .data(userJoinAuth)
+                    .data(userMailAuth)
                 .build());
     }
 

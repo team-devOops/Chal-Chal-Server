@@ -13,7 +13,7 @@ import javax.persistence.*;
 
 /**
  * to do 그룹에 대한 도메인
- * todo_list topic key와 함께 사용
+ * todo_mst topic key와 함께 사용
  */
 @Builder
 @Getter

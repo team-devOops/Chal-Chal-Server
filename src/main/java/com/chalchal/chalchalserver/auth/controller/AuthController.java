@@ -1,8 +1,10 @@
 package com.chalchal.chalchalserver.auth.controller;
 
+import com.chalchal.chalchalserver.auth.domain.ProfileImg;
 import com.chalchal.chalchalserver.auth.dto.LoginUserRequest;
 import com.chalchal.chalchalserver.auth.dto.UserRequest;
 import com.chalchal.chalchalserver.auth.dto.UserResponse;
+import com.chalchal.chalchalserver.auth.service.ProfileImgService;
 import com.chalchal.chalchalserver.auth.service.UserService;
 import com.chalchal.chalchalserver.auth.jwt.JwtUtils;
 import com.chalchal.chalchalserver.auth.domain.User;
@@ -33,6 +35,7 @@ public class AuthController {
     private final static  String REFRESH_TOKEN_INDEX = "REFRESHTOKENINDEX";
     private final UserService userService;
     private final UserTokenInfoService userTokenInfoService;
+    private final ProfileImgService profileImgService;
     private final JwtUtils jwtUtils;
 
     @PostMapping(value = "/join")
@@ -42,8 +45,14 @@ public class AuthController {
             return ErrorResponse.toErrorResponse(ErrorCode.DUPLICATE_RESOURCE);
         }
 
+        User user = userService.createUser(userRequest);
+        ProfileImg profileImg = profileImgService.saveFirstProfileImg(user.getId());
+        // Auth 관련 컨트롤러 부분에 회원 프로필사진 부분을 추가 했는데 괜찮을까요?
+        // 또 반환 값을 동시에 주고 싶어 아래 처럼 표기를 했습니다...
+        // 반환 값 관려해서 UserResponse보다 [ signUpResponse ] 같은게 더 정확할지 궁금해요
+
         return ResultResponse.ok(ResultResponse.builder()
-                    .data(UserResponse.from(userService.createUser(userRequest)))
+                    .data(UserResponse.from(user, profileImg))
                 .build());
     }
 

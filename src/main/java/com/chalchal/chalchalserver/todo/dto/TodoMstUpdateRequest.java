@@ -7,7 +7,7 @@ import lombok.Getter;
  * 할 일 수정시 필요한 객체
  */
 @Getter
-public class TodoListUpdateRequest {
+public class TodoMstUpdateRequest {
     private String svcNo;
     private String topicKey;
     private String title;

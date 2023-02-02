@@ -1,10 +1,10 @@
 package com.chalchal.chalchalserver.todo.controller;
 
 import com.chalchal.chalchalserver.auth.domain.User;
-import com.chalchal.chalchalserver.todo.dto.TodoListSaveRequest;
-import com.chalchal.chalchalserver.todo.dto.TodoListUpdateRequest;
+import com.chalchal.chalchalserver.todo.dto.TodoMstSaveRequest;
+import com.chalchal.chalchalserver.todo.dto.TodoMstUpdateRequest;
 import com.chalchal.chalchalserver.global.dto.ResultResponse;
-import com.chalchal.chalchalserver.todo.service.TodoService;
+import com.chalchal.chalchalserver.todo.service.TodoMstService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/todo")
 @Api(tags = {"TODO : 할 일 관리"})
 @RequiredArgsConstructor
-public class TodoController {
+public class TodoMstController {
 
-    private final TodoService todoService;
+    private final TodoMstService todoMstService;
 
     /**
      * 할 일 조회
@@ -29,7 +29,7 @@ public class TodoController {
     @ApiOperation(value = "TODO 조회", notes = "할 일 내용 조회")
     public ResponseEntity<ResultResponse<Object>> selectAll(@AuthenticationPrincipal User user) {
         return ResultResponse.ok(ResultResponse.builder()
-                    .data(todoService.findTodoListByRegId(user.getId()))
+                    .data(todoMstService.findTodoMstByRegId(user.getId()))
                 .build());
     }
 
@@ -38,10 +38,11 @@ public class TodoController {
      */
     @PostMapping(value = "/")
     @ApiOperation(value = "TODO 작성", notes = "할 일 내용 등록")
-    public ResponseEntity<ResultResponse<Object>> save(@RequestBody TodoListSaveRequest todoListSaveRequest) {
+    public ResponseEntity<ResultResponse<Object>> save(@AuthenticationPrincipal User user,
+                                                       @RequestBody TodoMstSaveRequest todoMstSaveRequest) {
         return ResultResponse.ok(ResultResponse.builder()
                     .message("등록 되었습니다.")
-                    .data(todoService.createTodoList(todoListSaveRequest))
+                    .data(todoMstService.createTodoMst(todoMstSaveRequest, user.getId()))
                 .build());
     }
 
@@ -50,9 +51,9 @@ public class TodoController {
      */
     @PatchMapping(value = "/{svcNo}")
     @ApiOperation(value = "TODO 수정", notes = "할 일 내용 수정")
-    public ResponseEntity<ResultResponse<Object>> update(@RequestBody TodoListUpdateRequest todoListUpdateRequest) {
+    public ResponseEntity<ResultResponse<Object>> update(@RequestBody TodoMstUpdateRequest todoMstUpdateRequest) {
         return ResultResponse.ok(ResultResponse.builder()
-                    .data(todoService.updateTodoList(todoListUpdateRequest))
+                    .data(todoMstService.updateTodoMst(todoMstUpdateRequest))
                     .message("수정 되었습니다.")
                 .build());
     }
@@ -64,7 +65,7 @@ public class TodoController {
     @ApiOperation(value = "TODO 삭제", notes = "할 일 내용 삭제")
     public ResponseEntity<ResultResponse<Object>> delete(@PathVariable String svcNo) {
         return ResultResponse.ok(ResultResponse.builder()
-                    .data(todoService.deleteTodoList(svcNo))
+                    .data(todoMstService.deleteTodoMst(svcNo))
                     .message("삭제 되었습니다.")
                 .build());
     }

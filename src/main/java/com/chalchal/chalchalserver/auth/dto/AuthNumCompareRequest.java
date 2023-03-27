@@ -5,4 +5,8 @@ import lombok.Getter;
 @Getter
 public class AuthNumCompareRequest {
     private Long id;
+
+    public AuthNumCompareRequest(Long id) {
+        this.id = id;
+    }
 }

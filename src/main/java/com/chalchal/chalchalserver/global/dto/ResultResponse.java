@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.net.URI;
 import java.time.LocalDateTime;
 
 
@@ -39,8 +40,11 @@ public class ResultResponse<T> {
         return ResponseEntity.ok(new ResultResponse<>());
     }
 
-    public static ResponseEntity<ResultResponse<Object>> ok(ResultResponse resultResponse) {
-        return ResponseEntity
-                .ok(resultResponse);
+    public static <T> ResponseEntity<ResultResponse<T>> ok(ResultResponse resultResponse) {
+        return ResponseEntity.ok(resultResponse);
+    }
+
+    public static ResponseEntity created(URI url) {
+        return ResponseEntity.created(url).build();
     }
 }

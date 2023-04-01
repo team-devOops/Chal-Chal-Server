@@ -9,6 +9,7 @@ import javax.validation.constraints.*;
 @Getter
 @NoArgsConstructor
 public class LoginUserRequest {
+    @NotEmpty
     @Email
     private String email;
 

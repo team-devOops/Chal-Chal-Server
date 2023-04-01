@@ -157,6 +157,21 @@ class TodoMstTest {
         assertThat(todoMst.getTopicKey()).isEqualTo(topicKey);
     }
 
+    @ParameterizedTest
+    @NullAndEmptySource
+    @DisplayName("topicKey is null")
+    void changeTopicKeyIsNull(String paramTopicKey) {
+        //given
+        TodoMst todoMst = createTodoMst();
+        String topicKey = todoMst.getTopicKey();
+
+        //when
+        todoMst.changeTopicKey(topicKey);
+
+        //then
+        assertThat(todoMst.getTopicKey()).isEqualTo(topicKey);
+    }
+
     @Test
     @DisplayName("successYn 변경")
     void changeSuccessYn() {

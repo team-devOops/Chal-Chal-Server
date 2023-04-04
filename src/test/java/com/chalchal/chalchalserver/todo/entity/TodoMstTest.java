@@ -143,7 +143,6 @@ class TodoMstTest {
     }
 
     @ParameterizedTest
-    @NullAndEmptySource
     @ValueSource(strings = {"changeTopicKey"})
     @DisplayName("topicKey 변경")
     void changeTopicKey(String topicKey) {

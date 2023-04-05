@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/todo/topic")
+@RequestMapping("/todo/topic")
 @Api(tags = {"TODO : TOPIC 관리"})
 @RequiredArgsConstructor
 public class TodoTopicController {
 
     private final TodoTopicService todoTopicService;
 
-    @PostMapping(value = "/")
+    @PostMapping
     @ApiOperation(value = "TODO 토픽 생성")
     public ResponseEntity<ResultResponse<Object>> save(@RequestBody TodoTopicSaveRequest todoTopicSaveRequest) {
         return ResultResponse.ok(ResultResponse.builder()

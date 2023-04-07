@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping("/todo/topic")
+@RequestMapping("/todo/topics")
 @Api(tags = {"TODO : TOPIC 관리"})
 @RequiredArgsConstructor
 public class TodoTopicController {

@@ -82,7 +82,7 @@ class TodoMstControllerTest {
                 .build();
 
         //when
-        TodoMstSaveResponse result = 할일을_등록함(request);
+        TodoMstResponse result = 할일을_등록함(request);
 
         //then
         assertSoftly(softAssertions -> {
@@ -106,7 +106,7 @@ class TodoMstControllerTest {
                 .memo(memo)
                 .build();
 
-        TodoMstSaveResponse result = 할일을_등록함(request);
+        TodoMstResponse result = 할일을_등록함(request);
 
         //when
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(baseUrl + "/" + result.getSvcNo()))
@@ -201,7 +201,7 @@ class TodoMstControllerTest {
                 .memo(memo)
                 .build();
 
-        TodoMstSaveResponse todoMst = 할일을_등록함(request);
+        TodoMstResponse todoMst = 할일을_등록함(request);
 
         String updateTitle = "updateTitle";
         TodoMstUpdateRequest updateRequest = TodoMstUpdateRequest.builder()
@@ -265,7 +265,7 @@ class TodoMstControllerTest {
                 .memo(memo)
                 .build();
 
-        TodoMstSaveResponse todoMst = 할일을_등록함(request);
+        TodoMstResponse todoMst = 할일을_등록함(request);
         String svcNo = todoMst.getSvcNo();
 
         //when & then
@@ -288,7 +288,7 @@ class TodoMstControllerTest {
         assertEquals(HttpStatus.NOT_FOUND.value(), mvcResult.getResponse().getStatus());
     }
 
-    private TodoMstSaveResponse 할일을_등록함(TodoMstSaveRequest todoMstSaveRequest) throws Exception {
+    private TodoMstResponse 할일을_등록함(TodoMstSaveRequest todoMstSaveRequest) throws Exception {
         String requestBody = objectMapper.writeValueAsString(todoMstSaveRequest);
 
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post(baseUrl)
@@ -301,7 +301,7 @@ class TodoMstControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn();
 
-        return 응답값을_객체에_매핑함(mvcSelectResult, TodoMstSaveResponse.class);
+        return 응답값을_객체에_매핑함(mvcSelectResult, TodoMstResponse.class);
     }
 
     private <T> T 응답값을_객체에_매핑함(MvcResult mvcResult, Class<T> type) throws Exception {

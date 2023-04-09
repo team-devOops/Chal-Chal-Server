@@ -47,8 +47,7 @@ public class TodoMstController {
      */
     @GetMapping("/{svcNo}")
     @ApiOperation(value = "TODO 조회", notes = "할 일 내용 조회")
-    public ResponseEntity<ResultResponse<TodoMstResponse>> select(@AuthenticationPrincipal User user,
-                                                            @PathVariable String svcNo) {
+    public ResponseEntity<ResultResponse<TodoMstResponse>> select(@AuthenticationPrincipal User user, @PathVariable String svcNo) {
         return ResultResponse.ok(ResultResponse.builder()
                 .data(todoMstService.findTodoMstBySvcNo(svcNo))
                 .build());

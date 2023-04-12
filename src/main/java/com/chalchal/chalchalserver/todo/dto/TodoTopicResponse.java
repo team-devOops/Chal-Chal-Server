@@ -1,12 +1,13 @@
 package com.chalchal.chalchalserver.todo.dto;
 
 import com.chalchal.chalchalserver.global.dto.Flag;
-import com.chalchal.chalchalserver.todo.entity.TodoMst;
 import com.chalchal.chalchalserver.todo.entity.TodoTopic;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class TodoTopicResponse {
     private String svcNo;
     private String emoji;

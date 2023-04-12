@@ -2,13 +2,22 @@ package com.chalchal.chalchalserver.todo.dto;
 
 import com.chalchal.chalchalserver.global.dto.Flag;
 import com.chalchal.chalchalserver.todo.entity.TodoTopic;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.SoftAssertions.*;
 
 class TodoTopicResponseTest {
+
+    @Test
+    @DisplayName("todoTopic 빈생성자")
+    void todoTopicNoArgsConstructor() {
+        TodoTopicResponse todoTopicResponse = new TodoTopicResponse();
+
+        assertThat(todoTopicResponse).isNotNull();
+    }
+
     @Test
     @DisplayName("todoTopic 생성자 생성")
     void todoTopicConstructor() {
@@ -28,10 +37,10 @@ class TodoTopicResponseTest {
 
         //then
         assertSoftly(softAssertions -> {
-            Assertions.assertThat(response.getSvcNo()).isEqualTo(svcNo);
-            Assertions.assertThat(response.getEmoji()).isEqualTo(emoji);
-            Assertions.assertThat(response.getBgColor()).isEqualTo(bgColor);
-            Assertions.assertThat(response.getUseYn()).isEqualTo(useYn);
+            assertThat(response.getSvcNo()).isEqualTo(svcNo);
+            assertThat(response.getEmoji()).isEqualTo(emoji);
+            assertThat(response.getBgColor()).isEqualTo(bgColor);
+            assertThat(response.getUseYn()).isEqualTo(useYn);
         });
     }
 
@@ -55,10 +64,10 @@ class TodoTopicResponseTest {
         TodoTopicResponse response = TodoTopicResponse.from(todoTopic);
 
         assertSoftly(softAssertions -> {
-            Assertions.assertThat(response.getSvcNo()).isEqualTo(svcNo);
-            Assertions.assertThat(response.getEmoji()).isEqualTo(emoji);
-            Assertions.assertThat(response.getBgColor()).isEqualTo(bgColor);
-            Assertions.assertThat(response.getUseYn()).isEqualTo(useYn);
+            assertThat(response.getSvcNo()).isEqualTo(svcNo);
+            assertThat(response.getEmoji()).isEqualTo(emoji);
+            assertThat(response.getBgColor()).isEqualTo(bgColor);
+            assertThat(response.getUseYn()).isEqualTo(useYn);
         });
     }
 }

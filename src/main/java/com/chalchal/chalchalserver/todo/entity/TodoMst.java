@@ -100,6 +100,10 @@ public class TodoMst extends BaseDomain {
     }
 
     public void updateSuccessDate() {
-        this.successDate = LocalDateTime.now();
+        updateSuccessDate(LocalDateTime.now());
+    }
+
+    public void updateSuccessDate(LocalDateTime localDateTime) {
+        this.successDate = localDateTime;
     }
 }

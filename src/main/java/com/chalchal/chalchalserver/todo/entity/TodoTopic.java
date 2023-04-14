@@ -20,7 +20,7 @@ import javax.persistence.*;
 @Getter
 @Entity
 @AllArgsConstructor
-@Table(name = "t_todo_topic")
+@Table(name = "todo_topic")
 @NoArgsConstructor
 public class TodoTopic extends BaseDomain {
     @Id

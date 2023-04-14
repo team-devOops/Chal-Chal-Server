@@ -7,7 +7,6 @@ import com.chalchal.chalchalserver.todo.repository.TodoMstRepository;
 import com.chalchal.chalchalserver.global.dto.Flag;
 import com.chalchal.chalchalserver.global.generate.SvcNo;
 import lombok.RequiredArgsConstructor;
-import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +27,6 @@ public class TodoMstService {
      *
      * @return TodoMst 저장 된 내용 반환
      */
-    @Retryable(value = SQLException.class)
     public TodoMst createTodoMst(TodoMstSaveRequest todoMstSaveRequest, Long id) {
         return todoMstRepository.save(TodoMst.builder()
                     .svcNo(SvcNo.getSvcNo())
@@ -49,7 +47,6 @@ public class TodoMstService {
      * @return TodoMst 수정 된 내용 반환
      */
     @Transactional
-    @Retryable(value = SQLException.class)
     public TodoMst updateTodoMst(TodoMstUpdateRequest todoMstUpdateRequest) {
         TodoMst todoMst = this.findTodoMstBySvcNo(todoMstUpdateRequest.getSvcNo());
 
@@ -69,7 +66,6 @@ public class TodoMstService {
      * @return TodoMst 삭제 처리 된 내역 반환
      */
     @Transactional
-    @Retryable(value = SQLException.class)
     public TodoMst deleteTodoMst(String svcNo) {
         TodoMst todoMst = this.findTodoMstBySvcNo(svcNo);
         todoMst.changeUseYn(Flag.N);

@@ -1,0 +1,44 @@
+spring:
+  config:
+    import:
+      - classpath:/config/mail-config.yml
+  datasource:
+    url: jdbc:h2:mem:test;MODE=MySQL;
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+    initialization-mode: always
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: true
+    defer-datasource-initialization: true
+  test:
+    constructor:
+      autowire:
+        mode: all
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: debug
+        type:
+          descriptor:
+            sql: debug
+
+jwt:
+  token:
+    access: testjwtsecret
+    refresh: testjwtrefresh
+  expire:
+    time: 36000000
+
+svcno:
+  type: TEST

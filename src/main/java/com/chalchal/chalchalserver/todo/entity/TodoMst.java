@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 @Getter
 @Entity
 @AllArgsConstructor
-@Table(name = "t_todo_mst")
+@Table(name = "todo_mst")
 @NoArgsConstructor
 public class TodoMst extends BaseDomain {
 
@@ -100,6 +100,10 @@ public class TodoMst extends BaseDomain {
     }
 
     public void updateSuccessDate() {
-        this.successDate = LocalDateTime.now();
+        updateSuccessDate(LocalDateTime.now());
+    }
+
+    public void updateSuccessDate(LocalDateTime localDateTime) {
+        this.successDate = localDateTime;
     }
 }

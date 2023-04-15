@@ -16,19 +16,20 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public class BaseDomain {
-    @CreatedDate
-    @Column(name = "reg_date", nullable = false, updatable = false)
-    private LocalDateTime regDate;
 
     @CreatedBy
     @Column(name = "reg_id", nullable = false, updatable = false)
     private Long regId;
 
-    @LastModifiedDate
-    @Column(name = "upd_date")
-    private LocalDateTime updDate;
+    @CreatedDate
+    @Column(name = "reg_date", nullable = false, updatable = false)
+    private LocalDateTime regDate;
 
     @LastModifiedBy
     @Column(name = "upd_id")
     private Long updId;
+
+    @LastModifiedDate
+    @Column(name = "upd_date")
+    private LocalDateTime updDate;
 }

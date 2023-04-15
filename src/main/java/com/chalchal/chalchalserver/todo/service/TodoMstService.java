@@ -26,7 +26,7 @@ public class TodoMstService {
      *
      * @return TodoMst 저장 된 내용 반환
      */
-    public TodoMst createTodoMst(TodoMstSaveRequest todoMstSaveRequest, Long id) {
+    public TodoMst createTodoMst(TodoMstSaveRequest todoMstSaveRequest) {
         return todoMstRepository.save(TodoMst.builder()
                     .svcNo(SvcNo.getSvcNo())
                     .reSvcNo(null)
@@ -47,7 +47,7 @@ public class TodoMstService {
      */
     @Transactional
     public TodoMst updateTodoMst(TodoMstUpdateRequest todoMstUpdateRequest) {
-        TodoMst todoMst = this.findTodoMstBySvcNo(todoMstUpdateRequest.getSvcNo());
+        TodoMst todoMst = findTodoMstBySvcNo(todoMstUpdateRequest.getSvcNo());
 
         todoMst.changeTopicKey(todoMstUpdateRequest.getTopicKey());
         todoMst.changeTitle(todoMstUpdateRequest.getTitle());

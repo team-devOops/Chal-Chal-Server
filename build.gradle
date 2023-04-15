@@ -48,8 +48,6 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-mail'
 
-    implementation 'joda-time:joda-time:2.12.2'
-
     implementation 'mysql:mysql-connector-java'
 
     implementation 'com.github.maricn:logback-slack-appender:1.6.1'

@@ -1,9 +1,10 @@
 package com.chalchal.chalchalserver.global.generate;
 
-import com.chalchal.chalchalserver.global.util.DateUtils;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * 우리 프로젝트에서 UUID 역할을 하는 클래스 입니다.
@@ -12,11 +13,10 @@ import org.springframework.stereotype.Component;
  *
  * @author zinzoddari
  */
-@Slf4j
 @Component
 public class SvcNo {
 
-    private static final int SVC_NO_MAX_SIZE = 32;
+    public static final int SVC_NO_MAX_SIZE = 32;
 
     private static String svcNoType;
 
@@ -25,8 +25,13 @@ public class SvcNo {
     }
 
     public static String getSvcNo() {
-        String svcNo = DateUtils.getCurrentDay("yyyyMMddHHmmssSSS") + svcNoType;
+        LocalDateTime localDateTime = LocalDateTime.now();
+        String svcNo = localDateTime.format(DateTimeFormatter.ofPattern("YYYYmmddHHMMssSSS")) + svcNoType;
 
         return String.format(svcNo + "%0" + (SVC_NO_MAX_SIZE - svcNo.length()) + "d", (int)(Math.random() * (Integer.MAX_VALUE))).substring(0, SVC_NO_MAX_SIZE);
+    }
+
+    public static String getSvcNoType() {
+        return svcNoType;
     }
 }

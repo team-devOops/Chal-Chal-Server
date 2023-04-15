@@ -49,7 +49,7 @@ public class User extends BaseDomain implements UserDetails {
     @Column(name = "INTRO", columnDefinition = "varchar(512)")
     private String intro;
 
-    @Comment("사용여부")
+    @Comment("공개여부")
     @Enumerated(EnumType.STRING)
     @Column(name = "PRIVATE_YN", columnDefinition = "char(1)")
     private Flag privateYn;

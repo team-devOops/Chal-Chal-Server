@@ -42,7 +42,7 @@ public class TodoMstController {
                                                        @RequestBody TodoMstSaveRequest todoMstSaveRequest) {
         return ResultResponse.ok(ResultResponse.builder()
                     .message("등록 되었습니다.")
-                    .data(todoMstService.createTodoMst(todoMstSaveRequest, user.getId()))
+                    .data(todoMstService.createTodoMst(todoMstSaveRequest))
                 .build());
     }
 

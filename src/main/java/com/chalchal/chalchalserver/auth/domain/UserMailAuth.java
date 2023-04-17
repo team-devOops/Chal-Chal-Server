@@ -16,7 +16,7 @@ import java.util.Objects;
 @Getter
 @Entity
 @AllArgsConstructor
-@Table(name = "T_USER_MAIL_AUTH")
+@Table(name = "USER_MAIL_AUTH")
 @NoArgsConstructor
 public class UserMailAuth extends BaseDomain {
 
@@ -41,7 +41,7 @@ public class UserMailAuth extends BaseDomain {
     @Builder.Default
     @Comment("인증유효시간")
     @Column(name = "VALID_DATE", nullable = false, columnDefinition = "datetime")
-    private LocalDateTime validDate = getValidity();
+    private LocalDateTime validDate = setValidDate();
 
     @Comment("인증여부")
     @Enumerated(EnumType.STRING)
@@ -57,7 +57,7 @@ public class UserMailAuth extends BaseDomain {
         this.successAuthDate = LocalDateTime.now();
     }
 
-    public static LocalDateTime getValidity() {
+    public static LocalDateTime setValidDate() {
         return LocalDateTime.now().plusMinutes(AUTH_VALID_MAX_TIME);
     }
 

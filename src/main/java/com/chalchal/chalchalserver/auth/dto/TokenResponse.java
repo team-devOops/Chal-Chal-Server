@@ -4,7 +4,6 @@ import lombok.*;
 
 @Getter
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TokenResponse {
     private long index;
@@ -13,4 +12,13 @@ public class TokenResponse {
 
     private String accessToken;
     private String refreshToken;
+
+    @Builder
+    public TokenResponse(long index, long id, long refreshTokenIndex, String accessToken, String refreshToken) {
+        this.index = index;
+        this.id = id;
+        this.refreshTokenIndex = refreshTokenIndex;
+        this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
+    }
 }

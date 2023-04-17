@@ -14,13 +14,18 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserAuthRequest {
     private String svcNo;
+
     private Long id;
+
     @Email
+    @NotEmpty
     private String email;
+
     @NotEmpty
     private String code;
+
     private Flag authYn;
 
     @Builder.Default
-    private LocalDateTime validDate = UserMailAuth.getValidity();
+    private LocalDateTime validDate = UserMailAuth.setValidDate();
 }

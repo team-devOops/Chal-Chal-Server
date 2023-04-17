@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Getter
 @Entity
 @AllArgsConstructor
-@Table(name = "T_LOGIN_TOKEN_INFO")
+@Table(name = "LOGIN_TOKEN_INFO")
 @NoArgsConstructor
 public class UserTokenInfo extends BaseDomain {
 

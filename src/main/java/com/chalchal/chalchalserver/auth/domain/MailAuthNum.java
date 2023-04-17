@@ -12,6 +12,10 @@ public class MailAuthNum {
         this.authNum = validateAuthNum(RandomUtils.getRandomIntByLength(MAX_AUTH_NUM));
     }
 
+    public MailAuthNum(String authNum) {
+        this.authNum = validateAuthNum(authNum);
+    }
+
     public static MailAuthNum creteMailAuthNum() {
         return new MailAuthNum();
     }

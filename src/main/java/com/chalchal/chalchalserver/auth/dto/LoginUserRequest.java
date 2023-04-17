@@ -1,19 +1,25 @@
 package com.chalchal.chalchalserver.auth.dto;
 
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.*;
 
 @Getter
+@NoArgsConstructor
 public class LoginUserRequest {
+    @NotEmpty
     @Email
     private String email;
 
     @NotEmpty
-    @Min(8)
-    @Max(32)
+    @Size(min = 8, max = 32)
     private String password;
+
+    @Builder
+    public LoginUserRequest(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
 }

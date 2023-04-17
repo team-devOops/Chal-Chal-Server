@@ -22,7 +22,6 @@ public class UserTokenInfo extends BaseDomain {
     @Column(name = "TOKEN_INDEX", nullable = false, columnDefinition = "bigint")
     private Long tokenIndex;
 
-
     @Comment("유저 KEY")
     @Column(name = "ID", nullable = false, columnDefinition = "bigint")
     private Long id;

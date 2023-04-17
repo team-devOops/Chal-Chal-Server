@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class TodoMstSaveResponse {
+public class TodoMstResponse {
     private String svcNo;
     private String topicKey;
     private String title;
@@ -16,7 +16,7 @@ public class TodoMstSaveResponse {
 
 
     @Builder
-    public TodoMstSaveResponse(String svcNo, String topicKey, String title, String memo, Flag useYn, Flag successYn) {
+    public TodoMstResponse(String svcNo, String topicKey, String title, String memo, Flag useYn, Flag successYn) {
         this.svcNo = svcNo;
         this.topicKey = topicKey;
         this.title = title;
@@ -25,8 +25,8 @@ public class TodoMstSaveResponse {
         this.successYn = successYn;
     }
 
-    public static TodoMstSaveResponse from(TodoMst todoMst) {
-        return TodoMstSaveResponse.builder()
+    public static TodoMstResponse from(TodoMst todoMst) {
+        return TodoMstResponse.builder()
                     .svcNo(todoMst.getSvcNo())
                     .topicKey(todoMst.getTopicKey())
                     .title(todoMst.getTitle())

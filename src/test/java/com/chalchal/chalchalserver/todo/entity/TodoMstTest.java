@@ -143,12 +143,26 @@ class TodoMstTest {
     }
 
     @ParameterizedTest
-    @NullAndEmptySource
     @ValueSource(strings = {"changeTopicKey"})
     @DisplayName("topicKey 변경")
     void changeTopicKey(String topicKey) {
         //given
         TodoMst todoMst = createTodoMst();
+
+        //when
+        todoMst.changeTopicKey(topicKey);
+
+        //then
+        assertThat(todoMst.getTopicKey()).isEqualTo(topicKey);
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    @DisplayName("topicKey is null")
+    void changeTopicKeyIsNull(String paramTopicKey) {
+        //given
+        TodoMst todoMst = createTodoMst();
+        String topicKey = todoMst.getTopicKey();
 
         //when
         todoMst.changeTopicKey(topicKey);

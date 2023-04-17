@@ -1,7 +1,11 @@
 package com.chalchal.chalchalserver.todo.service;
 
+import com.chalchal.chalchalserver.auth.domain.User;
+import com.chalchal.chalchalserver.auth.domain.UserRole;
+import com.chalchal.chalchalserver.global.config.jpa.AuditorAwareImpl;
 import com.chalchal.chalchalserver.global.dto.Flag;
 import com.chalchal.chalchalserver.global.exception.BaseException;
+import com.chalchal.chalchalserver.global.fixture.UserDetailsFixture;
 import com.chalchal.chalchalserver.todo.dto.TodoMstSaveRequest;
 import com.chalchal.chalchalserver.todo.dto.TodoMstUpdateRequest;
 import com.chalchal.chalchalserver.todo.entity.TodoMst;
@@ -10,6 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.AuditorAware;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
@@ -131,6 +143,35 @@ class TodoMstServiceTest {
 
         //when & then
         assertThrows(BaseException.class, () -> todoMstService.deleteTodoMst(svcNo));
+    }
+
+    @Test
+    void findTodoMstByRegId() {
+        User user = User.builder()
+                .id(888L)
+                .email("email")
+                .userId("userId")
+                .nickname("nickname")
+                .password("password")
+                .useYn(Flag.Y)
+                .privateYn(Flag.Y)
+                .userRole(UserRole.USER)
+                .build();
+
+        UserDetails userDetails = UserDetailsFixture.generateAuthUserDetails(user);
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken(user, "", userDetails.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        AuditorAware<Long> auditorAware = new AuditorAwareImpl();
+
+        for (int i = 0; i < 3; i++) {
+            create();
+        }
+
+        Optional<Long> currentAuditor = auditorAware.getCurrentAuditor();
+        List<TodoMst> todoMstList = todoMstService.findTodoMstByRegId(currentAuditor.get());
+
+        assertThat(todoMstList.size()).isEqualTo(3);
     }
 
     private TodoMst create() {

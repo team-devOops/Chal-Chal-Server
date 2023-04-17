@@ -48,6 +48,35 @@ class MailRequestTest {
     }
 
     @Test
+    @DisplayName("svcNo null 값으로 mailRequest  생성")
+    void mailRequestOfSvcNoIsNull() {
+        //given
+        String svcNo = null;
+        MailDiv mailDiv = MailDiv.SIGN_UP;
+        String to = "to";
+        String subject = "subject";
+        String content = "content";
+
+        //when
+        MailRequest request = MailRequest.builder()
+                .svcNo(svcNo)
+                .mailDiv(mailDiv)
+                .to(to)
+                .subject(subject)
+                .content(content)
+                .build();
+
+        //then
+        assertSoftly(softAssertions -> {
+            assertThat(request.getSvcNo()).isNotNull();
+            assertThat(request.getMailDiv()).isEqualTo(mailDiv);
+            assertThat(request.getTo()).isEqualTo(to);
+            assertThat(request.getSubject()).isEqualTo(subject);
+            assertThat(request.getContent()).isEqualTo(content);
+        });
+    }
+
+    @Test
     @DisplayName("mailRequest from")
     void mailRequestFrom() {
         //given

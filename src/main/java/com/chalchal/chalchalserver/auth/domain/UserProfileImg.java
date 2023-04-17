@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Getter
 @Entity
 @AllArgsConstructor
-@Table(name = "T_USER_PROFILE_IMG")
+@Table(name = "USER_PROFILE_IMG")
 @NoArgsConstructor
 public class UserProfileImg extends BaseDomain {
     @Id

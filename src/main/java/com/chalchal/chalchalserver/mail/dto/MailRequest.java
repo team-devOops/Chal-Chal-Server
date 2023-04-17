@@ -6,9 +6,10 @@ import com.chalchal.chalchalserver.global.util.StringUtils;
 import com.chalchal.chalchalserver.mail.domain.MailDiv;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Builder
 @Getter
+@NoArgsConstructor
 public class MailRequest {
     private String svcNo;
 
@@ -17,15 +18,21 @@ public class MailRequest {
     private String subject;
     private String content;
 
+    @Builder
     public MailRequest(String svcNo, MailDiv mailDiv, String to, String subject, String content) {
-        if(StringUtils.isEmpty(svcNo)) {
-           svcNo = SvcNo.getSvcNo();
-        }
-        this.svcNo = svcNo;
+        this.svcNo = validSvcNo(svcNo);
         this.mailDiv = mailDiv;
         this.to = to;
         this.subject = subject;
         this.content = content;
+    }
+
+    private String validSvcNo(String svcNo) {
+        if(StringUtils.isEmpty(svcNo)) {
+            return SvcNo.getSvcNo();
+        }
+
+        return svcNo;
     }
 
     public static MailRequest from(Mail mail) {

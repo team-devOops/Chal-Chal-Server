@@ -16,13 +16,14 @@ import java.sql.SQLException;
 @RequiredArgsConstructor
 public class ProfileImgService {
     private final ProfileImgRepository profileImgRepository;
+    private final String PROFILE_IMG = "https://api.dicebear.com/5.x/identicon/svg?seed=";
 
     /**
      * 프로필 사진 마지막 저장 번호 조회
      *
      * @return count로 order_seq 조회
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public int getLastOrderSeq(Long id) {
         return profileImgRepository.countById(id);
     }
@@ -30,13 +31,12 @@ public class ProfileImgService {
     /**
      * 프로필 사진 기본 값 저장
      */
-    @Retryable(value = SQLException.class)
     public UserProfileImg saveFirstProfileImg(Long id) {
         return profileImgRepository.save(UserProfileImg.builder()
                     .svcNo(SvcNo.getSvcNo())
                     .orderSeq(0)
                     .id(id)
-                    .url("https://api.dicebear.com/5.x/identicon/svg?seed=" + id)
+                    .url(PROFILE_IMG + id)
                 .build());
     }
 }

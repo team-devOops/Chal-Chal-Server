@@ -9,11 +9,9 @@ import org.hibernate.annotations.Comment;
 
 import javax.persistence.*;
 
-@Builder
 @Getter
 @Entity
-@AllArgsConstructor
-@Table(name = "T_MAIL_HISTORY")
+@Table(name = "MAIL_HISTORY")
 @NoArgsConstructor
 public class Mail extends BaseDomain {
 
@@ -42,4 +40,14 @@ public class Mail extends BaseDomain {
     @Comment("내용")
     @Column(name = "CONTENT", columnDefinition = "text")
     private String content;
+
+    @Builder
+    public Mail(String svcNo, MailDiv mailDiv, String fromMail, String toMail, String subject, String content) {
+        this.svcNo = svcNo;
+        this.mailDiv = mailDiv;
+        this.fromMail = fromMail;
+        this.toMail = toMail;
+        this.subject = subject;
+        this.content = content;
+    }
 }

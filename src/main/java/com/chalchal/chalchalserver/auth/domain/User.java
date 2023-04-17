@@ -1,9 +1,11 @@
 package com.chalchal.chalchalserver.auth.domain;
+
 import com.chalchal.chalchalserver.global.BaseDomain;
 import com.chalchal.chalchalserver.global.dto.Flag;
 import lombok.*;
 import org.hibernate.annotations.Comment;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -14,7 +16,7 @@ import java.util.*;
 @Getter
 @Entity
 @AllArgsConstructor
-@Table(name = "T_USER")
+@Table(name = "USER_INFO")
 @NoArgsConstructor
 public class User extends BaseDomain implements UserDetails {
 
@@ -61,7 +63,9 @@ public class User extends BaseDomain implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<GrantedAuthority> roles = new HashSet<>();
-        //roles.add(new SimpleGrantedAuthority(userRole.getValue()));
+        if(userRole.getValue() != null) {
+            roles.add(new SimpleGrantedAuthority(userRole.getValue()));
+        }
         return roles;
     }
 

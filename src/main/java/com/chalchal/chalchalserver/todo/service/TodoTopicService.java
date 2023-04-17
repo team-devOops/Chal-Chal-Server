@@ -45,7 +45,7 @@ public class TodoTopicService {
     @Transactional
     @Retryable(value = SQLException.class)
     public TodoTopic updateTodoTopic(TodoTopicUpdateRequest todoTopicUpdateRequest) {
-        TodoTopic todoTopic = this.findTodoTopicBySvcNo(todoTopicUpdateRequest.getSvcNo());
+        TodoTopic todoTopic = findTodoTopicBySvcNo(todoTopicUpdateRequest.getSvcNo());
 
         todoTopic.changeEmoji(todoTopicUpdateRequest.getEmoji());
         todoTopic.changeBgColor(todoTopicUpdateRequest.getBgColor());

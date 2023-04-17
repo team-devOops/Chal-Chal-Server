@@ -93,9 +93,4 @@ public class TodoMstService {
     public List<TodoMst> findTodoMstByRegId(Long id) {
         return todoMstRepository.findByRegIdAndUseYn(id, Flag.Y);
     }
-
-    @Transactional(readOnly = true)
-    public int getTodoMstCount(Long id) {
-        return todoMstRepository.countByRegId(id);
-    }
 }

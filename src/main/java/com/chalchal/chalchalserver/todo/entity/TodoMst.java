@@ -67,6 +67,9 @@ public class TodoMst extends BaseDomain {
     private LocalDateTime successDate;
 
     public void changeTopicKey(String topicKey) {
+        if(StringUtils.isEmpty(topicKey)) {
+            return;
+        }
         this.topicKey = topicKey;
     }
 
